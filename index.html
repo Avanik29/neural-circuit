@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Neural Circuit | AI News for Techies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            400: '#4ade80', // neon green
+                            500: '#22c55e',
+                            900: '#14532d',
+                        },
+                        dark: {
+                            bg: '#0a0a0a',
+                            surface: '#171717',
+                            border: '#262626'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for the Inshorts-style feed */
+        .shorts-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .shorts-scroll::-webkit-scrollbar-track {
+            background: #171717; 
+        }
+        .shorts-scroll::-webkit-scrollbar-thumb {
+            background: #4ade80; 
+            border-radius: 4px;
+        }
+        .shorts-scroll::-webkit-scrollbar-thumb:hover {
+            background: #22c55e; 
+        }
+        
+        .glass-panel {
+            background: rgba(23, 23, 23, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid #262626;
+        }
+
+        .hover-lift {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+            border-color: #4ade80;
+        }
+
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #4ade80, #3b82f6);
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-gray-300 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Header (NYT / Masthead Style) -->
+    <header class="border-b border-dark-border bg-dark-bg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4 md:py-6">
+                <!-- Date / Weather (Morning Brew style) -->
+                <div class="hidden md:flex flex-col text-xs font-mono text-gray-500">
+                    <span id="current-date">Friday, July 31, 2026</span>
+                    <span>1,024 Active Models</span>
+                </div>
+                
+                <!-- Logo -->
+                <div class="text-center flex-1">
+                    <h1 class="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight">
+                        The Neural <span class="text-brand-400">Circuit</span>
+                    </h1>
+                    <p class="text-xs md:text-sm text-gray-400 mt-1 font-mono tracking-widest uppercase">Signal over noise.</p>
+                </div>
+
+                <!-- Subscribe -->
+                <div class="flex items-center gap-4">
+                    <button id="auth-btn" class="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-dark-bg bg-brand-400 hover:bg-brand-500 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2 focus:ring-offset-dark-bg">
+                        Join 2.5M Techies
+                    </button>
+                    <!-- Mobile Menu Button -->
+                    <button class="sm:hidden text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Navigation tags -->
+            <nav id="category-nav" class="flex space-x-6 overflow-x-auto py-3 text-sm font-medium text-gray-400 border-t border-dark-border scrollbar-hide">
+                <a href="#" data-target="tab-front-page" class="nav-link text-white border-b-2 border-brand-400 pb-2 whitespace-nowrap">Front Page</a>
+                <a href="#" data-target="tab-llms" class="nav-link hover:text-white whitespace-nowrap transition-colors">LLMs & Foundation Models</a>
+                <a href="#" data-target="tab-cv" class="nav-link hover:text-white whitespace-nowrap transition-colors">Computer Vision</a>
+                <a href="#" data-target="tab-robotics" class="nav-link hover:text-white whitespace-nowrap transition-colors">Robotics</a>
+                <a href="#" data-target="tab-hardware" class="nav-link hover:text-white whitespace-nowrap transition-colors">Hardware & Silicon</a>
+                <a href="#" data-target="tab-policy" class="nav-link hover:text-white whitespace-nowrap transition-colors">Policy & Ethics</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- Morning Brew Style Briefing -->
+        <div id="morning-briefing" class="mb-10 bg-dark-surface p-6 rounded-xl border border-dark-border relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-1 h-full bg-brand-400"></div>
+            <h2 class="text-xl font-bold text-white mb-2 font-serif flex items-center gap-2">
+                ☕ The Morning Compute
+            </h2>
+            <p class="text-sm text-gray-400 mb-4 font-mono">Estimated Read Time: 3.2 ms</p>
+            <p class="mb-4 leading-relaxed text-gray-300">
+                Good morning. Today's top updates: OpenAI is now letting AI run its own code environments directly, a new open-source model just beat Claude 4 in coding tests, and spiking neural networks (brain-like AI) are making a huge comeback.
+            </p>
+            <ul class="space-y-2">
+                <li class="flex items-start gap-2">
+                    <span class="text-brand-400 mt-1">↳</span>
+                    <span><strong>Market Watch:</strong> NVIDIA stock went up 4% after they announced "Blackwell-Ultra", a new chip built specifically for running AI on local devices like laptops and phones.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-brand-400 mt-1">↳</span>
+                    <span><strong>Drama:</strong> Open-source developers are threatening to block European users in protest of the strict new EU AI Act.</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Main Content Area (NYT Editorial Style) -->
+            <div class="lg:col-span-8 space-y-8">
+                
+                <div id="tab-front-page" class="tab-content block space-y-8">
+                    <!-- Lead Story -->
+                    <article class="group cursor-pointer">
+                            <div class="flex justify-between items-center mt-auto border-t border-dark-border pt-3">
+                                <span class="text-xs font-mono text-gray-500">via ArXiv</span>
+                                <button class="text-brand-400 hover:text-brand-500 text-sm font-medium inline-flex items-center gap-1">
+                                    Read Paper <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </button>
+                            </div>
+                        </article>
+
+                    </div>
+                </div>
+
+                <!-- LLMs Tab -->
+                <div id="tab-llms" class="tab-content hidden space-y-8">
+                    <article class="group cursor-pointer">
+                        <div class="relative overflow-hidden rounded-xl mb-4 aspect-video border border-dark-border">
+                            <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 to-black flex items-center justify-center overflow-hidden">
+                                <svg class="w-24 h-24 text-brand-400 opacity-50 transform group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                            </div>
+                            <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700">
+                                <span class="text-xs font-mono text-brand-400 uppercase font-bold tracking-wider">Models</span>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">Anthropic Releases Claude 4: The First Model to Solve P vs NP (Almost)</h2>
+                        <p class="text-gray-400 text-lg mb-4 line-clamp-3">In a stunning breakthrough, Anthropic's new foundation model has demonstrated early capabilities in proving complex mathematical theorems, heavily utilizing advanced chain-of-thought protocols.</p>
+                        <div class="flex items-center gap-4 text-xs font-mono text-gray-500">
+                            <span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 6 min read</span>
+                        </div>
+                    </article>
+                    <hr class="border-dark-border">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">TinyLlama-3 Fits on a Smartwatch</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">A new 500M parameter model is achieving GPT-3.5 level performance while running entirely locally on an Apple Watch.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via GitHub</span></div>
+                        </article>
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">Mistral's New Mixture of Experts Architecture</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">A technical deep-dive into how Mistral is routing queries through 16 distinct sub-models to maximize efficiency.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via ArXiv</span></div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- CV Tab -->
+                <div id="tab-cv" class="tab-content hidden space-y-8">
+                    <article class="group cursor-pointer">
+                        <div class="relative overflow-hidden rounded-xl mb-4 aspect-video border border-dark-border">
+                            <div class="absolute inset-0 bg-gradient-to-br from-green-900 to-black flex items-center justify-center overflow-hidden">
+                                <svg class="w-24 h-24 text-brand-400 opacity-50 transform group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700">
+                                <span class="text-xs font-mono text-brand-400 uppercase font-bold tracking-wider">Vision</span>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">Sora 2.0 Generates Real-Time Interactive 3D Worlds</h2>
+                        <p class="text-gray-400 text-lg mb-4 line-clamp-3">Video generation moves to the next dimension. OpenAI's Sora 2.0 doesn't just create pixels; it generates explorable physics engines directly from text prompts.</p>
+                        <div class="flex items-center gap-4 text-xs font-mono text-gray-500">
+                            <span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 5 min read</span>
+                        </div>
+                    </article>
+                    <hr class="border-dark-border">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">Meta's Segment Anything 3</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">The new SAM 3 model can perfectly identify and mask transparent objects like glass and water in complex lighting.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via Meta AI</span></div>
+                        </article>
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">AlphaScan Detects Cancers 5 Years Earlier</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">DeepMind's latest medical imaging breakthrough spots microscopic cellular changes in MRI scans missed by human radiologists.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via Nature</span></div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Robotics Tab -->
+                <div id="tab-robotics" class="tab-content hidden space-y-8">
+                    <article class="group cursor-pointer">
+                        <div class="relative overflow-hidden rounded-xl mb-4 aspect-video border border-dark-border">
+                            <div class="absolute inset-0 bg-gradient-to-br from-orange-900 to-black flex items-center justify-center overflow-hidden">
+                                <svg class="w-24 h-24 text-brand-400 opacity-50 transform group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                            </div>
+                            <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700">
+                                <span class="text-xs font-mono text-brand-400 uppercase font-bold tracking-wider">Robotics</span>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">Boston Dynamics' Atlas Does Parkour and Writes Poetry</h2>
+                        <p class="text-gray-400 text-lg mb-4 line-clamp-3">Integrated with a new LLM reasoning core, the Atlas robot can now verbally explain its physical logic as it navigates complex obstacle courses.</p>
+                        <div class="flex items-center gap-4 text-xs font-mono text-gray-500">
+                            <span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 4 min read</span>
+                        </div>
+                    </article>
+                    <hr class="border-dark-border">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">Tesla Optimus in 100 Factories</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">Tesla has quietly deployed its humanoid robots to perform repetitive battery sorting tasks across multiple gigafactories.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via TechCrunch</span></div>
+                        </article>
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">Soft Robotics Breakthrough</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">New bio-inspired grippers use liquid sensors to detect the texture of a strawberry without bruising it.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via MIT News</span></div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Hardware Tab -->
+                <div id="tab-hardware" class="tab-content hidden space-y-8">
+                    <article class="group cursor-pointer">
+                        <div class="relative overflow-hidden rounded-xl mb-4 aspect-video border border-dark-border">
+                            <div class="absolute inset-0 bg-gradient-to-br from-red-900 to-black flex items-center justify-center overflow-hidden">
+                                <svg class="w-24 h-24 text-brand-400 opacity-50 transform group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                            </div>
+                            <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700">
+                                <span class="text-xs font-mono text-brand-400 uppercase font-bold tracking-wider">Silicon</span>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">NVIDIA Unveils Rubin Architecture, Pushing Limits of Silicon</h2>
+                        <p class="text-gray-400 text-lg mb-4 line-clamp-3">Just months after Blackwell, NVIDIA announces Rubin, utilizing an entirely new 3D transistor layout that reduces power consumption by 40% while doubling memory bandwidth.</p>
+                        <div class="flex items-center gap-4 text-xs font-mono text-gray-500">
+                            <span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 8 min read</span>
+                        </div>
+                    </article>
+                    <hr class="border-dark-border">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">Groq's LPU Reaches 5000 Tokens/Sec</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">The specialized tensor processor breaks new records, generating text faster than the human eye can track on a screen.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via Hardware Times</span></div>
+                        </article>
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">TSMC Begins 2nm Production</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">Apple and AMD are first in line for the revolutionary 2-nanometer node, promising massive gains for mobile AI workloads.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via Bloomberg</span></div>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Policy Tab -->
+                <div id="tab-policy" class="tab-content hidden space-y-8">
+                    <article class="group cursor-pointer">
+                        <div class="relative overflow-hidden rounded-xl mb-4 aspect-video border border-dark-border">
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-900 to-black flex items-center justify-center overflow-hidden">
+                                <svg class="w-24 h-24 text-brand-400 opacity-50 transform group-hover:scale-110 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path></svg>
+                            </div>
+                            <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-gray-700">
+                                <span class="text-xs font-mono text-brand-400 uppercase font-bold tracking-wider">Ethics</span>
+                            </div>
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-serif font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">EU AI Act Takes Effect: What Tech Giants Must Change Today</h2>
+                        <p class="text-gray-400 text-lg mb-4 line-clamp-3">The landmark regulation is now officially law. Companies deploying 'high-risk' AI systems have 90 days to open their black boxes to regulators or face multi-billion dollar fines.</p>
+                        <div class="flex items-center gap-4 text-xs font-mono text-gray-500">
+                            <span class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> 7 min read</span>
+                        </div>
+                    </article>
+                    <hr class="border-dark-border">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">US Senate Passes Deepfake Bill</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">A bipartisan bill mandating cryptographic watermarking for all commercially generated AI media has passed the Senate.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via Reuters</span></div>
+                        </article>
+                        <article class="flex flex-col">
+                            <h3 class="text-xl font-serif font-bold text-white mb-2 hover:text-brand-400 cursor-pointer">NYT vs OpenAI Settlement</h3>
+                            <p class="text-gray-400 text-sm mb-4 flex-grow">The historic copyright infringement lawsuit ends with a massive licensing deal, setting a new precedent for training data.</p>
+                            <div class="mt-auto border-t border-dark-border pt-3"><span class="text-xs font-mono text-gray-500">via NYT</span></div>
+                        </article>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Sidebar: The "Shorts" Feed (Inshorts Style) -->
+            <aside class="lg:col-span-4 flex flex-col h-[800px]">
+                <div class="flex items-center justify-between mb-4 pb-2 border-b border-dark-border">
+                    <h3 class="text-lg font-bold text-white font-mono uppercase tracking-wider flex items-center gap-2">
+                        <span class="relative flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-500"></span>
+                        </span>
+                        Live Feed
+                    </h3>
+                    <span class="text-xs text-gray-500 font-mono">60 words max</span>
+                </div>
+                
+                <!-- Scrollable Container -->
+                <div class="shorts-scroll overflow-y-auto pr-2 space-y-4 flex-grow">
+                    
+                    <!-- Short Card 1 -->
+                    <div class="glass-panel p-4 rounded-lg hover-lift cursor-pointer group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-blue-900/50 text-blue-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-mono border border-blue-800">GitHub Trending</span>
+                            <span class="text-xs text-gray-500">10m ago</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-2 group-hover:text-brand-400">New 'Agent-Zero' Tool Makes Building AI Swarms Easy</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            A new coding tool for building AI agents is going viral. Written in Rust, it lets you easily create teams of AI bots that work together. It automatically manages how they share information and use tools, running 40 times faster than older Python versions.
+                        </p>
+                    </div>
+
+                    <!-- Short Card 2 -->
+                    <div class="glass-panel p-4 rounded-lg hover-lift cursor-pointer group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-purple-900/50 text-purple-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-mono border border-purple-800">Hardware</span>
+                            <span class="text-xs text-gray-500">45m ago</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-2 group-hover:text-brand-400">AMD Unveils Cheaper, Faster AI Chip to Rival Nvidia</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            AMD is taking on Nvidia with a powerful new AI chip. It features huge memory capacity designed specifically to run large language models faster. Most importantly, it's priced aggressively at $15k to undercut Nvidia's dominance.
+                        </p>
+                    </div>
+
+                    <!-- Short Card 3 -->
+                    <div class="glass-panel p-4 rounded-lg hover-lift cursor-pointer group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-yellow-900/50 text-yellow-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-mono border border-yellow-800">Regulation</span>
+                            <span class="text-xs text-gray-500">2h ago</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-2 group-hover:text-brand-400">US Government Wants to Watermark All AI Content</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            The US government proposed a rule requiring invisible, secure watermarks on any images, video, or audio made by commercial AI. Smaller, free AI tools are exempt for now, causing debate about fairness between big and small companies.
+                        </p>
+                    </div>
+
+                    <!-- Short Card 4 -->
+                    <div class="glass-panel p-4 rounded-lg hover-lift cursor-pointer group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-green-900/50 text-green-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-mono border border-green-800">Paper Alert</span>
+                            <span class="text-xs text-gray-500">3h ago</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-2 group-hover:text-brand-400">Rumored OpenAI 'Q-Star' AI Design Leaked Online</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            A research paper was accidentally posted and quickly deleted, showing a new way to mix normal AI text generation with advanced, chess-like logic and planning. Experts think this is the secret recipe behind OpenAI's highly rumored 'Q-Star' project.
+                        </p>
+                    </div>
+                    
+                    <!-- Short Card 5 -->
+                    <div class="glass-panel p-4 rounded-lg hover-lift cursor-pointer group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="bg-red-900/50 text-red-400 text-[10px] uppercase tracking-wider px-2 py-0.5 rounded font-mono border border-red-800">Robotics</span>
+                            <span class="text-xs text-gray-500">5h ago</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-2 group-hover:text-brand-400">Humanoid Robot Learns Chores by Watching YouTube</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Figure Robotics showed off a robot that learns physical tasks just by watching regular YouTube videos. Without any humans remote-controlling it first, the robot figured out how to build Ikea furniture and fold laundry almost perfectly.
+                        </p>
+                    </div>
+
+                </div>
+                
+                <div class="pt-4 border-t border-dark-border mt-4 text-center">
+                    <button class="text-xs font-mono text-gray-400 hover:text-white flex items-center justify-center w-full gap-2 transition-colors">
+                        Scroll for more <svg class="w-3 h-3 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </button>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <footer class="border-t border-dark-border bg-dark-surface mt-12 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <p class="text-white font-serif font-bold text-xl">The Neural Circuit</p>
+                <p class="text-gray-500 text-xs font-mono mt-1">Compiled with ❤️ by humans (mostly).</p>
+            </div>
+            <div class="flex space-x-6 text-sm text-gray-400">
+                <a href="#" id="link-about" class="hover:text-brand-400">About</a>
+                <a href="#" id="link-rss" class="hover:text-brand-400">RSS</a>
+                <a href="#" id="link-api" class="hover:text-brand-400">API</a>
+                <a href="#" id="link-privacy" class="hover:text-brand-400">Privacy</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Info Page Modal -->
+    <div id="info-modal" class="fixed inset-0 z-[120] hidden items-center justify-center bg-black/90 backdrop-blur-md">
+        <div class="bg-dark-surface border border-dark-border rounded-xl p-8 max-w-3xl w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-200 max-h-[80vh] overflow-y-auto" id="info-modal-content">
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-2xl font-bold text-white font-serif" id="info-modal-title">Title</h3>
+                <button id="info-modal-close" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="text-gray-300 space-y-4 leading-relaxed font-sans" id="info-modal-body">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth / Sign In Modal -->
+    <div id="auth-modal" class="fixed inset-0 z-[130] hidden items-center justify-center bg-black/90 backdrop-blur-md">
+        <div class="bg-dark-surface border border-dark-border rounded-xl p-8 max-w-md w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-200" id="auth-modal-content">
+            <div class="flex justify-between items-start mb-6">
+                <h3 class="text-2xl font-bold text-white font-serif" id="auth-modal-title">Access the Circuit</h3>
+                <button id="auth-modal-close" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <!-- Auth Tabs -->
+            <div class="flex space-x-4 mb-6 border-b border-dark-border pb-2">
+                <button id="tab-register" class="text-brand-400 font-medium text-sm pb-2 border-b-2 border-brand-400">Register</button>
+                <button id="tab-login" class="text-gray-400 hover:text-white font-medium text-sm pb-2">Sign In</button>
+            </div>
+
+            <!-- Auth Form -->
+            <form id="auth-form" class="space-y-4">
+                <input type="hidden" id="auth-type" value="register">
+                
+                <div id="name-field-group">
+                    <label class="block text-xs font-mono text-gray-400 mb-1">Full Name</label>
+                    <input type="text" id="auth-name" class="w-full bg-dark-bg border border-dark-border text-white text-sm rounded-md px-3 py-2 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-colors" placeholder="Ada Lovelace">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-gray-400 mb-1">Secure Email</label>
+                    <input type="email" id="auth-email" required class="w-full bg-dark-bg border border-dark-border text-white text-sm rounded-md px-3 py-2 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-colors" placeholder="ada@example.com">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-mono text-gray-400 mb-1">Password</label>
+                    <input type="password" id="auth-password" required class="w-full bg-dark-bg border border-dark-border text-white text-sm rounded-md px-3 py-2 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-colors" placeholder="••••••••">
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" id="auth-submit-btn" class="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-dark-bg bg-brand-400 hover:bg-brand-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 focus:ring-offset-dark-bg transition-colors">
+                        Create Account
+                    </button>
+                </div>
+                <p class="text-[10px] text-gray-500 text-center mt-4 font-mono">Your data is encrypted and stored securely.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- AI Insights Modal -->
+    <div id="ai-modal" class="fixed inset-0 z-[110] hidden items-center justify-center bg-black/90 backdrop-blur-md">
+        <div class="bg-dark-surface border border-indigo-500/40 rounded-2xl p-6 max-w-2xl w-full mx-4 shadow-[0_0_40px_-10px_rgba(79,70,229,0.25)] transform scale-95 transition-transform duration-200 flex flex-col max-h-[85vh]" id="ai-modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white font-serif flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    Gemini Insights
+                </h3>
+                <button id="ai-modal-close" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="mb-4 p-3 bg-dark-bg border border-dark-border rounded-lg">
+                <p class="text-xs text-gray-500 uppercase tracking-wider mb-1 font-mono">Context</p>
+                <h4 id="ai-context-title" class="text-sm font-bold text-gray-200 mb-1"></h4>
+                <p id="ai-context-text" class="text-xs text-gray-400 line-clamp-2"></p>
+            </div>
+
+            <div class="flex gap-2 mb-4 overflow-x-auto scrollbar-hide pb-1">
+                <button class="ai-action-btn whitespace-nowrap px-3 py-1.5 bg-indigo-900/40 hover:bg-indigo-800/60 text-indigo-300 text-xs font-mono rounded border border-indigo-700/50 transition-colors" data-prompt="Explain this simply like I am a beginner. Use a simple analogy if helpful.">ELI5</button>
+                <button class="ai-action-btn whitespace-nowrap px-3 py-1.5 bg-brand-900/20 hover:bg-brand-900/40 text-brand-400 text-xs font-mono rounded border border-brand-700/50 transition-colors" data-prompt="Provide a very brief 1-sentence TL;DR of this.">TL;DR</button>
+                <button class="ai-action-btn whitespace-nowrap px-3 py-1.5 bg-purple-900/40 hover:bg-purple-800/60 text-purple-300 text-xs font-mono rounded border border-purple-700/50 transition-colors" data-prompt="Why does this matter? What is the impact on the tech industry?">Impact Analysis</button>
+            </div>
+
+            <div id="ai-response-area" class="flex-grow overflow-y-auto bg-dark-bg rounded-lg border border-dark-border p-4 mb-4 text-sm text-gray-300 leading-relaxed font-sans min-h-[160px]">
+                <div class="text-gray-500 italic text-center mt-10">Select an action above or ask a question below to analyze this article with Gemini.</div>
+            </div>
+
+            <div class="relative mt-auto">
+                <input type="text" id="ai-custom-prompt" placeholder="Ask Gemini something else..." class="w-full bg-dark-bg border border-dark-border text-white text-sm rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors">
+                <button id="ai-submit-btn" class="absolute right-2 top-1/2 -translate-y-1/2 text-indigo-400 hover:text-indigo-300 p-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Alerts (Replaces window.alert) -->
+    <div id="custom-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="bg-dark-surface border border-dark-border rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl transform scale-95 transition-transform duration-200" id="modal-content">
+            <h3 class="text-xl font-bold text-white mb-2 font-serif" id="modal-title">Notification</h3>
+            <p class="text-gray-400 text-sm mb-6" id="modal-message">Message goes here.</p>
+            <div class="flex justify-end">
+                <button id="modal-close" class="px-4 py-2 bg-brand-400 hover:bg-brand-500 text-dark-bg font-medium rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-brand-400">
+                    Acknowledge
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Set dynamic date
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                dateElement.textContent = new Date().toLocaleDateString('en-US', options);
+            }
+
+            // --- Info Modal Logic (About, RSS, API, Privacy) ---
+            const infoModal = document.getElementById('info-modal');
+            const infoModalContent = document.getElementById('info-modal-content');
+            const infoModalClose = document.getElementById('info-modal-close');
+            const infoModalTitle = document.getElementById('info-modal-title');
+            const infoModalBody = document.getElementById('info-modal-body');
+
+            const pages = {
+                'link-about': {
+                    title: 'About The Neural Circuit',
+                    body: '<p>The Neural Circuit is the premier destination for technical professionals, researchers, and developers who need signal over noise in the fast-paced world of Artificial Intelligence.</p><p>We cut through the marketing fluff to bring you pure, digestible insights on foundation models, computer vision, robotics, and the silicon powering it all.</p>'
+                },
+                'link-rss': {
+                    title: 'RSS Feeds',
+                    body: '<p>Integrate our streams into your favorite reader:</p><ul class="list-disc pl-5 space-y-2 mt-2 text-brand-400 font-mono text-sm"><li>https://neuralcircuit.com/rss/all.xml</li><li>https://neuralcircuit.com/rss/llms.xml</li><li>https://neuralcircuit.com/rss/hardware.xml</li></ul>'
+                },
+                'link-api': {
+                    title: 'API Access',
+                    body: '<p>We offer a RESTful JSON API for enterprise partners to ingest our briefs directly into internal dashboards.</p><div class="bg-dark-bg p-4 rounded-md border border-dark-border mt-3 font-mono text-xs text-gray-400">GET /api/v1/briefs?category=robotics<br>Authorization: Bearer YOUR_KEY</div><p class="mt-4">Contact <strong>api@neuralcircuit.com</strong> for a developer key.</p>'
+                },
+                'link-privacy': {
+                    title: 'Privacy Policy',
+                    body: '<p>We respect your privacy. The Neural Circuit uses zero third-party tracking cookies.</p><p>Analytics are fully anonymized and self-hosted. We do not sell your email address.</p>'
+                }
+            };
+
+            const openInfoModal = (pageId) => {
+                const page = pages[pageId];
+                infoModalTitle.textContent = page.title;
+                infoModalBody.innerHTML = page.body;
+                infoModal.classList.remove('hidden');
+                infoModal.classList.add('flex');
+                setTimeout(() => {
+                    infoModalContent.classList.remove('scale-95');
+                    infoModalContent.classList.add('scale-100');
+                }, 10);
+            };
+
+            const closeInfoModal = () => {
+                infoModalContent.classList.remove('scale-100');
+                infoModalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    infoModal.classList.add('hidden');
+                    infoModal.classList.remove('flex');
+                }, 200);
+            };
+
+            infoModalClose.addEventListener('click', closeInfoModal);
+            infoModal.addEventListener('click', (e) => {
+                if(e.target === infoModal) closeInfoModal();
+            });
+
+            // --- Auth Modal Logic (Register / Sign In) ---
+            const authModal = document.getElementById('auth-modal');
+            const authModalContent = document.getElementById('auth-modal-content');
+            const authModalClose = document.getElementById('auth-modal-close');
+            const authBtn = document.getElementById('auth-btn');
+            
+            const tabRegister = document.getElementById('tab-register');
+            const tabLogin = document.getElementById('tab-login');
+            const nameFieldGroup = document.getElementById('name-field-group');
+            const authTypeInput = document.getElementById('auth-type');
+            const authSubmitBtn = document.getElementById('auth-submit-btn');
+            const authForm = document.getElementById('auth-form');
+
+            const openAuthModal = () => {
+                authModal.classList.remove('hidden');
+                authModal.classList.add('flex');
+                setTimeout(() => {
+                    authModalContent.classList.remove('scale-95');
+                    authModalContent.classList.add('scale-100');
+                }, 10);
+            };
+
+            const closeAuthModal = () => {
+                authModalContent.classList.remove('scale-100');
+                authModalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    authModal.classList.add('hidden');
+                    authModal.classList.remove('flex');
+                    authForm.reset(); // Clear sensitive data on close
+                }, 200);
+            };
+
+            if(authBtn) authBtn.addEventListener('click', openAuthModal);
+            authModalClose.addEventListener('click', closeAuthModal);
+            authModal.addEventListener('click', (e) => {
+                if(e.target === authModal) closeAuthModal();
+            });
+
+            // Toggle between Register and Sign In
+            const setAuthMode = (mode) => {
+                authTypeInput.value = mode;
+                if(mode === 'register') {
+                    tabRegister.classList.add('text-brand-400', 'border-b-2', 'border-brand-400');
+                    tabRegister.classList.remove('text-gray-400');
+                    tabLogin.classList.remove('text-brand-400', 'border-b-2', 'border-brand-400');
+                    tabLogin.classList.add('text-gray-400');
+                    nameFieldGroup.style.display = 'block';
+                    authSubmitBtn.textContent = 'Create Account';
+                    document.getElementById('auth-name').required = true;
+                } else {
+                    tabLogin.classList.add('text-brand-400', 'border-b-2', 'border-brand-400');
+                    tabLogin.classList.remove('text-gray-400');
+                    tabRegister.classList.remove('text-brand-400', 'border-b-2', 'border-brand-400');
+                    tabRegister.classList.add('text-gray-400');
+                    nameFieldGroup.style.display = 'none';
+                    authSubmitBtn.textContent = 'Sign In';
+                    document.getElementById('auth-name').required = false;
+                }
+            };
+
+            tabRegister.addEventListener('click', (e) => { e.preventDefault(); setAuthMode('register'); });
+            tabLogin.addEventListener('click', (e) => { e.preventDefault(); setAuthMode('login'); });
+
+            // Handle Form Submission securely
+            authForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const type = authTypeInput.value;
+                const email = document.getElementById('auth-email').value;
+                const password = document.getElementById('auth-password').value; // In a real app, NEVER send plain passwords.
+                const name = document.getElementById('auth-name').value;
+
+                // VISUAL FEEDBACK
+                authSubmitBtn.innerHTML = '<svg class="w-5 h-5 animate-spin mx-auto text-dark-bg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                
+                // MOCK API CALL (This is where you connect to your secure backend to write to Excel)
+                setTimeout(() => {
+                    closeAuthModal();
+                    if(type === 'register') {
+                        showModal("Registration Successful", `Welcome to the circuit, ${name || email}. Your neural link is active.`);
+                        if(authBtn) authBtn.textContent = 'My Account';
+                    } else {
+                        showModal("Authentication Successful", `Welcome back, ${email}.`);
+                        if(authBtn) authBtn.textContent = 'My Account';
+                    }
+                    authSubmitBtn.textContent = type === 'register' ? 'Create Account' : 'Sign In';
+                    
+                    /* 
+                     * TO ACTUALLY SAVE TO EXCEL SECURELY:
+                     * 1. Go to make.com or zapier.com
+                     * 2. Create a webhook URL.
+                     * 3. Send a POST request here using fetch() to that webhook.
+                     * 4. Have Zapier/Make write the data to your private Google Sheet/Excel file.
+                     * This ensures your database credentials are NEVER exposed to the public.
+                     */
+
+                }, 1500);
+            });
+
+            // --- Tab Navigation Logic ---
+            const navLinks = document.querySelectorAll('.nav-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const morningBriefing = document.getElementById('morning-briefing');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Reset all links
+                    navLinks.forEach(l => {
+                        l.classList.remove('text-white', 'border-b-2', 'border-brand-400', 'pb-2');
+                        l.classList.add('hover:text-white');
+                    });
+                    
+                    // Set active link
+                    link.classList.remove('hover:text-white');
+                    link.classList.add('text-white', 'border-b-2', 'border-brand-400', 'pb-2');
+                    
+                    // Hide all tabs
+                    tabContents.forEach(tab => {
+                        tab.classList.remove('block');
+                        tab.classList.add('hidden');
+                    });
+                    
+                    // Show target tab
+                    const targetId = link.getAttribute('data-target');
+                    document.getElementById(targetId).classList.remove('hidden');
+                    document.getElementById(targetId).classList.add('block');
+
+                    // Toggle morning briefing
+                    if(targetId === 'tab-front-page') {
+                        morningBriefing.classList.remove('hidden');
+                    } else {
+                        morningBriefing.classList.add('hidden');
+                    }
+                });
+            });
+
+            // Custom Modal Logic
+            const modal = document.getElementById('custom-modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalClose = document.getElementById('modal-close');
+            const modalTitle = document.getElementById('modal-title');
+            const modalMessage = document.getElementById('modal-message');
+
+            const showModal = (title, message) => {
+                modalTitle.textContent = title;
+                modalMessage.textContent = message;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modalContent.classList.remove('scale-95');
+                    modalContent.classList.add('scale-100');
+                }, 10);
+            };
+
+            const hideModal = () => {
+                modalContent.classList.remove('scale-100');
+                modalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 200);
+            };
+
+            modalClose.addEventListener('click', hideModal);
+            
+            // Close on outside click
+            modal.addEventListener('click', (e) => {
+                if(e.target === modal) hideModal();
+            });
+            
+            // --- Gemini AI Integration ---
+            let currentContext = { title: '', text: '' };
+            const aiModal = document.getElementById('ai-modal');
+            const aiModalContent = document.getElementById('ai-modal-content');
+            const aiModalClose = document.getElementById('ai-modal-close');
+            const aiContextTitle = document.getElementById('ai-context-title');
+            const aiContextText = document.getElementById('ai-context-text');
+            const aiResponseArea = document.getElementById('ai-response-area');
+            const aiCustomPrompt = document.getElementById('ai-custom-prompt');
+            const aiSubmitBtn = document.getElementById('ai-submit-btn');
+            
+            const openAIModal = (title, text) => {
+                currentContext = { title, text };
+                aiContextTitle.textContent = title;
+                aiContextText.textContent = text;
+                aiResponseArea.innerHTML = '<div class="text-gray-500 italic text-center mt-10">Select an action above or ask a question below to analyze this article with Gemini.</div>';
+                aiCustomPrompt.value = '';
+                
+                aiModal.classList.remove('hidden');
+                aiModal.classList.add('flex');
+                setTimeout(() => {
+                    aiModalContent.classList.remove('scale-95');
+                    aiModalContent.classList.add('scale-100');
+                }, 10);
+            };
+
+            const closeAIModal = () => {
+                aiModalContent.classList.remove('scale-100');
+                aiModalContent.classList.add('scale-95');
+                setTimeout(() => {
+                    aiModal.classList.add('hidden');
+                    aiModal.classList.remove('flex');
+                }, 200);
+            };
+
+            aiModalClose.addEventListener('click', closeAIModal);
+            aiModal.addEventListener('click', (e) => {
+                if(e.target === aiModal) closeAIModal();
+            });
+
+            // Handle pre-set prompts
+            document.querySelectorAll('.ai-action-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    callGemini(btn.getAttribute('data-prompt'), currentContext);
+                });
+            });
+
+            // Handle custom prompt
+            const submitCustomPrompt = () => {
+                const prompt = aiCustomPrompt.value.trim();
+                if(prompt) {
+                    callGemini(prompt, currentContext);
+                    aiCustomPrompt.value = '';
+                }
+            };
+            aiSubmitBtn.addEventListener('click', submitCustomPrompt);
+            aiCustomPrompt.addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') submitCustomPrompt();
+            });
+
+            const callGemini = async (prompt, context) => {
+                // Show loading state
+                aiResponseArea.innerHTML = '<div class="flex flex-col items-center justify-center h-full gap-3"><svg class="w-6 h-6 animate-spin text-indigo-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="animate-pulse text-indigo-300 text-sm">Gemini is analyzing...</span></div>';
+                
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const fullPrompt = `Article Title: ${context.title}\nArticle Content: ${context.text}\n\nUser Task: ${prompt}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: fullPrompt }] }],
+                            systemInstruction: { parts: [{ text: "You are an expert AI technology analyst. Format responses cleanly using markdown (bolding, bullet points). Keep it concise, insightful, and easy to read. Do not include large introductory or concluding statements." }] }
+                        })
+                    });
+                    const data = await response.json();
+                    
+                    if(data.candidates && data.candidates[0].content.parts[0].text) {
+                        let html = data.candidates[0].content.parts[0].text;
+                        // Basic markdown to HTML formatting
+                        html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="text-indigo-100">$1</strong>');
+                        html = html.replace(/\*(.*?)\*/g, '<em class="text-gray-300">$1</em>');
+                        html = html.replace(/\n\n/g, '<br><br>');
+                        html = html.replace(/\n\* /g, '<br>• '); // List items
+                        html = html.replace(/\n- /g, '<br>• '); // List items
+                        html = html.replace(/\n/g, '<br>');
+                        
+                        aiResponseArea.innerHTML = html;
+                    } else {
+                        throw new Error("Invalid response format");
+                    }
+                } catch(e) {
+                    console.error(e);
+                    aiResponseArea.innerHTML = '<span class="text-red-400">Failed to connect to Gemini AI. Please try again.</span>';
+                }
+            };
+
+            
+            // Add click events and AI buttons to main articles
+            const articles = document.querySelectorAll('article');
+            articles.forEach(article => {
+                const titleEl = article.querySelector('h2, h3');
+                const descEl = article.querySelector('p');
+                if(titleEl && descEl) {
+                    const btn = document.createElement('button');
+                    btn.className = 'mt-3 text-xs font-medium bg-indigo-900/30 text-indigo-300 px-3 py-1.5 rounded-md border border-indigo-700/50 hover:bg-indigo-800/50 transition-colors flex items-center gap-1.5 w-fit z-10 relative shadow-sm shadow-indigo-900/20';
+                    btn.innerHTML = '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Ask Gemini';
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openAIModal(titleEl.textContent.trim(), descEl.textContent.trim());
+                    };
+                    
+                    const actionBar = article.querySelector('.mt-auto');
+                    if(actionBar) {
+                        // For secondary articles in grid
+                        btn.classList.remove('mt-3');
+                        actionBar.insertBefore(btn, actionBar.firstChild);
+                    } else {
+                        // For lead story
+                        const leadActionArea = article.querySelector('.flex.items-center.gap-4');
+                        if (leadActionArea) {
+                           leadActionArea.appendChild(btn);
+                        }
+                    }
+                }
+
+                article.addEventListener('click', () => {
+                    const title = titleEl ? titleEl.textContent.trim() : 'Article';
+                    showModal("Accessing Resource", `Fetching content for: "${title}". (Demo mode: article rendering deferred).`);
+                });
+            });
+
+            // Add click events and AI buttons to short cards
+            const shortCards = document.querySelectorAll('.glass-panel');
+            shortCards.forEach(card => {
+                const titleEl = card.querySelector('h4');
+                const descEl = card.querySelector('p');
+                
+                if(titleEl && descEl) {
+                    const topBar = card.querySelector('.flex.justify-between.items-start');
+                    const btn = document.createElement('button');
+                    btn.className = 'text-[10px] font-medium bg-indigo-900/30 text-indigo-300 px-2 py-0.5 rounded border border-indigo-700/50 hover:bg-indigo-800/50 transition-colors flex items-center gap-1 ml-2 shrink-0 z-10 relative';
+                    btn.innerHTML = '✨ Ask Gemini';
+                    btn.onclick = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        openAIModal(titleEl.textContent.trim(), descEl.textContent.trim());
+                    };
+                    
+                    if(topBar) {
+                        const leftSide = topBar.querySelector('span:first-child');
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'flex items-center';
+                        wrapper.appendChild(leftSide.cloneNode(true));
+                        wrapper.appendChild(btn);
+                        topBar.replaceChild(wrapper, leftSide);
+                    }
+                }
+
+                card.addEventListener('click', () => {
+                    const title = titleEl ? titleEl.textContent : 'Update';
+                    showModal("Expanding Short", `Detailed metrics and sources for: "${title}" are currently compiling.`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
