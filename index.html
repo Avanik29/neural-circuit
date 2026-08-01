@@ -671,28 +671,43 @@
                 // VISUAL FEEDBACK
                 authSubmitBtn.innerHTML = '<svg class="w-5 h-5 animate-spin mx-auto text-dark-bg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
                 
-                // MOCK API CALL (This is where you connect to your secure backend to write to Excel)
-                setTimeout(() => {
-                    closeAuthModal();
-                    if(type === 'register') {
-                        showModal("Registration Successful", `Welcome to the circuit, ${name || email}. Your neural link is active.`);
-                        if(authBtn) authBtn.textContent = 'My Account';
-                    } else {
-                        showModal("Authentication Successful", `Welcome back, ${email}.`);
-                        if(authBtn) authBtn.textContent = 'My Account';
-                    }
-                    authSubmitBtn.textContent = type === 'register' ? 'Create Account' : 'Sign In';
-                    
-                    /* 
-                     * TO ACTUALLY SAVE TO EXCEL SECURELY:
-                     * 1. Go to make.com or zapier.com
-                     * 2. Create a webhook URL.
-                     * 3. Send a POST request here using fetch() to that webhook.
-                     * 4. Have Zapier/Make write the data to your private Google Sheet/Excel file.
-                     * This ensures your database credentials are NEVER exposed to the public.
-                     */
+                // LIVE FORMSPREE INTEGRATION
+                const formspreeEndpoint = "https://formspree.io/f/mjgnqgzb";
+                
+                const formData = new FormData();
+                formData.append("Email", email);
+                if(type === 'register') {
+                    formData.append("Name", name);
+                    formData.append("Action", "New Registration");
+                } else {
+                    formData.append("Action", "Sign In Attempt");
+                }
 
-                }, 1500);
+                fetch(formspreeEndpoint, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    closeAuthModal();
+                    if (response.ok) {
+                        if(type === 'register') {
+                            showModal("Registration Successful", `Welcome to the circuit, ${name || email}. Your neural link is active.`);
+                            if(authBtn) authBtn.textContent = 'My Account';
+                        } else {
+                            showModal("Authentication Successful", `Welcome back, ${email}.`);
+                            if(authBtn) authBtn.textContent = 'My Account';
+                        }
+                    } else {
+                        showModal("Error", "There was a problem connecting to the server. Please try again.");
+                    }
+                }).catch(error => {
+                    closeAuthModal();
+                    showModal("Error", "Network error. Please check your connection.");
+                }).finally(() => {
+                    authSubmitBtn.textContent = type === 'register' ? 'Create Account' : 'Sign In';
+                });
             });
 
             // --- Tab Navigation Logic ---
