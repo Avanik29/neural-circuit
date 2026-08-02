@@ -40,6 +40,8 @@
         .hover-lift:hover { transform: translateY(-2px); border-color: #4ade80; }
         .skeleton { background: linear-gradient(90deg, #171717 25%, #262626 50%, #171717 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
         @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-dark-bg text-gray-300 font-sans antialiased min-h-screen flex flex-col">
@@ -54,18 +56,18 @@
                     </span>
                 </div>
                 
-                <div class="text-center flex-1 w-full md:w-1/3">
+                <div class="text-center w-full md:w-1/3 order-1 md:order-none">
                     <h1 class="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight">
                         The Neural <span class="text-brand-400">Circuit</span>
                     </h1>
                 </div>
 
-                <div class="flex flex-row items-center justify-end w-full md:w-1/3 gap-3 md:gap-4 mt-4 md:mt-0">
+                <div class="flex flex-row items-center justify-end w-full md:w-1/3 gap-3 md:gap-4 order-2 md:order-none mt-2 md:mt-0">
                     <div class="relative flex-1 md:w-48 group flex">
                         <input type="text" id="search-input" placeholder="Search news..." class="w-full bg-dark-surface border border-dark-border text-white text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:border-brand-400 transition-all">
                         <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <button onclick="document.getElementById('auth-modal').classList.remove('hidden')" class="px-4 py-2 text-sm font-medium text-dark-bg bg-brand-400 hover:bg-brand-500 rounded-md transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(74,222,128,0.15)]">
+                    <button id="user-auth-btn" class="px-4 py-2 text-sm font-medium text-dark-bg bg-brand-400 hover:bg-brand-500 rounded-md transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(74,222,128,0.15)] flex-shrink-0">
                         Join 2.5M Techies
                     </button>
                 </div>
@@ -83,13 +85,13 @@
 
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         <div class="flex flex-col lg:flex-row gap-10">
-            <div class="lg:w-2/3 w-full space-y-8" id="news-section">
+            <div class="w-full lg:w-2/3 space-y-8" id="news-section">
                 <div id="dynamic-news-container" class="space-y-8">
                     <!-- Javascript will inject articles here -->
                 </div>
             </div>
 
-            <aside class="lg:w-1/3 w-full flex flex-col h-auto lg:h-[1200px] sticky top-32">
+            <aside class="w-full lg:w-1/3 flex flex-col h-auto lg:h-[1200px] lg:sticky lg:top-32">
                 <h3 class="text-lg font-bold text-white font-mono uppercase tracking-wider mb-4 border-b border-dark-border pb-2">Trending Shorts</h3>
                 <div class="shorts-scroll overflow-y-auto pr-2 space-y-4 flex-grow">
                     <!-- Sidebar populated by JS -->
@@ -98,7 +100,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="border-t border-dark-border bg-dark-bg py-12 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="col-span-1 md:col-span-2">
@@ -132,39 +133,58 @@
         </div>
     </footer>
 
-    <!-- Modals -->
+    <!-- Authentication Modal (Firebase) -->
     <div id="auth-modal" class="fixed inset-0 z-[130] hidden items-center justify-center bg-black/90 backdrop-blur-md">
         <div class="bg-dark-surface border border-dark-border rounded-xl p-8 max-w-md w-full mx-4">
-            <button onclick="document.getElementById('auth-modal').classList.add('hidden')" class="float-right text-gray-400">Close</button>
-            <h3 class="text-2xl font-bold text-white mb-6">Join the Circuit</h3>
-            <form action="https://formspree.io/f/mjgnqgzb" method="POST" class="space-y-4">
-                <input type="text" name="name" placeholder="Full Name" required class="w-full bg-dark-bg border border-dark-border p-3 rounded text-white">
-                <input type="email" name="email" placeholder="Email Address" required class="w-full bg-dark-bg border border-dark-border p-3 rounded text-white">
-                <button type="submit" class="w-full py-3 bg-brand-400 text-dark-bg font-bold rounded">Join Now</button>
-            </form>
+            <button onclick="document.getElementById('auth-modal').classList.add('hidden'); document.getElementById('auth-modal').classList.remove('flex');" class="float-right text-gray-400 hover:text-white transition-colors">Close</button>
+            <h3 class="text-2xl font-bold text-white mb-6">Sign In / Register</h3>
+            
+            <div id="auth-error-msg" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded mb-4 text-sm"></div>
+
+            <div class="space-y-4">
+                <input type="email" id="auth-email" placeholder="Email Address" required class="w-full bg-dark-bg border border-dark-border p-3 rounded text-white focus:border-brand-400 focus:outline-none transition-colors">
+                <input type="password" id="auth-password" placeholder="Password" required class="w-full bg-dark-bg border border-dark-border p-3 rounded text-white focus:border-brand-400 focus:outline-none transition-colors">
+                
+                <div class="flex gap-3 pt-2">
+                    <button id="auth-login-btn" class="flex-1 py-3 bg-dark-border hover:bg-gray-700 text-white font-bold rounded transition-colors">Sign In</button>
+                    <button id="auth-register-btn" class="flex-1 py-3 bg-brand-400 hover:bg-brand-500 text-dark-bg font-bold rounded transition-colors shadow-[0_0_15px_rgba(74,222,128,0.15)]">Register</button>
+                </div>
+
+                <div class="relative flex items-center py-4">
+                    <div class="flex-grow border-t border-dark-border"></div>
+                    <span class="flex-shrink-0 mx-4 text-gray-500 text-sm font-mono uppercase tracking-widest">or</span>
+                    <div class="flex-grow border-t border-dark-border"></div>
+                </div>
+
+                <button id="auth-google-btn" class="w-full py-3 bg-white hover:bg-gray-200 text-black font-bold rounded transition-colors flex items-center justify-center gap-3">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+                    Continue with Google
+                </button>
+            </div>
         </div>
     </div>
 
+    <!-- AI Insights Modal -->
     <div id="ai-modal" class="fixed inset-0 z-[140] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4">
         <div class="bg-dark-surface border border-indigo-500 rounded-2xl p-6 max-w-2xl w-full max-h-[85vh] flex flex-col">
-            <div class="flex justify-between mb-4"><h3 class="text-xl font-bold text-white">Gemini Insights</h3><button onclick="document.getElementById('ai-modal').classList.add('hidden')" class="text-gray-400">Close</button></div>
+            <div class="flex justify-between mb-4"><h3 class="text-xl font-bold text-white">Gemini Insights</h3><button onclick="document.getElementById('ai-modal').classList.add('hidden'); document.getElementById('ai-modal').classList.remove('flex');" class="text-gray-400">Close</button></div>
             <div id="ai-response-area" class="flex-grow overflow-y-auto bg-dark-bg p-4 rounded text-sm text-gray-300">Select an action.</div>
         </div>
     </div>
 
-    <!-- Full Article Detail Modal -->
+    <!-- Article Detail Modal -->
     <div id="article-detail-modal" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/95 backdrop-blur-md p-4">
         <div class="bg-dark-surface border border-dark-border rounded-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
-            <button onclick="document.getElementById('article-detail-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕ Close</button>
+            <button onclick="document.getElementById('article-detail-modal').classList.add('hidden'); document.getElementById('article-detail-modal').classList.remove('flex');" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕ Close</button>
             <h2 id="article-detail-title" class="text-3xl md:text-4xl font-serif font-bold text-white mb-6 pr-8"></h2>
             <div id="article-detail-content" class="text-gray-300 leading-relaxed text-lg whitespace-pre-line"></div>
         </div>
     </div>
 
-    <!-- Document Modal (For Privacy, Terms, etc) -->
+    <!-- Document Modal -->
     <div id="document-modal" class="fixed inset-0 z-[160] hidden items-center justify-center bg-black/95 backdrop-blur-md p-4">
         <div class="bg-dark-surface border border-dark-border rounded-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
-            <button onclick="document.getElementById('document-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-white">✕ Close</button>
+            <button onclick="document.getElementById('document-modal').classList.add('hidden'); document.getElementById('document-modal').classList.remove('flex');" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕ Close</button>
             <h2 id="document-title" class="text-3xl font-serif font-bold text-white mb-6 border-b border-dark-border pb-4"></h2>
             <div class="text-gray-300 leading-relaxed text-base space-y-4">
                 <p>This is a placeholder document for the Neural Circuit demonstration.</p>
@@ -175,194 +195,199 @@
     </div>
 
     <script>
-        const apiKey = "YOUR_API_KEY_HERE"; 
+        const apiKey = ""; 
         
-        // Modal functions
         window.openArticleDetail = (title, content) => {
             document.getElementById('article-detail-title').textContent = decodeURIComponent(title);
             document.getElementById('article-detail-content').textContent = decodeURIComponent(content);
-            document.getElementById('article-detail-modal').classList.remove('hidden');
-            document.getElementById('article-detail-modal').classList.add('flex');
+            const modal = document.getElementById('article-detail-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         };
 
-        window.openAIModal = (title, text, event) => {
+        window.openAIModal = async (title, text, event) => {
             if(event) event.stopPropagation();
-            document.getElementById('ai-modal').classList.remove('hidden');
-            document.getElementById('ai-modal').classList.add('flex');
-            document.getElementById('ai-response-area').innerHTML = `<div class="animate-pulse">Generating insights for: ${title}...</div>`;
+            const modal = document.getElementById('ai-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
             
-            setTimeout(() => {
-                document.getElementById('ai-response-area').innerHTML = `<strong>Insight:</strong> This development regarding "${title}" signifies a major shift in the industry landscape. The rapid acceleration of these technologies suggests that regulatory frameworks will need to adapt quickly.`;
-            }, 1500);
+            const aiResponseArea = document.getElementById('ai-response-area');
+            
+            if (apiKey === "") {
+                aiResponseArea.innerHTML = `<div class="text-amber-400 bg-amber-400/10 p-4 rounded-lg border border-amber-400/30"><strong>Demo Mode:</strong> To generate custom insights dynamically, please add your free Gemini API key to the code! <br><br><strong>Simulated Insight:</strong> The development regarding "${title}" signifies a major shift in the industry landscape, demanding updated strategic frameworks.</div>`;
+                return;
+            }
+
+            aiResponseArea.innerHTML = '<div class="flex flex-col items-center justify-center h-full gap-3"><svg class="w-6 h-6 animate-spin text-indigo-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="animate-pulse text-indigo-300 text-sm">Gemini is analyzing...</span></div>';
+            
+            try {
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                const fullPrompt = `Act as an expert AI analyst. Analyze this news article briefly and provide a 3-sentence deep insight about its future implications.\n\nArticle Title: ${title}\nSummary: ${text}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
+                });
+                
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content.parts[0].text) {
+                    aiResponseArea.innerHTML = `<div class="prose prose-invert max-w-none">${data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>')}</div>`;
+                } else {
+                    throw new Error("Invalid API response");
+                }
+            } catch (error) {
+                aiResponseArea.innerHTML = `<div class="text-red-400">Error analyzing content. Check your API key.</div>`;
+            }
         };
 
         window.openDocumentModal = (docTitle) => {
             document.getElementById('document-title').textContent = docTitle;
-            document.getElementById('document-modal').classList.remove('hidden');
-            document.getElementById('document-modal').classList.add('flex');
+            const modal = document.getElementById('document-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         };
 
-        // Massive 20-Article Fallback Database
         const fallbackArticles = [
             {
                 title: "GPT-6 Architecture Leaked: What We Know",
                 category: "LLMs and Foundation Models",
                 summary: "Rumors suggest the next generation model will feature a radical departure from traditional transformer architecture.",
-                content: "Detailed reports have emerged regarding the architecture of GPT-6. Unlike its predecessors, which relied heavily on static transformer models, GPT-6 is rumored to integrate continuous learning mechanisms.\n\nThis means the model could potentially update its knowledge base in real-time without requiring massive retraining cycles. Experts suggest this could reduce computing costs by up to 40% while significantly improving contextual accuracy.\n\nFurthermore, early benchmarks leaked by insiders indicate a 10x improvement in complex reasoning tasks, putting it closer to human-level problem-solving in specialized domains. The shift to a Mixture-of-Experts (MoE) approach is also expected to be vastly scaled up, utilizing over 100 trillion parameters.",
-                author: "Sarah Chen",
-                time: "2h ago"
+                content: "Detailed reports have emerged regarding the architecture of GPT-6. Unlike its predecessors, which relied heavily on static transformer models, GPT-6 is rumored to integrate continuous learning mechanisms.\n\nThis means the model could potentially update its knowledge base in real-time without requiring massive retraining cycles. Experts suggest this could reduce computing costs by up to 40% while significantly improving contextual accuracy.\n\nFurthermore, early benchmarks leaked by insiders indicate a 10x improvement in complex reasoning tasks, putting it closer to human-level problem-solving in specialized domains.",
+                author: "Sarah Chen", time: "2h ago"
             },
             {
                 title: "Sora 2.0 Generates Perfect Physics",
                 category: "Computer Vision",
                 summary: "OpenAI's updated video model now understands fluid dynamics and glass reflections with 100% accuracy.",
                 content: "OpenAI has quietly rolled out an update to its Sora video generation model, pushing its capabilities into hyper-realism. The most notable improvement is its flawless understanding of real-world physics.\n\nPreviously, AI video struggled with fluid dynamics (like water splashing) and complex reflections. Sora 2.0 uses a new spatial-temporal rendering engine that mathematically simulates physics rather than just hallucinating pixels. This breakthrough means visual effects studios can now use generated footage for cinematic sequences without post-processing.",
-                author: "Marcus Wei",
-                time: "4h ago"
-            },
-            {
-                title: "EU AI Act Takes Effect Today",
-                category: "AI Policy & Ethics",
-                summary: "Tech giants face fines up to 7% of global revenue as the strict new European regulations become law.",
-                content: "The highly anticipated European Union AI Act has officially come into force today, setting a global precedent for artificial intelligence regulation.\n\nThe act classifies AI systems by risk, completely banning 'unacceptable risk' applications like social scoring and real-time biometric identification in public spaces. 'High-risk' systems, such as AI used in hiring or healthcare, must now undergo rigorous compliance checks.\n\nTech giants like Google, Meta, and OpenAI must adapt their models immediately. Failure to comply could result in unprecedented fines of up to 35 million Euros or 7% of their total global annual turnover, whichever is higher.",
-                author: "Elena Rossi",
-                time: "6h ago"
+                author: "Marcus Wei", time: "4h ago"
             },
             {
                 title: "Figure 02 Robot Starts Work at BMW",
                 category: "Robotics",
                 summary: "The humanoid robot is now fully autonomous on the manufacturing floor, performing complex assembly tasks.",
-                content: "In a major milestone for industrial robotics, Figure AI's second-generation humanoid robot, Figure 02, has been officially deployed on the factory floor at the BMW manufacturing plant in Spartanburg.\n\nPowered by advanced neural networks and vision-language models, the robot operates completely autonomously, handling delicate sheet metal components and inserting them into precision machinery. Unlike traditional robotic arms, Figure 02 can walk around the factory, identify parts dynamically, and adapt to changing environments in real-time, signaling a massive shift in modern manufacturing.",
-                author: "Dr. Aris Thorne",
-                time: "8h ago"
+                content: "In a major milestone for industrial robotics, Figure AI's second-generation humanoid robot, Figure 02, has been officially deployed on the factory floor at the BMW manufacturing plant in Spartanburg.\n\nPowered by advanced neural networks and vision-language models, the robot operates completely autonomously, handling delicate sheet metal components and inserting them into precision machinery.",
+                author: "Dr. Aris Thorne", time: "8h ago"
             },
             {
-                title: "AlphaFold 3 Maps the Unknown",
-                category: "BioAI",
-                summary: "DeepMind's latest breakthrough predicts the structure of all life's molecules, not just proteins.",
-                content: "Google DeepMind has unveiled AlphaFold 3, expanding its revolutionary AI beyond just proteins. The new model can predict the structures and interactions of almost all of life's molecules, including DNA, RNA, and small pharmaceutical molecules.\n\nThis holistic view of cellular biology allows researchers to see exactly how drugs interact with targets in the human body. The development is expected to shave years off the drug discovery process, potentially leading to faster cures for complex diseases like Alzheimer's and certain types of cancer.",
-                author: "Priya Patel",
-                time: "12h ago"
+                title: "EU AI Act Takes Effect Today",
+                category: "AI Policy & Ethics",
+                summary: "Tech giants face fines up to 7% of global revenue as the strict new European regulations become law.",
+                content: "The highly anticipated European Union AI Act has officially come into force today, setting a global precedent for artificial intelligence regulation.\n\nThe act classifies AI systems by risk, completely banning 'unacceptable risk' applications like social scoring and real-time biometric identification in public spaces. Tech giants must adapt their models immediately to avoid staggering fines.",
+                author: "Elena Rossi", time: "6h ago"
             },
             {
                 title: "Meta Open-Sources Llama 4 Base Weights",
                 category: "LLMs and Foundation Models",
                 summary: "Mark Zuckerberg announces the unexpected release of the 400B parameter Llama 4 model for free commercial use.",
-                content: "In a move that continues to disrupt the closed-API business model of competitors, Meta has officially released the base weights for its highly anticipated Llama 4 model.\n\nWeighing in at 400 billion parameters, Llama 4 is the largest open-weight model ever released. Independent benchmarks show it matching or exceeding the performance of proprietary models like GPT-4 and Claude 3 Opus on standard MMLU evaluations.\n\nThe developer community is already working on quantized versions that can run on consumer hardware, democratizing access to state-of-the-art AI capabilities.",
-                author: "David Kim",
-                time: "14h ago"
-            },
-            {
-                title: "Boston Dynamics Atlas Re-Learns Parkour",
-                category: "Robotics",
-                summary: "The all-electric Atlas model demonstrates fluid agility powered entirely by reinforcement learning.",
-                content: "Boston Dynamics has released a new video showcasing the capabilities of their fully electric Atlas robot. Gone are the pre-programmed, rigid movements of the past. The new Atlas uses end-to-end reinforcement learning to navigate complex obstacle courses.\n\nThe video demonstrates the robot adapting to slippery surfaces and moving platforms in real-time without prior mapping. Engineers note that the shift from hydraulics to electric actuators combined with neural processing has reduced latency in movement by 60%, allowing for lightning-fast balancing reactions.",
-                author: "Alex Mercer",
-                time: "16h ago"
-            },
-            {
-                title: "Supreme Court Hears AI Copyright Case",
-                category: "AI Policy & Ethics",
-                summary: "The highest court begins deliberation on whether training AI on copyrighted material constitutes fair use.",
-                content: "The U.g. Supreme Court has officially opened hearings on the landmark case regarding AI data scraping. The outcome of this case could fundamentally alter how foundation models are trained in the United States.\n\nPublishers argue that using their licensed text and imagery to train commercial AI models is a blatant violation of copyright. Tech companies counter that AI training falls under 'fair use,' comparing it to a human reading books in a library to learn.\n\nLegal analysts expect a deeply divided ruling that may require Congress to draft entirely new IP legislation specifically tailored for the generative AI era.",
-                author: "Sarah Chen",
-                time: "18h ago"
-            },
-            {
-                title: "YOLOv11 Revolutionizes Edge Tracking",
-                category: "Computer Vision",
-                summary: "The open-source object detection model achieves 500 frames per second on mobile processors.",
-                content: "The computer vision community is celebrating the release of YOLOv11 (You Only Look Once). The new version introduces a novel lightweight attention mechanism that dramatically reduces computational overhead.\n\nTests confirm that YOLOv11 can run real-time object detection and segmentation at 500 FPS on standard smartphone chips, without relying on cloud processing. This breakthrough is expected to accelerate the development of cheap, smart drones, advanced security cameras, and mobile AR applications.",
-                author: "Marcus Wei",
-                time: "20h ago"
-            },
-            {
-                title: "The Rise of Small Language Models (SLMs)",
-                category: "LLMs and Foundation Models",
-                summary: "Why tech giants are pivoting from massive trillion-parameter models to highly specialized 3B parameter models.",
-                content: "While the race for Artificial General Intelligence (AGI) continues with massive models, a parallel trend is taking over the enterprise space: Small Language Models (SLMs).\n\nCompanies are finding that a highly fine-tuned 3 billion parameter model is often cheaper, faster, and more private than calling a massive cloud API. Microsoft's Phi-3 and Google's Gemma 2 are leading this charge, proving that high-quality training data is often more important than sheer parameter count.",
-                author: "Priya Patel",
-                time: "1d ago"
+                content: "In a move that continues to disrupt the closed-API business model of competitors, Meta has officially released the base weights for its highly anticipated Llama 4 model.\n\nWeighing in at 400 billion parameters, Llama 4 is the largest open-weight model ever released. Independent benchmarks show it matching or exceeding the performance of proprietary models on standard MMLU evaluations.",
+                author: "David Kim", time: "14h ago"
             },
             {
                 title: "Waymo Expands Autonomous Fleet to 5 New Cities",
                 category: "Robotics",
                 summary: "The robotaxi service reports 10 million autonomous miles driven without a single critical intervention.",
-                content: "Waymo has announced a massive expansion of its fully autonomous ride-hailing service, moving into Miami, Austin, Seattle, Washington D.C., and Boston.\n\nThe expansion is backed by their latest safety report, which reveals the Waymo Driver system has surpassed 10 million miles on public roads without a critical safety incident. The company attributes this success to their 6th-generation hardware suite, which integrates advanced LiDAR with real-time transformer-based prediction models.",
-                author: "Dr. Aris Thorne",
-                time: "1d ago"
+                content: "Waymo has announced a massive expansion of its fully autonomous ride-hailing service, moving into Miami, Austin, Seattle, Washington D.C., and Boston.\n\nThe expansion is backed by their latest safety report, which reveals the Waymo Driver system has surpassed 10 million miles on public roads without a critical safety incident. The company attributes this success to their 6th-generation hardware suite.",
+                author: "Dr. Aris Thorne", time: "1d ago"
+            },
+            {
+                title: "YOLOv11 Revolutionizes Edge Tracking",
+                category: "Computer Vision",
+                summary: "The open-source object detection model achieves 500 frames per second on mobile processors.",
+                content: "The computer vision community is celebrating the release of YOLOv11 (You Only Look Once). The new version introduces a novel lightweight attention mechanism that dramatically reduces computational overhead.\n\nTests confirm that YOLOv11 can run real-time object detection and segmentation at 500 FPS on standard smartphone chips, without relying on cloud processing.",
+                author: "Marcus Wei", time: "20h ago"
+            },
+            {
+                title: "The Rise of Small Language Models (SLMs)",
+                category: "LLMs and Foundation Models",
+                summary: "Why tech giants are pivoting from massive trillion-parameter models to highly specialized 3B parameter models.",
+                content: "While the race for Artificial General Intelligence (AGI) continues with massive models, a parallel trend is taking over the enterprise space: Small Language Models (SLMs).\n\nCompanies are finding that a highly fine-tuned 3 billion parameter model is often cheaper, faster, and more private than calling a massive cloud API. Microsoft's Phi-3 and Google's Gemma 2 are leading this charge.",
+                author: "Priya Patel", time: "1d ago"
             },
             {
                 title: "Deepfake Detection Protocol Standardized",
                 category: "Computer Vision",
                 summary: "Major social platforms agree on a unified cryptographic watermark system for AI-generated media.",
-                content: "In a rare display of industry unity, Meta, Google, TikTok, and X have agreed to adopt the C2PA (Coalition for Content Provenance and Authenticity) standard for AI-generated content.\n\nAny image, video, or audio generated by major AI platforms will now include an invisible, cryptographically signed watermark. Social networks will automatically read this watermark and display a clear 'AI Generated' label to users, aiming to combat the spread of misinformation ahead of global elections.",
-                author: "Elena Rossi",
-                time: "1d ago"
+                content: "In a rare display of industry unity, Meta, Google, TikTok, and X have agreed to adopt the C2PA (Coalition for Content Provenance and Authenticity) standard for AI-generated content.\n\nAny image, video, or audio generated by major AI platforms will now include an invisible, cryptographically signed watermark. Social networks will automatically read this watermark and display a clear 'AI Generated' label.",
+                author: "Elena Rossi", time: "1d ago"
+            },
+            {
+                title: "Supreme Court Hears AI Copyright Case",
+                category: "AI Policy & Ethics",
+                summary: "The highest court begins deliberation on whether training AI on copyrighted material constitutes fair use.",
+                content: "The U.S. Supreme Court has officially opened hearings on the landmark case regarding AI data scraping. The outcome of this case could fundamentally alter how foundation models are trained in the United States.\n\nPublishers argue that using their licensed text and imagery to train commercial AI models is a blatant violation of copyright. Tech companies counter that AI training falls under 'fair use'.",
+                author: "Sarah Chen", time: "18h ago"
+            },
+            {
+                title: "Boston Dynamics Atlas Re-Learns Parkour",
+                category: "Robotics",
+                summary: "The all-electric Atlas model demonstrates fluid agility powered entirely by reinforcement learning.",
+                content: "Boston Dynamics has released a new video showcasing the capabilities of their fully electric Atlas robot. Gone are the pre-programmed, rigid movements of the past. The new Atlas uses end-to-end reinforcement learning to navigate complex obstacle courses.\n\nThe video demonstrates the robot adapting to slippery surfaces and moving platforms in real-time without prior mapping.",
+                author: "Alex Mercer", time: "16h ago"
+            },
+            {
+                title: "AlphaFold 3 Maps the Unknown",
+                category: "BioAI",
+                summary: "DeepMind's latest breakthrough predicts the structure of all life's molecules, not just proteins.",
+                content: "Google DeepMind has unveiled AlphaFold 3, expanding its revolutionary AI beyond just proteins. The new model can predict the structures and interactions of almost all of life's molecules, including DNA, RNA, and small pharmaceutical molecules.\n\nThis holistic view of cellular biology allows researchers to see exactly how drugs interact with targets in the human body, potentially shaving years off drug discovery.",
+                author: "Priya Patel", time: "12h ago"
             },
             {
                 title: "FDA Approves First Autonomous AI Diagnostic Tool",
                 category: "AI Policy & Ethics",
                 summary: "A neural network can now diagnose early-stage retinopathy without a doctor's supervision.",
-                content: "The FDA has granted landmark approval to a medical AI system capable of making diagnostic decisions entirely autonomously. \n\nThe system, focused on detecting diabetic retinopathy from eye scans, demonstrated a 99.4% accuracy rate in clinical trials, outperforming the human baseline. This approval sets a major regulatory precedent, paving the way for AI to be used not just as an assistive tool, but as a primary healthcare provider in specialized fields.",
-                author: "David Kim",
-                time: "2d ago"
+                content: "The FDA has granted landmark approval to a medical AI system capable of making diagnostic decisions entirely autonomously.\n\nThe system, focused on detecting diabetic retinopathy from eye scans, demonstrated a 99.4% accuracy rate in clinical trials, outperforming the human baseline. This approval sets a major regulatory precedent for medical AI.",
+                author: "David Kim", time: "2d ago"
             },
             {
                 title: "Gemini 3.0 Pro Achieves Perfect Recall",
                 category: "LLMs and Foundation Models",
                 summary: "Google's latest model features a 5-million token context window with 100% retrieval accuracy.",
-                content: "Google has launched Gemini 3.0 Pro, pushing the boundaries of contextual memory. The model boasts a staggering 5-million token context window—enough to ingest 15 thick novels, a company's entire codebase, or hours of video footage simultaneously.\n\nMore importantly, independent evaluations confirm a 100% 'Needle In A Haystack' retrieval accuracy. This means the model never forgets or hallucinates details buried deep within its massive prompt window, making it a game-changer for legal analysis and massive data processing.",
-                author: "Sarah Chen",
-                time: "2d ago"
+                content: "Google has launched Gemini 3.0 Pro, pushing the boundaries of contextual memory. The model boasts a staggering 5-million token context window—enough to ingest 15 thick novels or a company's entire codebase simultaneously.\n\nIndependent evaluations confirm a 100% 'Needle In A Haystack' retrieval accuracy, meaning the model never forgets details buried deep within its prompt.",
+                author: "Sarah Chen", time: "2d ago"
             },
             {
                 title: "Swarm Robotics Deployed in Agriculture",
                 category: "Robotics",
                 summary: "Hundreds of micro-drones are now being used to pollinate crops autonomously in California.",
-                content: "Facing a decline in natural bee populations, farms in California's Central Valley are turning to AI. A startup has successfully deployed 'swarms' of autonomous micro-drones designed to pollinate almond orchards.\n\nThe drones use decentralized AI, communicating with each other locally via radio to ensure optimal coverage of the field without colliding. This represents one of the first commercial applications of true swarm intelligence outside of military research.",
-                author: "Alex Mercer",
-                time: "2d ago"
+                content: "Facing a decline in natural bee populations, farms in California's Central Valley are turning to AI. A startup has successfully deployed 'swarms' of autonomous micro-drones designed to pollinate almond orchards.\n\nThe drones use decentralized AI, communicating with each other locally via radio to ensure optimal coverage of the field without colliding.",
+                author: "Alex Mercer", time: "2d ago"
             },
             {
                 title: "AI Alignment Breakthrough at Oxford",
                 category: "AI Policy & Ethics",
                 summary: "Researchers publish a mathematical framework proving bounded safety in advanced neural networks.",
-                content: "A joint paper from researchers at Oxford and MIT has proposed a breakthrough in the notoriously difficult field of AI alignment. The team developed a mathematical proof that guarantees a neural network will not take actions outside a defined set of 'safe bounds', regardless of its intelligence level.\n\nWhile currently only applicable to restricted model architectures, experts hail this as the first concrete step toward mathematically provable safety in Artificial General Intelligence (AGI).",
-                author: "Elena Rossi",
-                time: "3d ago"
+                content: "A joint paper from researchers at Oxford and MIT has proposed a breakthrough in the notoriously difficult field of AI alignment. The team developed a mathematical proof that guarantees a neural network will not take actions outside a defined set of 'safe bounds'.\n\nWhile currently only applicable to restricted model architectures, experts hail this as the first concrete step toward mathematically provable safety in AGI.",
+                author: "Elena Rossi", time: "3d ago"
             },
             {
                 title: "Hugging Face Crosses 5 Million Models",
                 category: "LLMs and Foundation Models",
                 summary: "The open-source AI platform reaches a massive milestone as fine-tuning becomes mainstream.",
-                content: "Hugging Face, the central hub for open-source AI, has officially crossed 5 million publicly available models on its platform. The exponential growth is driven heavily by the ease of PEFT (Parameter-Efficient Fine-Tuning) techniques like LoRA.\n\nDevelopers are no longer training models from scratch. Instead, they are taking powerful base models and fine-tuning them for hyper-specific tasks—from generating specialized code to mimicking historical figures—leading to a massive explosion in AI diversity.",
-                author: "Priya Patel",
-                time: "3d ago"
+                content: "Hugging Face, the central hub for open-source AI, has officially crossed 5 million publicly available models on its platform. The exponential growth is driven heavily by the ease of PEFT (Parameter-Efficient Fine-Tuning) techniques like LoRA.\n\nDevelopers are no longer training models from scratch, leading to a massive explosion in AI diversity and specialization.",
+                author: "Priya Patel", time: "3d ago"
             },
             {
                 title: "Segment Anything 3 Sees the Unseen",
                 category: "Computer Vision",
                 summary: "Meta's new vision model can accurately segment objects in medical imaging and satellite radar.",
-                content: "Meta AI has released SAM 3 (Segment Anything Model). While previous versions were revolutionary for standard photography, SAM 3 has been trained on non-optical data, including X-rays, MRIs, sonar, and Synthetic Aperture Radar (SAR).\n\nThe model provides zero-shot segmentation for highly complex scientific imaging, allowing doctors to isolate tumors or geologists to track subtle shifts in tectonic plates with a single click.",
-                author: "Marcus Wei",
-                time: "3d ago"
+                content: "Meta AI has released SAM 3 (Segment Anything Model). While previous versions were revolutionary for standard photography, SAM 3 has been trained on non-optical data, including X-rays, MRIs, sonar, and Synthetic Aperture Radar (SAR).\n\nThe model provides zero-shot segmentation for highly complex scientific imaging, allowing doctors to isolate tumors with a single click.",
+                author: "Marcus Wei", time: "3d ago"
             },
             {
                 title: "Tesla Optimus Navigates Factory Unsupervised",
                 category: "Robotics",
                 summary: "A leaked video shows the Tesla bot handling complex logistics tasks without human intervention.",
-                content: "A recently surfaced video from inside the Tesla Gigafactory shows the Optimus Gen 3 robot operating completely unsupervised for a full 8-hour shift. The robot is seen identifying incorrectly sorted parts, fixing the bins, and moving heavy crates using a highly fluid gait.\n\nTesla engineers have reportedly solved the 'battery swap' problem, allowing the robots to automatically navigate to charging docks when low on power, enabling 24/7 continuous operation in the facility.",
-                author: "Dr. Aris Thorne",
-                time: "4d ago"
+                content: "A recently surfaced video from inside the Tesla Gigafactory shows the Optimus Gen 3 robot operating completely unsupervised for a full 8-hour shift. The robot is seen identifying incorrectly sorted parts, fixing the bins, and moving heavy crates.\n\nTesla engineers have reportedly solved the 'battery swap' problem, allowing the robots to automatically navigate to charging docks when low on power.",
+                author: "Dr. Aris Thorne", time: "4d ago"
             },
             {
                 title: "Open-Source AI Regulation Debate Heats Up",
                 category: "AI Policy & Ethics",
                 summary: "Policymakers clash over whether open-weight AI models should be subject to export controls.",
-                content: "A fierce debate has erupted in Washington over the regulation of open-source AI. National security officials are pushing to categorize large open-weight models (like Llama 4) as 'dual-use technologies', potentially restricting their export or publication.\n\nAdvocates for the open-source community argue that restricting weights will only harm domestic innovation and concentrate power in the hands of a few tech monopolies, setting the stage for a major legislative battle later this year.",
-                author: "Sarah Chen",
-                time: "4d ago"
+                content: "A fierce debate has erupted in Washington over the regulation of open-source AI. National security officials are pushing to categorize large open-weight models as 'dual-use technologies', potentially restricting their export or publication.\n\nAdvocates for the open-source community argue that restricting weights will only harm domestic innovation and concentrate power in the hands of a few tech monopolies.",
+                author: "Sarah Chen", time: "4d ago"
             }
         ];
 
@@ -386,24 +411,26 @@
                     ? fallbackArticles 
                     : fallbackArticles.filter(a => a.category.toLowerCase().includes(category.toLowerCase()) || category.toLowerCase().includes(a.category.toLowerCase()));
                 
-                const articlesToRender = filteredArticles.length > 0 ? filteredArticles : fallbackArticles.slice(0,2);
+                // Show at least 5-6 articles per page if available
+                const articlesToRender = filteredArticles.slice(0, 10); 
 
                 articlesToRender.forEach((article, index) => {
                     const isLead = index === 0;
                     const encTitle = encodeURIComponent(article.title);
                     const encContent = encodeURIComponent(article.content);
+                    const encSummary = encodeURIComponent(article.summary);
                     
                     const articleHTML = `
-                        <article onclick="openArticleDetail('${encTitle}', '${encContent}')" class="article-card glass-panel p-6 rounded-2xl hover-lift group ${isLead ? 'border-brand-400/30 bg-gradient-to-br from-dark-surface to-dark-bg' : 'cursor-pointer'}">
+                        <article onclick="openArticleDetail('${encTitle}', '${encContent}')" class="article-card glass-panel p-6 rounded-2xl hover-lift group cursor-pointer ${isLead ? 'border-brand-400/30 bg-gradient-to-br from-dark-surface to-dark-bg' : ''}">
                             <div class="flex justify-between items-start mb-4">
                                 <span class="text-xs font-mono text-brand-400 border border-brand-400/30 px-2 py-1 rounded-full category-tag">${article.category}</span>
                                 <span class="text-xs text-gray-500 font-mono">${article.time}</span>
                             </div>
-                            <h2 class="article-title ${isLead ? 'text-3xl' : 'text-xl'} font-serif font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">${article.title}</h2>
-                            <p class="article-summary text-gray-400 text-sm leading-relaxed mb-4">${article.summary}</p>
+                            <h2 class="article-title ${isLead ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl'} font-serif font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">${article.title}</h2>
+                            <p class="article-summary text-gray-400 text-sm md:text-base leading-relaxed mb-4">${article.summary}</p>
                             <div class="flex justify-between items-center pt-4 border-t border-dark-border">
                                 <span class="text-xs text-gray-500">By ${article.author}</span>
-                                <button onclick="openAIModal('${encTitle}', '${encodeURIComponent(article.summary)}', event)" class="flex items-center gap-2 text-xs font-medium text-brand-400 hover:text-white transition-colors z-10 relative">
+                                <button onclick="openAIModal('${encTitle}', '${encSummary}', event)" class="flex items-center gap-2 text-xs font-medium text-brand-400 hover:text-white transition-colors z-10 relative">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                                     AI Summary
                                 </button>
@@ -412,7 +439,7 @@
                     `;
                     container.innerHTML += articleHTML;
                 });
-            }, 300);
+            }, 200);
         }
 
         function populateShorts() {
@@ -474,6 +501,135 @@
             fetchDynamicNews();
             populateShorts();
         });
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // IMPORTANT FOR DEPLOYMENT: 
+        // If you publish this to GitHub Pages, replace these placeholder values 
+        // with your real Firebase Project configuration keys!
+        let firebaseConfig = {
+            apiKey: "YOUR_FIREBASE_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // This checks if the preview environment injected a config for us to test with.
+        if (typeof __firebase_config !== 'undefined') {
+            try {
+                firebaseConfig = JSON.parse(__firebase_config);
+            } catch(e) {}
+        }
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Setup UI Elements
+        const authModal = document.getElementById('auth-modal');
+        const authBtn = document.getElementById('user-auth-btn');
+        const emailInput = document.getElementById('auth-email');
+        const passwordInput = document.getElementById('auth-password');
+        const loginBtn = document.getElementById('auth-login-btn');
+        const registerBtn = document.getElementById('auth-register-btn');
+        const googleBtn = document.getElementById('auth-google-btn');
+        const errorMsg = document.getElementById('auth-error-msg');
+
+        const showError = (msg) => {
+            // Friendly error message for missing Firebase keys on Github
+            if(msg.includes("API key not valid")) {
+                errorMsg.textContent = "Developer Note: You need to add your real Firebase API keys to the HTML code to use Authentication on GitHub Pages!";
+            } else {
+                errorMsg.textContent = msg;
+            }
+            errorMsg.classList.remove('hidden');
+        };
+
+        const clearError = () => {
+            errorMsg.textContent = '';
+            errorMsg.classList.add('hidden');
+        };
+
+        // Toggle modal & Sign Out Logic
+        authBtn.addEventListener('click', () => {
+            if (auth.currentUser && !auth.currentUser.isAnonymous) {
+                // If logged in, button acts as sign out
+                signOut(auth).then(() => {
+                    authBtn.textContent = "Join 2.5M Techies";
+                }).catch(err => console.error("Sign out error", err));
+            } else {
+                // Open Login Modal
+                clearError();
+                authModal.classList.remove('hidden');
+                authModal.classList.add('flex');
+            }
+        });
+
+        // Listen for authentication changes globally
+        onAuthStateChanged(auth, (user) => {
+            if (user && !user.isAnonymous) {
+                // Successfully signed in
+                authModal.classList.add('hidden');
+                authModal.classList.remove('flex');
+                
+                // Format the button text (e.g., "Sign Out (test@test.com)")
+                const displayName = user.email || user.displayName || 'User';
+                const truncatedName = displayName.length > 15 ? displayName.substring(0, 12) + '...' : displayName;
+                authBtn.textContent = `Sign Out (${truncatedName})`;
+            } else {
+                // Logged out
+                authBtn.textContent = "Join 2.5M Techies";
+            }
+        });
+
+        // Action: Sign In with Email
+        loginBtn.addEventListener('click', () => {
+            clearError();
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            if(!email || !password) return showError("Please enter an email and password.");
+            
+            loginBtn.textContent = "Loading...";
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => loginBtn.textContent = "Sign In")
+                .catch(error => {
+                    loginBtn.textContent = "Sign In";
+                    showError(error.message.replace("Firebase:", "").trim());
+                });
+        });
+
+        // Action: Register with Email
+        registerBtn.addEventListener('click', () => {
+            clearError();
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            if(!email || !password) return showError("Please enter an email and password.");
+            
+            registerBtn.textContent = "Loading...";
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => registerBtn.textContent = "Register")
+                .catch(error => {
+                    registerBtn.textContent = "Register";
+                    showError(error.message.replace("Firebase:", "").trim());
+                });
+        });
+
+        // Action: Sign In with Google
+        googleBtn.addEventListener('click', () => {
+            clearError();
+            signInWithPopup(auth, googleProvider)
+                .catch(error => showError(error.message.replace("Firebase:", "").trim()));
+        });
+
+        // Preview Environment Authenticator
+        if (typeof __initial_auth_token !== 'undefined' && (!auth.currentUser || auth.currentUser.isAnonymous)) {
+            signInWithCustomToken(auth, __initial_auth_token).catch(console.error);
+        }
     </script>
 </body>
 </html>
