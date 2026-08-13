@@ -1,635 +1,844 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Neural Circuit | AI News for Techies</title>
+    <title>The Neural Circuit | AI & Tech News</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    },
-                    colors: {
-                        brand: {
-                            400: '#4ade80',
-                            500: '#22c55e',
-                        },
-                        dark: {
-                            bg: '#0a0a0a',
-                            surface: '#171717',
-                            border: '#262626'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
-        .shorts-scroll::-webkit-scrollbar { width: 4px; }
-        .shorts-scroll::-webkit-scrollbar-track { background: #171717; }
-        .shorts-scroll::-webkit-scrollbar-thumb { background: #4ade80; border-radius: 4px; }
-        .glass-panel { background: rgba(23, 23, 23, 0.7); backdrop-filter: blur(10px); border: 1px solid #262626; }
-        .hover-lift { transition: transform 0.2s ease, box-shadow 0.2s ease; border: 1px solid #262626; cursor: pointer; }
-        .hover-lift:hover { transform: translateY(-2px); border-color: #4ade80; }
-        .skeleton { background: linear-gradient(90deg, #171717 25%, #262626 50%, #171717 75%); background-size: 200% 100%; animation: loading 1.5s infinite; }
-        @keyframes loading { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        body { font-family: 'Inter', sans-serif; background-color: #0f1115; color: #f3f4f6; }
+        h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+        .nav-link { transition: color 0.2s, border-bottom 0.2s; border-bottom: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { color: #fff; border-bottom: 2px solid #34d399; }
+        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Modal Animation */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 300ms, transform 300ms; }
     </style>
 </head>
-<body class="bg-dark-bg text-gray-300 font-sans antialiased min-h-screen flex flex-col">
+<body class="antialiased min-h-screen flex flex-col">
 
-    <header class="border-b border-dark-border bg-dark-bg sticky top-0 z-50">
+    <!-- Header -->
+    <header class="sticky top-0 z-40 bg-[#0f1115]/90 backdrop-blur-md border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row justify-between items-center py-4 md:py-6 gap-4 md:gap-0">
-                <div class="hidden md:flex flex-col text-xs font-mono text-gray-500 w-1/3">
-                    <span id="current-date">Fetching Date...</span>
-                    <span class="text-brand-400 flex items-center gap-1">
-                        <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span> Auto-updating via AI
-                    </span>
-                </div>
-                
-                <div class="text-center w-full md:w-1/3 order-1 md:order-none">
-                    <h1 class="text-3xl md:text-5xl font-serif font-bold text-white tracking-tight">
-                        The Neural <span class="text-brand-400">Circuit</span>
-                    </h1>
+            <div class="py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
+                    <div>
+                        <div class="text-xs text-gray-400 mb-1 tracking-widest uppercase" id="current-date">Thursday, August 13, 2026</div>
+                        <div class="text-xs text-emerald-400 font-medium tracking-wide">1,024 Active Models</div>
+                    </div>
                 </div>
 
-                <div class="flex flex-row items-center justify-end w-full md:w-1/3 gap-3 md:gap-4 order-2 md:order-none mt-2 md:mt-0">
-                    <div class="relative flex-1 md:w-48 group flex">
-                        <input type="text" id="search-input" placeholder="Search news..." class="w-full bg-dark-surface border border-dark-border text-white text-sm rounded-full pl-10 pr-4 py-2 focus:outline-none focus:border-brand-400 transition-all">
-                        <svg class="w-4 h-4 text-gray-500 absolute left-3.5 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <div class="text-center w-full md:w-auto">
+                    <h1 class="text-4xl md:text-5xl font-bold tracking-tight">The Neural <span class="text-emerald-400">Circuit</span></h1>
+                    <p class="text-gray-400 text-sm tracking-widest uppercase mt-1">Signal Over Noise.</p>
+                </div>
+
+                <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                    <div class="relative w-full md:w-64">
+                        <input type="text" id="search-input" placeholder="Search articles..." class="w-full bg-gray-800 text-white text-sm rounded-full pl-4 pr-10 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500 border border-gray-700 transition-all placeholder-gray-500">
+                        <svg class="w-4 h-4 text-gray-400 absolute right-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                     </div>
-                    <button id="user-auth-btn" class="px-4 py-2 text-sm font-medium text-dark-bg bg-brand-400 hover:bg-brand-500 rounded-md transition-colors whitespace-nowrap shadow-[0_0_15px_rgba(74,222,128,0.15)] flex-shrink-0">
-                        Join 2.5M Techies
+                    <button onclick="openSubscribe()" class="bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-semibold py-2 px-5 rounded-full text-sm transition-all whitespace-nowrap shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_20px_rgba(16,185,129,0.5)]">
+                        Subscribe
                     </button>
                 </div>
             </div>
-            
-            <nav id="category-nav" class="flex space-x-6 overflow-x-auto py-3 text-sm font-medium text-gray-400 border-t border-dark-border scrollbar-hide">
-                <a href="#" data-category="AI" class="nav-tab text-white border-b-2 border-brand-400 pb-2 whitespace-nowrap">Live Feed</a>
-                <a href="#" data-category="LLMs and Foundation Models" class="nav-tab hover:text-white border-b-2 border-transparent pb-2 whitespace-nowrap transition-colors">LLMs & Models</a>
-                <a href="#" data-category="Computer Vision" class="nav-tab hover:text-white border-b-2 border-transparent pb-2 whitespace-nowrap transition-colors">Computer Vision</a>
-                <a href="#" data-category="Robotics" class="nav-tab hover:text-white border-b-2 border-transparent pb-2 whitespace-nowrap transition-colors">Robotics</a>
-                <a href="#" data-category="AI Policy & Ethics" class="nav-tab hover:text-white border-b-2 border-transparent pb-2 whitespace-nowrap transition-colors">Policy & Ethics</a>
+
+            <!-- Categories -->
+            <nav class="flex overflow-x-auto hide-scrollbar py-3 gap-6 text-sm font-medium text-gray-400">
+                <button onclick="filterArticles('Front Page')" class="nav-link active whitespace-nowrap pb-1">Front Page</button>
+                <button onclick="filterArticles('LLMs & Foundation Models')" class="nav-link whitespace-nowrap pb-1">LLMs & Foundation Models</button>
+                <button onclick="filterArticles('Computer Vision')" class="nav-link whitespace-nowrap pb-1">Computer Vision</button>
+                <button onclick="filterArticles('Robotics')" class="nav-link whitespace-nowrap pb-1">Robotics</button>
+                <button onclick="filterArticles('Hardware & Silicon')" class="nav-link whitespace-nowrap pb-1">Hardware & Silicon</button>
+                <button onclick="filterArticles('Policy & Ethics')" class="nav-link whitespace-nowrap pb-1">Policy & Ethics</button>
             </nav>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        
+        <!-- Category Title -->
+        <div class="mb-8 border-b border-gray-800 pb-4 flex items-end justify-between">
+            <h2 id="section-title" class="text-3xl font-bold text-white serif">Front Page</h2>
+            <span id="article-count" class="text-gray-500 text-sm"></span>
+        </div>
+
         <div class="flex flex-col lg:flex-row gap-10">
-            <div class="w-full lg:w-2/3 space-y-8" id="news-section">
-                <div id="dynamic-news-container" class="space-y-8">
-                    <!-- Javascript will inject articles here -->
+            <!-- Left Column: Articles Grid -->
+            <div class="lg:w-2/3">
+                <div id="articles-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Articles will be injected here via JS -->
+                </div>
+                <!-- Empty State -->
+                <div id="no-results" class="hidden py-12 text-center text-gray-500">
+                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-.586-1.414l-4.5-4.5A2 2 0 0015.086 3H15m4 17h-4"></path></svg>
+                    <p class="text-lg">No articles found matching your search.</p>
                 </div>
             </div>
 
-            <aside class="w-full lg:w-1/3 flex flex-col h-auto lg:h-[1200px] lg:sticky lg:top-32">
-                <h3 class="text-lg font-bold text-white font-mono uppercase tracking-wider mb-4 border-b border-dark-border pb-2">Trending Shorts</h3>
-                <div class="shorts-scroll overflow-y-auto pr-2 space-y-4 flex-grow">
-                    <!-- Sidebar populated by JS -->
+            <!-- Right Column: Live Feed / Shorts -->
+            <div class="lg:w-1/3">
+                <div class="sticky top-40 bg-gray-900/50 rounded-xl border border-gray-800 p-5">
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                        <h3 class="text-lg font-semibold uppercase tracking-wider text-gray-300">Live Shorts</h3>
+                    </div>
+                    <div id="shorts-container" class="space-y-6">
+                        <!-- Shorts will be injected here -->
+                    </div>
                 </div>
-            </aside>
+            </div>
         </div>
     </main>
 
-    <footer class="border-t border-dark-border bg-dark-bg py-12 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div class="col-span-1 md:col-span-2">
-                <h2 class="text-2xl font-serif font-bold text-white tracking-tight mb-4">
-                    The Neural <span class="text-brand-400">Circuit</span>
-                </h2>
-                <p class="text-gray-400 text-sm leading-relaxed max-w-sm mb-6">
-                    Cutting through the noise of the AI revolution. We deliver unhyped, technical, and accurate news for developers, researchers, and tech enthusiasts.
-                </p>
-                <p class="text-xs font-mono text-gray-500">&copy; 2026 The Neural Circuit. All rights reserved.</p>
+    <!-- Footer -->
+    <footer class="bg-black py-12 border-t border-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <h2 class="text-2xl font-bold tracking-tight mb-4">The Neural <span class="text-emerald-400">Circuit</span></h2>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-md">
+                        Your premium source for signal in the age of artificial intelligence. We track foundation models, silicon breakthroughs, robotics, and the ethical implications of a rapidly changing world.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4 uppercase text-xs tracking-wider">Categories</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><button onclick="filterArticles('LLMs & Foundation Models'); window.scrollTo(0,0);" class="hover:text-emerald-400 transition-colors">LLMs & Models</button></li>
+                        <li><button onclick="filterArticles('Computer Vision'); window.scrollTo(0,0);" class="hover:text-emerald-400 transition-colors">Computer Vision</button></li>
+                        <li><button onclick="filterArticles('Robotics'); window.scrollTo(0,0);" class="hover:text-emerald-400 transition-colors">Robotics</button></li>
+                        <li><button onclick="filterArticles('Hardware & Silicon'); window.scrollTo(0,0);" class="hover:text-emerald-400 transition-colors">Hardware</button></li>
+                        <li><button onclick="filterArticles('Policy & Ethics'); window.scrollTo(0,0);" class="hover:text-emerald-400 transition-colors">Policy</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4 uppercase text-xs tracking-wider">Stay Updated</h4>
+                    <p class="text-gray-400 text-sm mb-4">Get the top daily AI news delivered straight to your inbox.</p>
+                    <button onclick="openSubscribe()" class="w-full bg-gray-800 hover:bg-gray-700 border border-gray-700 text-white font-medium py-2 px-4 rounded transition-colors text-sm">
+                        Join the Newsletter
+                    </button>
+                </div>
             </div>
-            
-            <div>
-                <h4 class="text-white font-bold mb-4">Categories</h4>
-                <ul class="space-y-2 text-sm text-gray-400" id="footer-categories">
-                    <li><a href="#" data-category="LLMs and Foundation Models" class="hover:text-brand-400 transition-colors">LLMs & Models</a></li>
-                    <li><a href="#" data-category="Computer Vision" class="hover:text-brand-400 transition-colors">Computer Vision</a></li>
-                    <li><a href="#" data-category="Robotics" class="hover:text-brand-400 transition-colors">Robotics</a></li>
-                    <li><a href="#" data-category="AI Policy & Ethics" class="hover:text-brand-400 transition-colors">Policy & Ethics</a></li>
-                </ul>
-            </div>
-            
-            <div>
-                <h4 class="text-white font-bold mb-4">Resources</h4>
-                <ul class="space-y-2 text-sm text-gray-400">
-                    <li><a href="#" onclick="openDocumentModal('Privacy Policy')" class="hover:text-brand-400 transition-colors">Privacy Policy</a></li>
-                    <li><a href="#" onclick="openDocumentModal('Terms of Service')" class="hover:text-brand-400 transition-colors">Terms of Service</a></li>
-                    <li><a href="#" onclick="openDocumentModal('API Documentation')" class="hover:text-brand-400 transition-colors">API Docs</a></li>
-                </ul>
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+                <p>&copy; 2026 The Neural Circuit. All rights reserved.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Authentication Modal (Firebase) -->
-    <div id="auth-modal" class="fixed inset-0 z-[130] hidden items-center justify-center bg-black/90 backdrop-blur-md">
-        <div class="bg-dark-surface border border-dark-border rounded-xl p-8 max-w-md w-full mx-4">
-            <button onclick="document.getElementById('auth-modal').classList.add('hidden'); document.getElementById('auth-modal').classList.remove('flex');" class="float-right text-gray-400 hover:text-white transition-colors">Close</button>
-            <h3 class="text-2xl font-bold text-white mb-6">Sign In / Register</h3>
-            
-            <div id="auth-error-msg" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded mb-4 text-sm"></div>
-
-            <div class="space-y-4">
-                <input type="email" id="auth-email" placeholder="Email Address" required class="w-full bg-dark-bg border border-dark-border p-3 rounded text-white focus:border-brand-400 focus:outline-none transition-colors">
-                <input type="password" id="auth-password" placeholder="Password" required class="w-full bg-dark-bg border border-dark-border p-3 rounded text-white focus:border-brand-400 focus:outline-none transition-colors">
+    <!-- Article Detail Modal -->
+    <div id="article-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeArticleModal()"></div>
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="relative bg-gray-900 border border-gray-700 rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-3xl w-full max-h-[90vh] flex flex-col">
                 
-                <div class="flex gap-3 pt-2">
-                    <button id="auth-login-btn" class="flex-1 py-3 bg-dark-border hover:bg-gray-700 text-white font-bold rounded transition-colors">Sign In</button>
-                    <button id="auth-register-btn" class="flex-1 py-3 bg-brand-400 hover:bg-brand-500 text-dark-bg font-bold rounded transition-colors shadow-[0_0_15px_rgba(74,222,128,0.15)]">Register</button>
-                </div>
-
-                <div class="relative flex items-center py-4">
-                    <div class="flex-grow border-t border-dark-border"></div>
-                    <span class="flex-shrink-0 mx-4 text-gray-500 text-sm font-mono uppercase tracking-widest">or</span>
-                    <div class="flex-grow border-t border-dark-border"></div>
-                </div>
-
-                <button id="auth-google-btn" class="w-full py-3 bg-white hover:bg-gray-200 text-black font-bold rounded transition-colors flex items-center justify-center gap-3">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-                    Continue with Google
+                <!-- Close Button -->
+                <button onclick="closeArticleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white bg-gray-800 p-2 rounded-full transition-colors z-10">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
+
+                <!-- Modal Content Scrollable Area -->
+                <div class="overflow-y-auto px-6 py-8 sm:p-10 hide-scrollbar flex-grow">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span id="modal-category" class="bg-gray-800 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">Category</span>
+                        <span id="modal-date" class="text-sm text-gray-400">Date</span>
+                    </div>
+                    
+                    <h2 id="modal-title" class="text-3xl sm:text-4xl font-bold text-white mb-6 serif leading-tight">Article Title</h2>
+                    
+                    <div id="modal-content" class="text-gray-300 text-base sm:text-lg leading-relaxed space-y-6 whitespace-pre-line mb-10">
+                        Article content goes here...
+                    </div>
+
+                    <!-- Gemini AI Integration Section -->
+                    <div class="mt-8 pt-8 border-t border-gray-800 bg-gray-800/30 rounded-xl p-6">
+                        <div class="flex items-center gap-2 mb-4">
+                            <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                            <h3 class="text-xl font-semibold text-white">Gemini Insights</h3>
+                        </div>
+                        
+                        <!-- Auto Summary -->
+                        <div class="mb-6">
+                            <button id="btn-ai-summary" onclick="generateArticleSummary()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium py-2 px-4 rounded transition-colors w-full sm:w-auto">
+                                ✨ Generate AI Summary
+                            </button>
+                            <div id="ai-summary-container" class="mt-4 hidden bg-gray-900 rounded-lg p-4 border border-gray-700">
+                                <h4 class="text-xs font-bold text-indigo-400 uppercase tracking-wider mb-2">Key Takeaways</h4>
+                                <div id="ai-summary-content" class="text-sm text-gray-300"></div>
+                            </div>
+                        </div>
+
+                        <!-- Ask Gemini -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Ask Gemini about this article:</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="ai-chat-input" placeholder="e.g. What are the main risks mentioned?" class="flex-grow bg-gray-900 border border-gray-700 rounded p-3 text-sm text-white focus:ring-1 focus:ring-indigo-500 focus:outline-none placeholder-gray-600">
+                                <button id="btn-ai-ask" onclick="askGeminiQuestion()" class="bg-gray-700 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded transition-colors text-sm">
+                                    Ask
+                                </button>
+                            </div>
+                            <div id="ai-chat-response" class="mt-4 p-4 rounded-lg bg-gray-900 border border-gray-700 hidden text-sm">
+                                <!-- AI Chat responses appear here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- AI Insights Modal -->
-    <div id="ai-modal" class="fixed inset-0 z-[140] hidden items-center justify-center bg-black/90 backdrop-blur-md p-4">
-        <div class="bg-dark-surface border border-indigo-500 rounded-2xl p-6 max-w-2xl w-full max-h-[85vh] flex flex-col">
-            <div class="flex justify-between mb-4"><h3 class="text-xl font-bold text-white">Gemini Insights</h3><button onclick="document.getElementById('ai-modal').classList.add('hidden'); document.getElementById('ai-modal').classList.remove('flex');" class="text-gray-400">Close</button></div>
-            <div id="ai-response-area" class="flex-grow overflow-y-auto bg-dark-bg p-4 rounded text-sm text-gray-300">Select an action.</div>
-        </div>
-    </div>
-
-    <!-- Article Detail Modal -->
-    <div id="article-detail-modal" class="fixed inset-0 z-[150] hidden items-center justify-center bg-black/95 backdrop-blur-md p-4">
-        <div class="bg-dark-surface border border-dark-border rounded-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
-            <button onclick="document.getElementById('article-detail-modal').classList.add('hidden'); document.getElementById('article-detail-modal').classList.remove('flex');" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕ Close</button>
-            <h2 id="article-detail-title" class="text-3xl md:text-4xl font-serif font-bold text-white mb-6 pr-8"></h2>
-            <div id="article-detail-content" class="text-gray-300 leading-relaxed text-lg whitespace-pre-line"></div>
-        </div>
-    </div>
-
-    <!-- Document Modal -->
-    <div id="document-modal" class="fixed inset-0 z-[160] hidden items-center justify-center bg-black/95 backdrop-blur-md p-4">
-        <div class="bg-dark-surface border border-dark-border rounded-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
-            <button onclick="document.getElementById('document-modal').classList.add('hidden'); document.getElementById('document-modal').classList.remove('flex');" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕ Close</button>
-            <h2 id="document-title" class="text-3xl font-serif font-bold text-white mb-6 border-b border-dark-border pb-4"></h2>
-            <div class="text-gray-300 leading-relaxed text-base space-y-4">
-                <p>This is a placeholder document for the Neural Circuit demonstration.</p>
-                <p>In a production environment, this modal would fetch the full legal or technical text via a CMS or static markdown file.</p>
-                <p>All data and content provided is strictly for educational and portfolio display purposes.</p>
+    <!-- Newsletter Subscribe Modal -->
+    <div id="subscribe-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeSubscribe()"></div>
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="relative bg-gray-900 border border-gray-700 rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-md w-full p-8">
+                <button onclick="closeSubscribe()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white serif mb-2">Stay Ahead of the Curve</h3>
+                    <p class="text-gray-400 text-sm">Join 2.5 million tech professionals. Get our daily briefing on the most important developments in AI.</p>
+                </div>
+                
+                <form id="subscribe-form" onsubmit="handleSubscribe(event)" class="space-y-4">
+                    <div>
+                        <input type="email" required placeholder="Enter your email address" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-gray-500">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 rounded-lg transition-colors">
+                        Subscribe Now
+                    </button>
+                </form>
+                <div id="subscribe-success" class="hidden text-center text-emerald-400 mt-4 p-3 bg-emerald-400/10 rounded-lg">
+                    Welcome to the Circuit! Your email is verified.
+                </div>
+                <p class="text-xs text-gray-500 text-center mt-4">We respect your inbox. Unsubscribe at any time.</p>
             </div>
         </div>
     </div>
 
     <script>
-        const apiKey = "AQ.Ab8RN6Ig4tv61QUy80mE-Cj0keysQ1quBNirVK8gTseAYJRfaA"; 
-        
-        window.openArticleDetail = (title, content) => {
-            document.getElementById('article-detail-title').textContent = decodeURIComponent(title);
-            document.getElementById('article-detail-content').textContent = decodeURIComponent(content);
-            const modal = document.getElementById('article-detail-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        };
+        // -----------------------------------------
+        // DATABASE: 40 Detailed Premium Articles
+        // -----------------------------------------
+        const database = [
+            // LLMs & Foundation Models (8 Articles)
+            {
+                id: "llm-1",
+                category: "LLMs & Foundation Models",
+                title: "GPT-6 Can Now Run Natively on Consumer Hardware",
+                date: "August 13, 2026",
+                desc: "In a stunning breakthrough for decentralized AI, OpenAI researchers have successfully compressed the GPT-6 architecture to run on 24GB VRAM consumer GPUs.\n\nHistorically, running models of this caliber required massive server clusters. By utilizing a new technique called 'Quantum Quantization' which reduces precision loss dynamically based on token importance, the model shrinks by nearly 85% in size.\n\nThis fundamentally alters the landscape of local AI, promising complete privacy for enterprise deployment while maintaining reasoning capabilities equivalent to the massive cloud-based GPT-5."
+            },
+            {
+                id: "llm-2",
+                category: "LLMs & Foundation Models",
+                title: "Claude 4 Opus Shatters SWE-bench Benchmarks",
+                date: "August 12, 2026",
+                desc: "Anthropic has quietly updated Claude 4 Opus, leading to an unprecedented 89% zero-shot success rate on the SWE-bench software engineering benchmark.\n\nThe improvement stems from Anthropic's new 'Constitutional Coding' training layer, which forces the model to heavily self-verify abstract logic trees before committing to syntax.\n\nDevelopers report that the model can now securely handle multi-file refactoring across complex React and Python codebases without hallucinating phantom variables."
+            },
+            {
+                id: "llm-3",
+                category: "LLMs & Foundation Models",
+                title: "Meta's Llama 4 Open-Sourced: 500B Parameters",
+                date: "August 10, 2026",
+                desc: "Mark Zuckerberg has officially released the weights for Llama 4, a 500-billion parameter behemoth. It is the largest open-source model in history.\n\nMeta explicitly designed Llama 4 as a MoE (Mixture of Experts) model to keep inference costs low. Despite its massive size, it routes requests to highly specialized micro-models, allowing researchers to run it efficiently.\n\nThe release has sent shockwaves through the proprietary model market, as startups can now fine-tune a massive foundational model entirely for free."
+            },
+            {
+                id: "llm-4",
+                category: "LLMs & Foundation Models",
+                title: "Google Gemini 3.5 Pro Masters Long-Context Video",
+                date: "August 9, 2026",
+                desc: "Google DeepMind has expanded the context window of Gemini 3.5 Pro to an incredible 10 million tokens, natively processing hours of raw video alongside text.\n\nUsers can now upload feature-length films or security camera footage, and the model can pinpoint exactly when specific events occur, answer spatial reasoning queries, and track objects across cuts.\n\nThis native multimodal architecture removes the need for OCR or frame-by-frame transcription, processing visual data as raw tensors."
+            },
+            {
+                id: "llm-5",
+                category: "LLMs & Foundation Models",
+                title: "The Rise of 'Small Language Models' (SLMs)",
+                date: "August 7, 2026",
+                desc: "While giants battle over massive parameter counts, a new trend is emerging: highly capable Small Language Models (SLMs) under 3 billion parameters.\n\nCompanies like Mistral and Microsoft (with their Phi-4 release) are proving that extreme data curation—training models only on textbook-quality data—yields reasoning capabilities that punch far above their weight class.\n\nThese models are rapidly being integrated directly into smartphones, operating offline to preserve battery life and user privacy."
+            },
+            {
+                id: "llm-6",
+                category: "LLMs & Foundation Models",
+                title: "AI Hallucinations Solved? The RAG Revolution",
+                date: "August 6, 2026",
+                desc: "A new paradigm in Retrieval-Augmented Generation (RAG) named 'GraphRAG' has reportedly reduced factual hallucinations in LLMs to near absolute zero.\n\nInstead of just retrieving similar text chunks, GraphRAG builds a persistent knowledge graph of entities and relationships. Before generating a token, the LLM must map its reasoning against this deterministic graph.\n\nEnterprise adoption of GraphRAG is skyrocketing in the legal and medical sectors where factual accuracy is a life-or-death requirement."
+            },
+            {
+                id: "llm-7",
+                category: "LLMs & Foundation Models",
+                title: "xAI Releases Grok 3 with Real-Time API Access",
+                date: "August 5, 2026",
+                desc: "Elon Musk's xAI has launched Grok 3, featuring a unique architecture that inherently ingests real-time API streams as part of its foundational context.\n\nUnlike other models that require external tool use, Grok 3 natively understands JSON streams from X (Twitter), financial markets, and weather stations, updating its internal state on the fly.\n\nThe model excels at real-time sentiment analysis and rapid news summarization, though critics warn about the potential for ingesting unverified live data."
+            },
+            {
+                id: "llm-8",
+                category: "LLMs & Foundation Models",
+                title: "The Context Window Dilemma: Cost vs Memory",
+                date: "August 4, 2026",
+                desc: "As models boast multi-million token context windows, researchers are hitting a physical wall: the quadratic cost of the attention mechanism.\n\nRecent papers from Stanford highlight that while an LLM can theoretically process 2 million tokens, the computational cost and latency make it economically unviable for average consumers.\n\nNew architectures like Mamba (State Space Models) are being proposed as alternatives to Transformers, offering linear scaling to solve the context window bottleneck."
+            },
 
-        window.openAIModal = async (title, text, event) => {
-            if(event) event.stopPropagation();
-            const modal = document.getElementById('ai-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
+            // Computer Vision (8 Articles)
+            {
+                id: "cv-1",
+                category: "Computer Vision",
+                title: "Sora 2.0 Generates Hyper-Realistic 4K Video in Realtime",
+                date: "August 12, 2026",
+                desc: "OpenAI has stunned the film industry with the release of Sora 2.0, capable of generating 60 frames per second 4K video instantly with zero rendering time.\n\nThe leap in performance is attributed to a new diffusion transformer architecture that processes spatial and temporal patches simultaneously.\n\nHollywood studios are already heavily integrating the tool for pre-visualization, while independent creators use it to generate entire short films from a single text prompt."
+            },
+            {
+                id: "cv-2",
+                category: "Computer Vision",
+                title: "YOLOv12 Achieves 99% Object Detection Accuracy",
+                date: "August 10, 2026",
+                desc: "The legendary 'You Only Look Once' architecture has reached version 12, achieving near-perfect object detection accuracy on the edge.\n\nOptimized for mobile processors, YOLOv12 can identify, track, and predict the trajectory of over 500 distinct objects simultaneously in a busy street camera feed at 120Hz.\n\nThis breakthrough is a massive boon for autonomous driving systems, drastically reducing the latency required to identify pedestrians and unpredictable hazards."
+            },
+            {
+                id: "cv-3",
+                category: "Computer Vision",
+                title: "DeepFake Detection Algorithms Hit an Impasse",
+                date: "August 8, 2026",
+                desc: "Cybersecurity researchers have sounded the alarm: current generation generative video has surpassed the detection capabilities of traditional DeepFake scanners.\n\nBecause models now perfectly replicate micro-expressions, skin light scattering, and heart-rate fluctuations based on pixel shifts, standard analytical tools are returning false negatives.\n\nThe industry is now pivoting toward cryptographic watermarking at the hardware level (inside the camera sensor itself) to verify authentic media."
+            },
+            {
+                id: "cv-4",
+                category: "Computer Vision",
+                title: "Medical AI Detects Cancers 5 Years Earlier",
+                date: "August 6, 2026",
+                desc: "A joint study by MIT and the Mayo Clinic shows that a new vision transformer model can detect microscopic anomalies in MRI scans that precede tumor formation by up to 5 years.\n\nThe model was trained on millions of longitudinal scans, learning the invisible pixel-level patterns that human radiologists simply cannot perceive.\n\nFDA fast-track approval is underway, signaling a potential paradigm shift in preventative oncology."
+            },
+            {
+                id: "cv-5",
+                category: "Computer Vision",
+                title: "NeRFs Make 3D Rendering Obsolete",
+                date: "August 5, 2026",
+                desc: "Neural Radiance Fields (NeRFs) have evolved to the point where they are replacing traditional 3D polygon modeling in video game development.\n\nInstead of artists modeling assets, developers take a 10-second smartphone video of an object. The AI instantly creates a photorealistic, fully relightable 3D asset.\n\nMajor game engines like Unreal and Unity have fully integrated native NeRF support, cutting asset creation time from weeks to minutes."
+            },
+            {
+                id: "cv-6",
+                category: "Computer Vision",
+                title: "Apple Vision Pro 2 Relies Heavily on Edge CV",
+                date: "August 3, 2026",
+                desc: "Leaks regarding Apple's next headset reveal a massive reliance on on-device Computer Vision, powered by a dedicated 'R2' spatial compute chip.\n\nThe device uses advanced semantic segmentation to map the user's physical room, perfectly occluding virtual objects behind real-world furniture in real-time.\n\nThis deep integration of CV eliminates the 'floating UI' feeling, making augmented reality objects appear physically grounded in the real world."
+            },
+            {
+                id: "cv-7",
+                category: "Computer Vision",
+                title: "Satellite Imagery Analysis Predicts Crop Yields",
+                date: "August 1, 2026",
+                desc: "AgriTech startups are deploying massive vision models to analyze daily satellite imagery of global farmlands.\n\nBy measuring hyperspectral data—including soil moisture and infrared reflection of leaves—the AI can predict global crop yields with 96% accuracy months before harvest.\n\nThis data is being used to stabilize supply chains, though it has also caused massive fluctuations in agricultural commodity trading."
+            },
+            {
+                id: "cv-8",
+                category: "Computer Vision",
+                title: "AI Restores Heavily Damaged Historical Footage",
+                date: "July 28, 2026",
+                desc: "A community of open-source developers has released a tool that perfectly restores, colorizes, and upscales archival footage from the early 1900s.\n\nThe model hallucinates missing frames to create fluid 60fps motion, using semantic understanding to correctly guess the colors of historical clothing and environments.\n\nMuseums worldwide are adopting the technology to modernize their archives for a new generation of visitors."
+            },
+
+            // Robotics (8 Articles)
+            {
+                id: "robo-1",
+                category: "Robotics",
+                title: "Figure 03 Humanoid Now Working in BMW Plants",
+                date: "August 13, 2026",
+                desc: "Robotics startup Figure has officially deployed a fleet of their Version 03 humanoid robots onto the manufacturing floor at BMW's Spartanburg plant.\n\nThese robots are not hardcoded. They use a Vision-Language-Action (VLA) model to 'watch' human workers assemble parts and instantly mimic the behavior, adjusting their grip strength dynamically.\n\nBMW reports a 15% increase in efficiency in sections where the robots assist human technicians with heavy lifting and precision placement."
+            },
+            {
+                id: "robo-2",
+                category: "Robotics",
+                title: "Tesla Optimus Navigates Complex Urban Environments",
+                date: "August 11, 2026",
+                desc: "A newly released video shows the Tesla Optimus robot navigating a crowded city street, stepping over uneven pavement, and avoiding pedestrians in real-time.\n\nTesla attributes this capability to their unified Full Self-Driving (FSD) architecture, utilizing the exact same neural nets used in their cars, adapted for bipedal locomotion.\n\nThe demonstration proves that end-to-end neural network training is vastly superior to traditional hardcoded robotic gait algorithms."
+            },
+            {
+                id: "robo-3",
+                category: "Robotics",
+                title: "Boston Dynamics' Atlas Masters Tool Use",
+                date: "August 9, 2026",
+                desc: "The fully electric version of Boston Dynamics' Atlas has demonstrated complex tool use, including operating power drills and welding equipment.\n\nThe robot's new hydraulic-free actuators provide unparalleled precision, allowing it to perform tasks that require sub-millimeter accuracy.\n\nConstruction companies are placing massive pre-orders, envisioning a future where robots handle hazardous structural tasks on active sites."
+            },
+            {
+                id: "robo-4",
+                category: "Robotics",
+                title: "Micro-Robots Deliver Targeted Cancer Drugs",
+                date: "August 7, 2026",
+                desc: "Researchers at ETH Zurich have successfully guided swarms of magnetic micro-robots through the human bloodstream to deliver chemotherapy directly to a tumor.\n\nThe robots are controlled externally by an AI system that monitors real-time ultrasound, navigating the complex vascular system while avoiding healthy tissue.\n\nThis breakthrough dramatically reduces the side effects of chemotherapy, as the drugs are only released exactly where they are needed."
+            },
+            {
+                id: "robo-5",
+                category: "Robotics",
+                title: "Drones Swarms Coordinate to Fight Wildfires",
+                date: "August 4, 2026",
+                desc: "In California, a fully autonomous swarm of 200 drones was deployed to map, track, and suppress a rapidly spreading wildfire.\n\nThe drones communicate with each other via a localized mesh network, dynamically reassigning tasks—some drop fire retardant, while others use thermal cameras to find hotspots.\n\nFire chiefs praise the AI swarm for operating in heavy smoke conditions where manned helicopters are grounded."
+            },
+            {
+                id: "robo-6",
+                category: "Robotics",
+                title: "Agricultural Robots Solve the Labor Shortage",
+                date: "August 2, 2026",
+                desc: "Autonomous harvesting machines powered by advanced vision models are sweeping through the American Midwest.\n\nThese machines identify ripe produce, use delicate robotic arms to pick fruit without bruising it, and sort it instantly. They operate 24/7, guided by GPS and LiDAR.\n\nFarmers report that the technology is the only viable solution to severe seasonal labor shortages, keeping food prices stable."
+            },
+            {
+                id: "robo-7",
+                category: "Robotics",
+                title: "Soft Robotics: Grippers that Feel",
+                date: "July 30, 2026",
+                desc: "A breakthrough in 'soft robotics' uses fluid-filled silicone fingers embedded with microscopic sensors that simulate a human sense of touch.\n\nThe AI analyzes pressure feedback in milliseconds, allowing the robot arm to pick up an egg without cracking it, and immediately transition to lifting a 50lb steel gear.\n\nThis tactile feedback is crucial for robots designed to interact safely with humans in domestic and healthcare environments."
+            },
+            {
+                id: "robo-8",
+                category: "Robotics",
+                title: "The Ethics of Autonomous Weapons Systems",
+                date: "July 28, 2026",
+                desc: "The UN has convened an emergency panel regarding the rapid deployment of AI-controlled autonomous weapon systems in recent global conflicts.\n\nThese drone systems can identify and engage targets without human intervention, raising profound moral questions about accountability in warfare.\n\nTech leaders are pushing for an absolute ban on lethal autonomous weapons, citing the risk of algorithmic bias and escalation without human oversight."
+            },
+
+            // Hardware & Silicon (8 Articles)
+            {
+                id: "hard-1",
+                category: "Hardware & Silicon",
+                title: "Nvidia Announces Rubin Architecture: 2nm Node",
+                date: "August 13, 2026",
+                desc: "Nvidia CEO Jensen Huang unveiled the highly anticipated 'Rubin' GPU architecture, built on TSMC's cutting-edge 2-nanometer process node.\n\nRubin promises a 4x leap in AI training performance over Blackwell, utilizing advanced 3D packaging and next-generation HBM4 memory to eliminate data bottlenecks.\n\nThe announcement solidifies Nvidia's total dominance in the AI hardware space, with hyperscalers like Microsoft and AWS already reserving billions of dollars in silicon."
+            },
+            {
+                id: "hard-2",
+                category: "Hardware & Silicon",
+                title: "Groq's LPU shatters Inference Speed Records",
+                date: "August 11, 2026",
+                desc: "Silicon startup Groq has demonstrated their latest Language Processing Unit (LPU), generating an astonishing 2,000 tokens per second on Llama 3.\n\nUnlike traditional GPUs, Groq's deterministic architecture compiles the model directly into SRAM, bypassing the memory bandwidth issues that plague standard hardware.\n\nThis extreme inference speed makes real-time voice-to-voice AI communication imperceptibly fast, eliminating awkward pauses in AI voice assistants."
+            },
+            {
+                id: "hard-3",
+                category: "Hardware & Silicon",
+                title: "Apple M5 Focuses Exclusively on Neural Engine",
+                date: "August 8, 2026",
+                desc: "Details of Apple's upcoming M5 chip reveal that nearly 60% of the die space is dedicated to the Neural Engine, a massive departure from CPU-centric designs.\n\nApple is heavily prioritizing on-device AI generation, ensuring that future Macs can run billion-parameter models entirely locally without draining battery life.\n\nThis hardware shift ensures total user privacy, as sensitive personal queries never have to hit cloud servers for processing."
+            },
+            {
+                id: "hard-4",
+                category: "Hardware & Silicon",
+                title: "The Energy Crisis of AI Datacenters",
+                date: "August 5, 2026",
+                desc: "The explosive growth of AI datacenters is straining global power grids, with a single training cluster now drawing as much power as a small city.\n\nTech giants are desperately seeking alternative energy solutions, including significant investments in small modular nuclear reactors (SMRs) to power their facilities directly.\n\nGovernments are threatening to impose 'compute limits' on non-essential model training if the energy draw begins to affect civilian power infrastructure."
+            },
+            {
+                id: "hard-5",
+                category: "Hardware & Silicon",
+                title: "Neuromorphic Chips Mimic the Human Brain",
+                date: "August 3, 2026",
+                desc: "Intel's latest neuromorphic chip, 'Hala Point', simulates 1.15 billion artificial neurons, processing data thousands of times faster than a standard CPU.\n\nThe chip uses 'spiking neural networks' that only fire when necessary, operating on a fraction of a watt. It is vastly more energy-efficient than traditional GPUs.\n\nWhile difficult to program for traditional software, neuromorphic hardware is showing incredible promise for edge robotics and constant-on sensors."
+            },
+            {
+                id: "hard-6",
+                category: "Hardware & Silicon",
+                title: "Photonic Chips Compute at the Speed of Light",
+                date: "July 31, 2026",
+                desc: "A startup has successfully commercialized the first photonic AI chip, using lasers instead of electrons to perform matrix multiplication.\n\nBy manipulating the physical properties of light through microscopic waveguides, the chip performs calculations instantly with zero heat generation.\n\nWhile currently limited to specific types of AI inference, photonics represents a massive leap forward in overcoming the thermal limits of traditional silicon."
+            },
+            {
+                id: "hard-7",
+                category: "Hardware & Silicon",
+                title: "TSMC Struggles to Meet CoWoS Packaging Demand",
+                date: "July 28, 2026",
+                desc: "While silicon yields are high, TSMC is facing a severe bottleneck in its 'Chip-on-Wafer-on-Substrate' (CoWoS) advanced packaging facilities.\n\nModern AI chips require multiple chiplets and memory modules perfectly stitched together on a single substrate. The demand for this packaging has outpaced factory capacity.\n\nThis bottleneck is artificially limiting the global supply of AI accelerators, keeping prices exorbitantly high for smaller startups."
+            },
+            {
+                id: "hard-8",
+                category: "Hardware & Silicon",
+                title: "Open Source Silicon: RISC-V Gains Ground",
+                date: "July 25, 2026",
+                desc: "The open-source RISC-V instruction set architecture is rapidly gaining adoption in the AI accelerator market, threatening ARM's dominance.\n\nStartups appreciate the ability to build custom, highly optimized silicon without paying massive licensing fees to proprietary architecture owners.\n\nMajor players like Google and Qualcomm are forming alliances to ensure RISC-V software ecosystems mature fast enough to challenge the status quo."
+            },
+
+            // Policy & Ethics (8 Articles)
+            {
+                id: "pol-1",
+                category: "Policy & Ethics",
+                title: "EU AI Act Takes Full Effect: The Fallout",
+                date: "August 13, 2026",
+                desc: "The comprehensive EU AI Act is now strictly enforced, causing several major tech companies to geo-block their most advanced models in Europe.\n\nThe law requires exhaustive documentation of training data and strict bias testing for 'high-risk' applications. Open-source developers argue the liability clauses are too severe for non-commercial projects.\n\nCritics argue Europe is stifling innovation, while proponents praise the act for protecting citizens' data rights against unchecked corporate scraping."
+            },
+            {
+                id: "pol-2",
+                category: "Policy & Ethics",
+                title: "Copyright Lawsuit Over AI Training Data Ends in Settlement",
+                date: "August 11, 2026",
+                desc: "The landmark class-action lawsuit filed by authors against major AI labs has concluded with a massive, undisclosed settlement and a new licensing framework.\n\nAI companies will now be required to pay an 'opt-in royalty' to creators whose works are used to train foundational models going forward.\n\nThis establishes a precedent that training data is not strictly 'fair use', fundamentally altering the economics of building massive language models."
+            },
+            {
+                id: "pol-3",
+                category: "Policy & Ethics",
+                title: "Deepfakes and the Integrity of Elections",
+                date: "August 9, 2026",
+                desc: "As global elections loom, the proliferation of AI-generated audio and video deepfakes has caused a crisis of trust among voters.\n\nSeveral governments are rushing to pass laws making it a felony to distribute undisclosed political deepfakes within 90 days of an election.\n\nTech platforms are deploying counter-AI systems to label synthetic media, but the sheer volume of generated content makes perfect moderation impossible."
+            },
+            {
+                id: "pol-4",
+                category: "Policy & Ethics",
+                title: "The Problem of Algorithmic Bias in Healthcare",
+                date: "August 7, 2026",
+                desc: "An independent audit of widely used diagnostic AI systems revealed severe racial biases, with the models under-diagnosing specific conditions in minority populations.\n\nThe root cause was traced back to historical training data, which disproportionately represented affluent, caucasian demographics in clinical trials.\n\nRegulators are now demanding 'demographic parity' testing before any AI system can be approved for hospital deployment."
+            },
+            {
+                id: "pol-5",
+                category: "Policy & Ethics",
+                title: "Universal Basic Income Debated as AI Displaces Workers",
+                date: "August 5, 2026",
+                desc: "With AI automation now significantly impacting white-collar professions like copywriting, coding, and legal analysis, economic summits are seriously discussing UBI.\n\nEconomists propose funding a universal basic income through an 'Automation Tax' levied on corporations that replace human workers with AI agents.\n\nHowever, fierce political debate remains regarding the societal impact of detaching income from labor."
+            },
+            {
+                id: "pol-6",
+                category: "Policy & Ethics",
+                title: "The Open Source vs. Closed Model Debate",
+                date: "August 2, 2026",
+                desc: "A schism has formed in the tech community regarding the safety of open-sourcing highly capable foundation models.\n\nCompanies like Meta argue that open source democratizes access and improves security through community scrutiny. Opponents argue that open-sourcing models removes the ability to prevent malicious actors from generating bioterrorism instructions or mass propaganda.\n\nPolicymakers are struggling to define the line between safe code sharing and weapons proliferation."
+            },
+            {
+                id: "pol-7",
+                category: "Policy & Ethics",
+                title: "Watermarking Synthetic Text: A Failed Experiment?",
+                date: "July 31, 2026",
+                desc: "Attempts to cryptographically watermark AI-generated text have largely failed, as researchers demonstrate how easy it is to scrub the watermarks using basic paraphrasing tools.\n\nBecause text has low entropy compared to video or images, statistical watermarking inherently degrades the quality of the output.\n\nEducators and publishers are abandoning detection tools, pivoting instead to new methods of assessing human knowledge that don't rely on take-home essays."
+            },
+            {
+                id: "pol-8",
+                category: "Policy & Ethics",
+                title: "Who Owns the Rights to AI-Generated Art?",
+                date: "July 28, 2026",
+                desc: "The US Copyright Office has finalized its ruling: AI-generated images and text cannot be copyrighted, as they lack human authorship.\n\nThis decision has massive implications for media companies attempting to protect AI-generated assets in their video games and films.\n\nCreators are now actively documenting their 'prompt engineering' and manual Photoshop touch-ups to prove a sufficient threshold of human intervention."
+            }
+        ];
+
+        // -----------------------------------------
+        // SHORTS (Sidebar Content)
+        // -----------------------------------------
+        const shortsData = [
+            { id: "s1", title: "AlphaFold 3 open sources new protein structures.", date: "2 hours ago" },
+            { id: "s2", title: "Midjourney v7 launches with full 3D asset generation.", date: "5 hours ago" },
+            { id: "s3", title: "Microsoft integrates Copilot natively into Windows kernel.", date: "7 hours ago" },
+            { id: "s4", title: "Waymo expands autonomous taxi service to NYC.", date: "12 hours ago" },
+            { id: "s5", title: "OpenAI announces $10B funding round led by UAE.", date: "1 day ago" },
+            { id: "s6", title: "GitHub reports 75% of new code is AI-assisted.", date: "1 day ago" },
+            { id: "s7", title: "SEC investigates undisclosed AI trading algorithms.", date: "2 days ago" }
+        ];
+
+        // -----------------------------------------
+        // UI AND RENDER LOGIC
+        // -----------------------------------------
+        let currentArticleContext = null;
+        let currentSearchQuery = "";
+        let currentCategory = "Front Page";
+
+        function renderArticles(articles) {
+            const container = document.getElementById('articles-container');
+            const noResults = document.getElementById('no-results');
+            const count = document.getElementById('article-count');
             
-            const aiResponseArea = document.getElementById('ai-response-area');
+            container.innerHTML = '';
             
-            if (apiKey === "") {
-                aiResponseArea.innerHTML = `<div class="text-amber-400 bg-amber-400/10 p-4 rounded-lg border border-amber-400/30"><strong>Demo Mode:</strong> To generate custom insights dynamically, please add your free Gemini API key to the code! <br><br><strong>Simulated Insight:</strong> The development regarding "${title}" signifies a major shift in the industry landscape, demanding updated strategic frameworks.</div>`;
+            if (articles.length === 0) {
+                container.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                count.innerText = "0 results";
                 return;
             }
 
-            aiResponseArea.innerHTML = '<div class="flex flex-col items-center justify-center h-full gap-3"><svg class="w-6 h-6 animate-spin text-indigo-500" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span class="animate-pulse text-indigo-300 text-sm">Gemini is analyzing...</span></div>';
+            container.classList.remove('hidden');
+            noResults.classList.add('hidden');
+            count.innerText = `${articles.length} Article${articles.length > 1 ? 's' : ''}`;
+
+            articles.forEach((article, index) => {
+                const isFeatured = index === 0 && currentSearchQuery === "";
+                const safeContent = encodeURIComponent(article.desc);
+                const safeTitle = encodeURIComponent(article.title);
+                
+                const cardHtml = `
+                    <article onclick="openArticleDetail('${article.id}', '${safeTitle}', '${safeContent}', '${article.category}', '${article.date}')" 
+                             class="group cursor-pointer bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-emerald-500/50 transition-all hover:shadow-[0_0_30px_rgba(16,185,129,0.1)] flex flex-col ${isFeatured ? 'md:col-span-2' : ''}">
+                        <div class="p-6 md:p-8 flex-grow flex flex-col">
+                            <div class="flex items-center gap-3 mb-4">
+                                <span class="bg-gray-800 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">${article.category}</span>
+                                <span class="text-sm text-gray-500">${article.date}</span>
+                            </div>
+                            <h3 class="${isFeatured ? 'text-2xl md:text-4xl' : 'text-xl'} font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors serif leading-tight">${article.title}</h3>
+                            <p class="text-gray-400 leading-relaxed ${isFeatured ? 'text-lg line-clamp-4' : 'text-sm line-clamp-3'} mb-6 flex-grow">${article.desc.split('\n')[0]}</p>
+                            <div class="mt-auto flex items-center text-emerald-500 text-sm font-medium group-hover:translate-x-2 transition-transform">
+                                Read Full Story <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </div>
+                        </div>
+                    </article>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        function renderShorts(query = "") {
+            const container = document.getElementById('shorts-container');
+            container.innerHTML = '';
+            
+            const filteredShorts = shortsData.filter(s => 
+                s.title.toLowerCase().includes(query.toLowerCase())
+            );
+
+            filteredShorts.forEach(short => {
+                const shortHtml = `
+                    <div class="border-b border-gray-800 pb-4 last:border-0 cursor-pointer hover:bg-gray-800/50 p-2 rounded transition-colors group">
+                        <span class="text-xs text-emerald-500 font-medium tracking-wide mb-1 block">${short.date}</span>
+                        <h4 class="text-sm text-gray-300 font-medium group-hover:text-white transition-colors leading-snug">${short.title}</h4>
+                    </div>
+                `;
+                container.innerHTML += shortHtml;
+            });
+        }
+
+        function filterArticles(category) {
+            currentCategory = category;
+            document.getElementById('section-title').innerText = category;
+            document.getElementById('search-input').value = ""; // Clear search
+            currentSearchQuery = "";
+            
+            // Update active state on nav buttons
+            document.querySelectorAll('.nav-link').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.innerText.trim() === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            let filtered;
+            if (category === "Front Page") {
+                // Get top 2 articles from each category for the front page
+                filtered = [];
+                const categories = ["LLMs & Foundation Models", "Computer Vision", "Robotics", "Hardware & Silicon", "Policy & Ethics"];
+                categories.forEach(cat => {
+                    filtered.push(...database.filter(a => a.category === cat).slice(0, 2));
+                });
+                // Sort randomly or keep structure (we'll keep structure for consistency)
+            } else {
+                filtered = database.filter(a => a.category === category);
+            }
+            
+            renderArticles(filtered);
+            renderShorts(); // Reset shorts
+        }
+
+        // Search functionality
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value.toLowerCase().trim();
+            
+            let sourceData = currentCategory === "Front Page" 
+                ? database // Search everything if on front page
+                : database.filter(a => a.category === currentCategory); // Search only category
+
+            if (currentSearchQuery === "") {
+                filterArticles(currentCategory); // Re-run standard filter
+                return;
+            }
+
+            const searchResults = sourceData.filter(a => 
+                a.title.toLowerCase().includes(currentSearchQuery) || 
+                a.desc.toLowerCase().includes(currentSearchQuery) ||
+                a.category.toLowerCase().includes(currentSearchQuery)
+            );
+            
+            renderArticles(searchResults);
+            renderShorts(currentSearchQuery);
+        });
+
+        // -----------------------------------------
+        // MODALS & INTERACTION LOGIC
+        // -----------------------------------------
+        function openSubscribe() {
+            document.getElementById('subscribe-modal').classList.remove('hidden');
+        }
+
+        function closeSubscribe() {
+            document.getElementById('subscribe-modal').classList.add('hidden');
+            document.getElementById('subscribe-success').classList.add('hidden');
+            document.getElementById('subscribe-form').reset();
+        }
+
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const form = document.getElementById('subscribe-form');
+            const btn = form.querySelector('button');
+            const successMsg = document.getElementById('subscribe-success');
+
+            btn.disabled = true;
+            btn.innerText = "Verifying...";
+
+            // Simulate network request
+            setTimeout(() => {
+                form.reset();
+                btn.disabled = false;
+                btn.innerText = "Subscribe Now";
+                successMsg.classList.remove('hidden');
+                
+                // Close after a moment
+                setTimeout(() => {
+                    closeSubscribe();
+                }, 2000);
+            }, 1000);
+        }
+
+        function openArticleDetail(id, encodedTitle, encodedDesc, category, date) {
+            const title = decodeURIComponent(encodedTitle);
+            const desc = decodeURIComponent(encodedDesc);
+            
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-content').innerText = desc;
+            document.getElementById('modal-category').innerText = category;
+            document.getElementById('modal-date').innerText = date;
+            
+            // Save context for Gemini API calls
+            currentArticleContext = { title: title, desc: desc };
+
+            // Reset Gemini UI
+            const btnSummary = document.getElementById('btn-ai-summary');
+            btnSummary.disabled = false;
+            btnSummary.innerText = "✨ Generate AI Summary";
+            document.getElementById('ai-summary-container').classList.add('hidden');
+            
+            document.getElementById('ai-chat-input').value = "";
+            document.getElementById('ai-chat-response').classList.add('hidden');
+
+            // Show Modal
+            document.getElementById('article-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeArticleModal() {
+            document.getElementById('article-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto'; // Restore background scrolling
+            currentArticleContext = null;
+        }
+
+        // -----------------------------------------
+        // GEMINI AI INTEGRATION
+        // -----------------------------------------
+        // IMPORTANT: In a production app, do NOT put your API key in the frontend HTML.
+        const apiKey = ""; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+        window.generateArticleSummary = async () => {
+            if (!currentArticleContext) return;
+            if (!apiKey) {
+                alert("API Key is missing. Please add it to the code to use Gemini.");
+                return;
+            }
+            
+            const btn = document.getElementById('btn-ai-summary');
+            const container = document.getElementById('ai-summary-container');
+            const content = document.getElementById('ai-summary-content');
+
+            btn.disabled = true;
+            btn.innerHTML = 'Analyzing...';
             
             try {
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-                const fullPrompt = `Act as an expert AI analyst. Analyze this news article briefly and provide a 3-sentence deep insight about its future implications.\n\nArticle Title: ${title}\nSummary: ${text}`;
+                const prompt = `Act as an expert tech journalist. Summarize the following AI news article into exactly 3 concise, punchy bullet points highlighting the key takeaways. Do not include introductory text, just the bullet points.\n\nTitle: ${currentArticleContext.title}\nContent: ${currentArticleContext.desc}`;
                 
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }]
+                };
+
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
+                    body: JSON.stringify(payload)
                 });
+
+                const result = await response.json();
                 
-                const data = await response.json();
-                if (data.candidates && data.candidates[0].content.parts[0].text) {
-                    aiResponseArea.innerHTML = `<div class="prose prose-invert max-w-none">${data.candidates[0].content.parts[0].text.replace(/\n/g, '<br>')}</div>`;
+                if (result.candidates && result.candidates.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    const formatted = text.split('\n')
+                        .filter(line => line.trim())
+                        .map(line => `<li class="mb-2 flex items-start"><span class="mr-2 text-indigo-400">✦</span> <span>${line.replace(/^[\*\-\s]+/, '')}</span></li>`)
+                        .join('');
+                    
+                    container.classList.remove('hidden');
+                    content.innerHTML = `<ul>${formatted}</ul>`;
+                    btn.innerHTML = '✨ Summary Generated';
                 } else {
-                    throw new Error("Invalid API response");
+                    throw new Error("Invalid response");
                 }
             } catch (error) {
-                aiResponseArea.innerHTML = `<div class="text-red-400">Error analyzing content. Check your API key.</div>`;
+                console.error("Gemini Summary Error:", error);
+                container.classList.remove('hidden');
+                content.innerHTML = '<span class="text-red-400">Failed to generate summary. Ensure your API key is valid.</span>';
+                btn.innerHTML = 'Retry Summary';
+                btn.disabled = false;
             }
         };
 
-        window.openDocumentModal = (docTitle) => {
-            document.getElementById('document-title').textContent = docTitle;
-            const modal = document.getElementById('document-modal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        };
-
-        const fallbackArticles = [
-            {
-                title: "GPT-6 Architecture Leaked: What We Know",
-                category: "LLMs and Foundation Models",
-                summary: "Rumors suggest the next generation model will feature a radical departure from traditional transformer architecture.",
-                content: "Detailed reports have emerged regarding the architecture of GPT-6. Unlike its predecessors, which relied heavily on static transformer models, GPT-6 is rumored to integrate continuous learning mechanisms.\n\nThis means the model could potentially update its knowledge base in real-time without requiring massive retraining cycles. Experts suggest this could reduce computing costs by up to 40% while significantly improving contextual accuracy.\n\nFurthermore, early benchmarks leaked by insiders indicate a 10x improvement in complex reasoning tasks, putting it closer to human-level problem-solving in specialized domains.",
-                author: "Sarah Chen", time: "2h ago"
-            },
-            {
-                title: "Sora 2.0 Generates Perfect Physics",
-                category: "Computer Vision",
-                summary: "OpenAI's updated video model now understands fluid dynamics and glass reflections with 100% accuracy.",
-                content: "OpenAI has quietly rolled out an update to its Sora video generation model, pushing its capabilities into hyper-realism. The most notable improvement is its flawless understanding of real-world physics.\n\nPreviously, AI video struggled with fluid dynamics (like water splashing) and complex reflections. Sora 2.0 uses a new spatial-temporal rendering engine that mathematically simulates physics rather than just hallucinating pixels. This breakthrough means visual effects studios can now use generated footage for cinematic sequences without post-processing.",
-                author: "Marcus Wei", time: "4h ago"
-            },
-            {
-                title: "Figure 02 Robot Starts Work at BMW",
-                category: "Robotics",
-                summary: "The humanoid robot is now fully autonomous on the manufacturing floor, performing complex assembly tasks.",
-                content: "In a major milestone for industrial robotics, Figure AI's second-generation humanoid robot, Figure 02, has been officially deployed on the factory floor at the BMW manufacturing plant in Spartanburg.\n\nPowered by advanced neural networks and vision-language models, the robot operates completely autonomously, handling delicate sheet metal components and inserting them into precision machinery.",
-                author: "Dr. Aris Thorne", time: "8h ago"
-            },
-            {
-                title: "EU AI Act Takes Effect Today",
-                category: "AI Policy & Ethics",
-                summary: "Tech giants face fines up to 7% of global revenue as the strict new European regulations become law.",
-                content: "The highly anticipated European Union AI Act has officially come into force today, setting a global precedent for artificial intelligence regulation.\n\nThe act classifies AI systems by risk, completely banning 'unacceptable risk' applications like social scoring and real-time biometric identification in public spaces. Tech giants must adapt their models immediately to avoid staggering fines.",
-                author: "Elena Rossi", time: "6h ago"
-            },
-            {
-                title: "Meta Open-Sources Llama 4 Base Weights",
-                category: "LLMs and Foundation Models",
-                summary: "Mark Zuckerberg announces the unexpected release of the 400B parameter Llama 4 model for free commercial use.",
-                content: "In a move that continues to disrupt the closed-API business model of competitors, Meta has officially released the base weights for its highly anticipated Llama 4 model.\n\nWeighing in at 400 billion parameters, Llama 4 is the largest open-weight model ever released. Independent benchmarks show it matching or exceeding the performance of proprietary models on standard MMLU evaluations.",
-                author: "David Kim", time: "14h ago"
-            },
-            {
-                title: "Waymo Expands Autonomous Fleet to 5 New Cities",
-                category: "Robotics",
-                summary: "The robotaxi service reports 10 million autonomous miles driven without a single critical intervention.",
-                content: "Waymo has announced a massive expansion of its fully autonomous ride-hailing service, moving into Miami, Austin, Seattle, Washington D.C., and Boston.\n\nThe expansion is backed by their latest safety report, which reveals the Waymo Driver system has surpassed 10 million miles on public roads without a critical safety incident. The company attributes this success to their 6th-generation hardware suite.",
-                author: "Dr. Aris Thorne", time: "1d ago"
-            },
-            {
-                title: "YOLOv11 Revolutionizes Edge Tracking",
-                category: "Computer Vision",
-                summary: "The open-source object detection model achieves 500 frames per second on mobile processors.",
-                content: "The computer vision community is celebrating the release of YOLOv11 (You Only Look Once). The new version introduces a novel lightweight attention mechanism that dramatically reduces computational overhead.\n\nTests confirm that YOLOv11 can run real-time object detection and segmentation at 500 FPS on standard smartphone chips, without relying on cloud processing.",
-                author: "Marcus Wei", time: "20h ago"
-            },
-            {
-                title: "The Rise of Small Language Models (SLMs)",
-                category: "LLMs and Foundation Models",
-                summary: "Why tech giants are pivoting from massive trillion-parameter models to highly specialized 3B parameter models.",
-                content: "While the race for Artificial General Intelligence (AGI) continues with massive models, a parallel trend is taking over the enterprise space: Small Language Models (SLMs).\n\nCompanies are finding that a highly fine-tuned 3 billion parameter model is often cheaper, faster, and more private than calling a massive cloud API. Microsoft's Phi-3 and Google's Gemma 2 are leading this charge.",
-                author: "Priya Patel", time: "1d ago"
-            },
-            {
-                title: "Deepfake Detection Protocol Standardized",
-                category: "Computer Vision",
-                summary: "Major social platforms agree on a unified cryptographic watermark system for AI-generated media.",
-                content: "In a rare display of industry unity, Meta, Google, TikTok, and X have agreed to adopt the C2PA (Coalition for Content Provenance and Authenticity) standard for AI-generated content.\n\nAny image, video, or audio generated by major AI platforms will now include an invisible, cryptographically signed watermark. Social networks will automatically read this watermark and display a clear 'AI Generated' label.",
-                author: "Elena Rossi", time: "1d ago"
-            },
-            {
-                title: "Supreme Court Hears AI Copyright Case",
-                category: "AI Policy & Ethics",
-                summary: "The highest court begins deliberation on whether training AI on copyrighted material constitutes fair use.",
-                content: "The U.S. Supreme Court has officially opened hearings on the landmark case regarding AI data scraping. The outcome of this case could fundamentally alter how foundation models are trained in the United States.\n\nPublishers argue that using their licensed text and imagery to train commercial AI models is a blatant violation of copyright. Tech companies counter that AI training falls under 'fair use'.",
-                author: "Sarah Chen", time: "18h ago"
-            },
-            {
-                title: "Boston Dynamics Atlas Re-Learns Parkour",
-                category: "Robotics",
-                summary: "The all-electric Atlas model demonstrates fluid agility powered entirely by reinforcement learning.",
-                content: "Boston Dynamics has released a new video showcasing the capabilities of their fully electric Atlas robot. Gone are the pre-programmed, rigid movements of the past. The new Atlas uses end-to-end reinforcement learning to navigate complex obstacle courses.\n\nThe video demonstrates the robot adapting to slippery surfaces and moving platforms in real-time without prior mapping.",
-                author: "Alex Mercer", time: "16h ago"
-            },
-            {
-                title: "AlphaFold 3 Maps the Unknown",
-                category: "BioAI",
-                summary: "DeepMind's latest breakthrough predicts the structure of all life's molecules, not just proteins.",
-                content: "Google DeepMind has unveiled AlphaFold 3, expanding its revolutionary AI beyond just proteins. The new model can predict the structures and interactions of almost all of life's molecules, including DNA, RNA, and small pharmaceutical molecules.\n\nThis holistic view of cellular biology allows researchers to see exactly how drugs interact with targets in the human body, potentially shaving years off drug discovery.",
-                author: "Priya Patel", time: "12h ago"
-            },
-            {
-                title: "FDA Approves First Autonomous AI Diagnostic Tool",
-                category: "AI Policy & Ethics",
-                summary: "A neural network can now diagnose early-stage retinopathy without a doctor's supervision.",
-                content: "The FDA has granted landmark approval to a medical AI system capable of making diagnostic decisions entirely autonomously.\n\nThe system, focused on detecting diabetic retinopathy from eye scans, demonstrated a 99.4% accuracy rate in clinical trials, outperforming the human baseline. This approval sets a major regulatory precedent for medical AI.",
-                author: "David Kim", time: "2d ago"
-            },
-            {
-                title: "Gemini 3.0 Pro Achieves Perfect Recall",
-                category: "LLMs and Foundation Models",
-                summary: "Google's latest model features a 5-million token context window with 100% retrieval accuracy.",
-                content: "Google has launched Gemini 3.0 Pro, pushing the boundaries of contextual memory. The model boasts a staggering 5-million token context window—enough to ingest 15 thick novels or a company's entire codebase simultaneously.\n\nIndependent evaluations confirm a 100% 'Needle In A Haystack' retrieval accuracy, meaning the model never forgets details buried deep within its prompt.",
-                author: "Sarah Chen", time: "2d ago"
-            },
-            {
-                title: "Swarm Robotics Deployed in Agriculture",
-                category: "Robotics",
-                summary: "Hundreds of micro-drones are now being used to pollinate crops autonomously in California.",
-                content: "Facing a decline in natural bee populations, farms in California's Central Valley are turning to AI. A startup has successfully deployed 'swarms' of autonomous micro-drones designed to pollinate almond orchards.\n\nThe drones use decentralized AI, communicating with each other locally via radio to ensure optimal coverage of the field without colliding.",
-                author: "Alex Mercer", time: "2d ago"
-            },
-            {
-                title: "AI Alignment Breakthrough at Oxford",
-                category: "AI Policy & Ethics",
-                summary: "Researchers publish a mathematical framework proving bounded safety in advanced neural networks.",
-                content: "A joint paper from researchers at Oxford and MIT has proposed a breakthrough in the notoriously difficult field of AI alignment. The team developed a mathematical proof that guarantees a neural network will not take actions outside a defined set of 'safe bounds'.\n\nWhile currently only applicable to restricted model architectures, experts hail this as the first concrete step toward mathematically provable safety in AGI.",
-                author: "Elena Rossi", time: "3d ago"
-            },
-            {
-                title: "Hugging Face Crosses 5 Million Models",
-                category: "LLMs and Foundation Models",
-                summary: "The open-source AI platform reaches a massive milestone as fine-tuning becomes mainstream.",
-                content: "Hugging Face, the central hub for open-source AI, has officially crossed 5 million publicly available models on its platform. The exponential growth is driven heavily by the ease of PEFT (Parameter-Efficient Fine-Tuning) techniques like LoRA.\n\nDevelopers are no longer training models from scratch, leading to a massive explosion in AI diversity and specialization.",
-                author: "Priya Patel", time: "3d ago"
-            },
-            {
-                title: "Segment Anything 3 Sees the Unseen",
-                category: "Computer Vision",
-                summary: "Meta's new vision model can accurately segment objects in medical imaging and satellite radar.",
-                content: "Meta AI has released SAM 3 (Segment Anything Model). While previous versions were revolutionary for standard photography, SAM 3 has been trained on non-optical data, including X-rays, MRIs, sonar, and Synthetic Aperture Radar (SAR).\n\nThe model provides zero-shot segmentation for highly complex scientific imaging, allowing doctors to isolate tumors with a single click.",
-                author: "Marcus Wei", time: "3d ago"
-            },
-            {
-                title: "Tesla Optimus Navigates Factory Unsupervised",
-                category: "Robotics",
-                summary: "A leaked video shows the Tesla bot handling complex logistics tasks without human intervention.",
-                content: "A recently surfaced video from inside the Tesla Gigafactory shows the Optimus Gen 3 robot operating completely unsupervised for a full 8-hour shift. The robot is seen identifying incorrectly sorted parts, fixing the bins, and moving heavy crates.\n\nTesla engineers have reportedly solved the 'battery swap' problem, allowing the robots to automatically navigate to charging docks when low on power.",
-                author: "Dr. Aris Thorne", time: "4d ago"
-            },
-            {
-                title: "Open-Source AI Regulation Debate Heats Up",
-                category: "AI Policy & Ethics",
-                summary: "Policymakers clash over whether open-weight AI models should be subject to export controls.",
-                content: "A fierce debate has erupted in Washington over the regulation of open-source AI. National security officials are pushing to categorize large open-weight models as 'dual-use technologies', potentially restricting their export or publication.\n\nAdvocates for the open-source community argue that restricting weights will only harm domestic innovation and concentrate power in the hands of a few tech monopolies.",
-                author: "Sarah Chen", time: "4d ago"
+        window.askGeminiQuestion = async () => {
+            if (!currentArticleContext) return;
+            if (!apiKey) {
+                alert("API Key is missing. Please add it to the code to use Gemini.");
+                return;
             }
-        ];
-
-        const fallbackShorts = [
-            { title: "Nvidia hits $4T", content: "Nvidia has officially surpassed a $4 trillion market cap, driven by unprecedented demand for their new Blackwell B200 AI chips and global data center expansions." },
-            { title: "Apple Intelligence Pro", content: "Apple has announced a paid tier of Apple Intelligence, giving iPhone users access to cloud-based server-class reasoning models." },
-            { title: "Mistral's Codestral 2", content: "European AI startup Mistral has launched Codestral 2, dominating the HumanEval coding benchmarks for open-weight models." },
-            { title: "Robotaxi Launch", content: "Tesla's highly anticipated Cybercab Robotaxi network has officially launched beta testing for employees in Texas." },
-            { title: "Claude 4 Teased", content: "Anthropic CEO Dario Amodei hinted that Claude 4 is currently training on a massive 100,000 GPU cluster." },
-            { title: "AI Music Lawsuit", content: "Major record labels have filed a joint lawsuit against generative AI music startups Suno and Udio over copyright infringement." }
-        ];
-
-        async function fetchDynamicNews(category = 'AI') {
-            const container = document.getElementById('dynamic-news-container');
-            container.innerHTML = `<div class="flex justify-center py-20"><div class="skeleton h-64 w-full max-w-2xl rounded-xl"></div></div>`;
             
-            setTimeout(() => {
-                container.innerHTML = ''; 
-                
-                const filteredArticles = category === 'AI' 
-                    ? fallbackArticles 
-                    : fallbackArticles.filter(a => a.category.toLowerCase().includes(category.toLowerCase()) || category.toLowerCase().includes(a.category.toLowerCase()));
-                
-                // Show at least 5-6 articles per page if available
-                const articlesToRender = filteredArticles.slice(0, 10); 
-
-                articlesToRender.forEach((article, index) => {
-                    const isLead = index === 0;
-                    const encTitle = encodeURIComponent(article.title);
-                    const encContent = encodeURIComponent(article.content);
-                    const encSummary = encodeURIComponent(article.summary);
-                    
-                    const articleHTML = `
-                        <article onclick="openArticleDetail('${encTitle}', '${encContent}')" class="article-card glass-panel p-6 rounded-2xl hover-lift group cursor-pointer ${isLead ? 'border-brand-400/30 bg-gradient-to-br from-dark-surface to-dark-bg' : ''}">
-                            <div class="flex justify-between items-start mb-4">
-                                <span class="text-xs font-mono text-brand-400 border border-brand-400/30 px-2 py-1 rounded-full category-tag">${article.category}</span>
-                                <span class="text-xs text-gray-500 font-mono">${article.time}</span>
-                            </div>
-                            <h2 class="article-title ${isLead ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl'} font-serif font-bold text-white mb-3 group-hover:text-brand-400 transition-colors">${article.title}</h2>
-                            <p class="article-summary text-gray-400 text-sm md:text-base leading-relaxed mb-4">${article.summary}</p>
-                            <div class="flex justify-between items-center pt-4 border-t border-dark-border">
-                                <span class="text-xs text-gray-500">By ${article.author}</span>
-                                <button onclick="openAIModal('${encTitle}', '${encSummary}', event)" class="flex items-center gap-2 text-xs font-medium text-brand-400 hover:text-white transition-colors z-10 relative">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                                    AI Summary
-                                </button>
-                            </div>
-                        </article>
-                    `;
-                    container.innerHTML += articleHTML;
-                });
-            }, 200);
-        }
-
-        function populateShorts() {
-            const sidebar = document.querySelector('.shorts-scroll');
-            sidebar.innerHTML = '';
-            fallbackShorts.forEach(short => {
-                const encTitle = encodeURIComponent(short.title);
-                const encContent = encodeURIComponent(short.content);
-                sidebar.innerHTML += `
-                    <div onclick="openArticleDetail('${encTitle}', '${encContent}')" class="short-card glass-panel p-4 rounded-xl hover-lift group cursor-pointer">
-                        <h4 class="short-title text-sm font-bold text-white mb-1 group-hover:text-brand-400 transition-colors">${short.title}</h4>
-                        <p class="short-content text-xs text-gray-400 line-clamp-2">${short.content}</p>
-                    </div>
-                `;
-            });
-        }
-
-        // Search logic
-        document.getElementById('search-input').addEventListener('input', (e) => {
-            const val = e.target.value.toLowerCase().trim();
+            const input = document.getElementById('ai-chat-input');
+            const btn = document.getElementById('btn-ai-ask');
+            const responseContainer = document.getElementById('ai-chat-response');
             
-            document.querySelectorAll('.article-card').forEach(el => {
-                const text = el.textContent.toLowerCase();
-                el.style.display = text.includes(val) ? 'block' : 'none';
-            });
+            const question = input.value.trim();
+            if (!question) return;
 
-            document.querySelectorAll('.short-card').forEach(el => {
-                const text = el.textContent.toLowerCase();
-                el.style.display = text.includes(val) ? 'block' : 'none';
-            });
-        });
-
-        // Tab and Footer Navigation Logic
-        const handleCategoryClick = (e, category) => {
-            e.preventDefault();
+            btn.disabled = true;
+            btn.innerHTML = '...';
+            responseContainer.classList.remove('hidden');
+            responseContainer.innerHTML = '<div class="animate-pulse flex space-x-2"><div class="h-2 w-2 bg-indigo-400 rounded-full"></div><div class="h-2 w-2 bg-indigo-400 rounded-full"></div><div class="h-2 w-2 bg-indigo-400 rounded-full"></div></div>';
             
-            document.querySelectorAll('.nav-tab').forEach(t => {
-                t.classList.remove('text-white', 'border-brand-400');
-                t.classList.add('text-gray-400', 'border-transparent');
-                
-                if(t.getAttribute('data-category') === category) {
-                    t.classList.remove('text-gray-400', 'border-transparent');
-                    t.classList.add('text-white', 'border-brand-400');
-                }
-            });
-            
-            fetchDynamicNews(category);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        };
-
-        document.querySelectorAll('.nav-tab, #footer-categories a').forEach(tab => {
-            tab.addEventListener('click', (e) => handleCategoryClick(e, tab.getAttribute('data-category')));
-        });
-
-        // Initialize Dates and Data
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchDynamicNews();
-            populateShorts();
-        });
-    </script>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        // IMPORTANT FOR DEPLOYMENT: 
-        // If you publish this to GitHub Pages, replace these placeholder values 
-        // with your real Firebase Project configuration keys!
-        let firebaseConfig = {
-            apiKey: "YOUR_FIREBASE_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        // This checks if the preview environment injected a config for us to test with.
-        if (typeof __firebase_config !== 'undefined') {
             try {
-                firebaseConfig = JSON.parse(__firebase_config);
-            } catch(e) {}
-        }
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const googleProvider = new GoogleAuthProvider();
-
-        // Setup UI Elements
-        const authModal = document.getElementById('auth-modal');
-        const authBtn = document.getElementById('user-auth-btn');
-        const emailInput = document.getElementById('auth-email');
-        const passwordInput = document.getElementById('auth-password');
-        const loginBtn = document.getElementById('auth-login-btn');
-        const registerBtn = document.getElementById('auth-register-btn');
-        const googleBtn = document.getElementById('auth-google-btn');
-        const errorMsg = document.getElementById('auth-error-msg');
-
-        const showError = (msg) => {
-            // Friendly error message for missing Firebase keys on Github
-            if(msg.includes("API key not valid")) {
-                errorMsg.textContent = "Developer Note: You need to add your real Firebase API keys to the HTML code to use Authentication on GitHub Pages!";
-            } else {
-                errorMsg.textContent = msg;
-            }
-            errorMsg.classList.remove('hidden');
-        };
-
-        const clearError = () => {
-            errorMsg.textContent = '';
-            errorMsg.classList.add('hidden');
-        };
-
-        // Toggle modal & Sign Out Logic
-        authBtn.addEventListener('click', () => {
-            if (auth.currentUser && !auth.currentUser.isAnonymous) {
-                // If logged in, button acts as sign out
-                signOut(auth).then(() => {
-                    authBtn.textContent = "Join 2.5M Techies";
-                }).catch(err => console.error("Sign out error", err));
-            } else {
-                // Open Login Modal
-                clearError();
-                authModal.classList.remove('hidden');
-                authModal.classList.add('flex');
-            }
-        });
-
-        // Listen for authentication changes globally
-        onAuthStateChanged(auth, (user) => {
-            if (user && !user.isAnonymous) {
-                // Successfully signed in
-                authModal.classList.add('hidden');
-                authModal.classList.remove('flex');
+                const prompt = `Based strictly on the provided article, answer the user's question concisely. If the article does not contain the answer, say "The article doesn't specify..." but you can provide general context if helpful.\n\nArticle Title: ${currentArticleContext.title}\nArticle Content: ${currentArticleContext.desc}\n\nQuestion: ${question}`;
                 
-                // Format the button text (e.g., "Sign Out (test@test.com)")
-                const displayName = user.email || user.displayName || 'User';
-                const truncatedName = displayName.length > 15 ? displayName.substring(0, 12) + '...' : displayName;
-                authBtn.textContent = `Sign Out (${truncatedName})`;
-            } else {
-                // Logged out
-                authBtn.textContent = "Join 2.5M Techies";
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    responseContainer.innerHTML = `<div class="font-semibold text-white mb-2 pb-2 border-b border-gray-700">Q: ${question}</div><div class="text-gray-300 leading-relaxed">${text.replace(/\n/g, '<br>')}</div>`;
+                    input.value = ''; 
+                } else {
+                    throw new Error("Invalid response");
+                }
+            } catch (error) {
+                console.error("Gemini Chat Error:", error);
+                responseContainer.innerHTML = '<span class="text-red-400">Failed to get an answer. Ensure your API key is valid.</span>';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Ask';
             }
-        });
+        };
 
-        // Action: Sign In with Email
-        loginBtn.addEventListener('click', () => {
-            clearError();
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            if(!email || !password) return showError("Please enter an email and password.");
-            
-            loginBtn.textContent = "Loading...";
-            signInWithEmailAndPassword(auth, email, password)
-                .then(() => loginBtn.textContent = "Sign In")
-                .catch(error => {
-                    loginBtn.textContent = "Sign In";
-                    showError(error.message.replace("Firebase:", "").trim());
-                });
-        });
-
-        // Action: Register with Email
-        registerBtn.addEventListener('click', () => {
-            clearError();
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            if(!email || !password) return showError("Please enter an email and password.");
-            
-            registerBtn.textContent = "Loading...";
-            createUserWithEmailAndPassword(auth, email, password)
-                .then(() => registerBtn.textContent = "Register")
-                .catch(error => {
-                    registerBtn.textContent = "Register";
-                    showError(error.message.replace("Firebase:", "").trim());
-                });
-        });
-
-        // Action: Sign In with Google
-        googleBtn.addEventListener('click', () => {
-            clearError();
-            signInWithPopup(auth, googleProvider)
-                .catch(error => showError(error.message.replace("Firebase:", "").trim()));
-        });
-
-        // Preview Environment Authenticator
-        if (typeof __initial_auth_token !== 'undefined' && (!auth.currentUser || auth.currentUser.isAnonymous)) {
-            signInWithCustomToken(auth, __initial_auth_token).catch(console.error);
-        }
+        // Initialize front page on load
+        filterArticles("Front Page");
     </script>
 </body>
 </html>
