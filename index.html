@@ -22,13 +22,12 @@
 </head>
 <body class="antialiased min-h-screen flex flex-col">
 
-    <!-- Header -->
     <header class="sticky top-0 z-40 bg-[#0f1115]/90 backdrop-blur-md border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="py-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-start">
                     <div>
-                        <div class="text-xs text-gray-400 mb-1 tracking-widest uppercase" id="current-date">Thursday, August 13, 2026</div>
+                        <div class="text-xs text-gray-400 mb-1 tracking-widest uppercase" id="current-date">Friday, August 14, 2026</div>
                         <div class="text-xs text-emerald-400 font-medium tracking-wide">1,024 Active Models</div>
                     </div>
                 </div>
@@ -61,7 +60,6 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         
         <!-- Category Title -->
@@ -98,7 +96,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="bg-black py-12 border-t border-gray-800 mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -136,7 +133,6 @@
         </div>
     </footer>
 
-    <!-- Article Detail Modal -->
     <div id="article-modal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeArticleModal()"></div>
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
@@ -197,7 +193,6 @@
         </div>
     </div>
 
-    <!-- Newsletter Subscribe Modal -->
     <div id="subscribe-modal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeSubscribe()"></div>
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
@@ -529,13 +524,55 @@
         // SHORTS (Sidebar Content)
         // -----------------------------------------
         const shortsData = [
-            { id: "s1", title: "AlphaFold 3 open sources new protein structures.", date: "2 hours ago" },
-            { id: "s2", title: "Midjourney v7 launches with full 3D asset generation.", date: "5 hours ago" },
-            { id: "s3", title: "Microsoft integrates Copilot natively into Windows kernel.", date: "7 hours ago" },
-            { id: "s4", title: "Waymo expands autonomous taxi service to NYC.", date: "12 hours ago" },
-            { id: "s5", title: "OpenAI announces $10B funding round led by UAE.", date: "1 day ago" },
-            { id: "s6", title: "GitHub reports 75% of new code is AI-assisted.", date: "1 day ago" },
-            { id: "s7", title: "SEC investigates undisclosed AI trading algorithms.", date: "2 days ago" }
+            { 
+                id: "s1", 
+                category: "BioAI",
+                title: "AlphaFold 3 open sources new protein structures.", 
+                date: "2 hours ago",
+                desc: "Google DeepMind has officially released a massive update to the AlphaFold 3 open-source database, adding over 50,000 new highly accurate protein interaction models.\n\nUnlike previous versions that focused solely on static proteins, this release includes dynamic folding states, allowing researchers to simulate how proteins interact with small-molecule drugs over time.\n\nPharma startups are already using this new dataset to dramatically accelerate early-stage drug discovery."
+            },
+            { 
+                id: "s2", 
+                category: "Creative AI",
+                title: "Midjourney v7 launches with full 3D asset generation.", 
+                date: "5 hours ago",
+                desc: "Midjourney has stunned the design community by releasing Version 7, which natively supports exporting generations as fully UV-mapped 3D models (OBJ and FBX formats).\n\nBy leveraging a new internal neural radiance field (NeRF) pipeline combined with their industry-leading diffusion models, v7 allows game developers to generate game-ready assets simply by typing a description.\n\nThe feature is currently in alpha for Pro subscribers and is expected to disrupt the 3D stock asset market."
+            },
+            { 
+                id: "s3", 
+                category: "OS & Systems",
+                title: "Microsoft integrates Copilot natively into Windows kernel.", 
+                date: "7 hours ago",
+                desc: "In a controversial move, Microsoft's latest Windows 11 insider build has embedded the Copilot AI directly into the operating system's kernel level.\n\nThis deep integration allows the AI to manage RAM allocation dynamically based on the user's habits, optimize background battery usage, and troubleshoot driver errors without human intervention.\n\nCybersecurity experts, however, are raising concerns about the potential vulnerabilities of granting a generative model kernel-level permissions."
+            },
+            { 
+                id: "s4", 
+                category: "Autonomous Vehicles",
+                title: "Waymo expands autonomous taxi service to NYC.", 
+                date: "12 hours ago",
+                desc: "Waymo has officially launched its Level 4 autonomous taxi service in the dense, highly unpredictable streets of Manhattan, New York City.\n\nThe fleet of custom-built Jaguar I-PACE vehicles has been training in simulation and shadow-mode for over two years to handle NYC-specific edge cases, such as erratic pedestrians and aggressive taxi drivers.\n\nEarly riders report smooth experiences, though the vehicles tend to drive far more conservatively than their human counterparts."
+            },
+            { 
+                id: "s5", 
+                category: "Business",
+                title: "OpenAI announces $10B funding round led by UAE.", 
+                date: "1 day ago",
+                desc: "OpenAI has closed a historic $10 billion Series F funding round, with the primary investment coming from a technology conglomerate backed by the United Arab Emirates government.\n\nThe capital injection is specifically earmarked for constructing a massive, dedicated supercomputer facility named 'Project Stargate', which aims to cluster millions of GPUs to train the hypothetical GPT-6.\n\nThe geopolitical implications of this investment have already sparked hearings in the US Senate regarding AI sovereignty."
+            },
+            { 
+                id: "s6", 
+                category: "Software Development",
+                title: "GitHub reports 75% of new code is AI-assisted.", 
+                date: "1 day ago",
+                desc: "In their annual 'State of the Octoverse' report, GitHub revealed that an astonishing 75% of all newly committed code on the platform was written or heavily modified by AI tools like Copilot.\n\nThe metric underscores a fundamental shift in software engineering, where developers are transitioning from writing syntax to acting as high-level reviewers and system architects.\n\nDespite the massive increase in code volume, GitHub notes that the overall quality and security metrics of the repositories have remained stable."
+            },
+            { 
+                id: "s7", 
+                category: "Finance & Trading",
+                title: "SEC investigates undisclosed AI trading algorithms.", 
+                date: "2 days ago",
+                desc: "The US Securities and Exchange Commission (SEC) has launched a sweeping investigation into several major hedge funds utilizing highly advanced, autonomous AI trading algorithms.\n\nThe concern stems from 'black box' models executing millions of micro-trades based on sentiment analysis of global news streams, potentially colluding or causing artificial flash crashes.\n\nRegulators are struggling to define the line between competitive algorithmic trading and market manipulation when no human is making the direct trading decisions."
+            }
         ];
 
         // -----------------------------------------
@@ -597,8 +634,11 @@
             );
 
             filteredShorts.forEach(short => {
+                const safeContent = encodeURIComponent(short.desc);
+                const safeTitle = encodeURIComponent(short.title);
+                
                 const shortHtml = `
-                    <div class="border-b border-gray-800 pb-4 last:border-0 cursor-pointer hover:bg-gray-800/50 p-2 rounded transition-colors group">
+                    <div onclick="openArticleDetail('${short.id}', '${safeTitle}', '${safeContent}', '${short.category}', '${short.date}')" class="border-b border-gray-800 pb-4 last:border-0 cursor-pointer hover:bg-gray-800/50 p-3 -mx-3 rounded transition-colors group">
                         <span class="text-xs text-emerald-500 font-medium tracking-wide mb-1 block">${short.date}</span>
                         <h4 class="text-sm text-gray-300 font-medium group-hover:text-white transition-colors leading-snug">${short.title}</h4>
                     </div>
@@ -629,7 +669,6 @@
                 categories.forEach(cat => {
                     filtered.push(...database.filter(a => a.category === cat).slice(0, 2));
                 });
-                // Sort randomly or keep structure (we'll keep structure for consistency)
             } else {
                 filtered = database.filter(a => a.category === category);
             }
@@ -733,7 +772,7 @@
         // GEMINI AI INTEGRATION
         // -----------------------------------------
         // IMPORTANT: In a production app, do NOT put your API key in the frontend HTML.
-        const apiKey = ""; 
+        const apiKey = "AQ.Ab8RN6JnKOG9OdrnQA5ZU-LQLWfn3-eDWs74U9vhafgaf6Ymdg"; 
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
         window.generateArticleSummary = async () => {
