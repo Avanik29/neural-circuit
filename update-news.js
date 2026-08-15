@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 async function generateNews() {
   try {
     console.log("Waking up Gemini AI...");
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-3.5-flash' });
     
     const prompt = `You are a professional tech journalist. 
     Write 5 detailed, brand-new articles covering today's advancements in AI, LLMs, Robotics, or Silicon.
