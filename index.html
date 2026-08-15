@@ -878,6 +878,99 @@
 
         // Initialize front page on load
         filterArticles("Front Page");
-    </script>
+  <script>
+// --- BEGIN AI ARTICLES ---
+const fallbackArticles = [
+    {
+        title: "The Next Leap in LLMs",
+        category: "LLMs",
+        tags: ["#AI", "#Tech", "#Future"],
+        content: "Detailed placeholder content. This will be replaced by the background script.",
+        image: "https://picsum.photos/800/600?random=1",
+        date: "August 15, 2026"
+    }
+];
+// --- END AI ARTICLES ---
+
+document.addEventListener('DOMContentLoaded', () => {
+    const mainFeed = document.getElementById('main-feed');
+    
+    function renderArticles(articles) {
+        if (!mainFeed) return;
+        mainFeed.innerHTML = ''; 
+        articles.forEach(article => {
+            const encodedContent = encodeURIComponent(article.content || '');
+            const encodedTitle = encodeURIComponent(article.title || '');
+            const encodedCategory = encodeURIComponent(article.category || 'Tech');
+            const encodedDate = encodeURIComponent(article.date || 'August 15, 2026');
+            
+            const html = `
+                <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden cursor-pointer hover:border-indigo-500 transition-colors" onclick="openArticleDetail('${encodedTitle}', '${encodedContent}', '${article.image}', '${encodedCategory}', '${encodedDate}')">
+                    <img src="${article.image}" alt="Article Image" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <span class="text-indigo-400 text-xs font-bold uppercase tracking-wider">${article.category}</span>
+                        <h2 class="text-white text-xl font-bold mt-2 mb-3">${article.title}</h2>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-3">${article.content}</p>
+                        <div class="flex gap-2 flex-wrap">
+                            ${(article.tags || []).map(tag => `<span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            mainFeed.insertAdjacentHTML('beforeend', html);
+        });
+    }
+
+    renderArticles(fallbackArticles);
+});
+
+// Modal handling
+function openArticleDetail(encodedTitle, encodedContent, image, encodedCategory, encodedDate) {
+    const title = decodeURIComponent(encodedTitle);
+    const content = decodeURIComponent(encodedContent);
+    const category = decodeURIComponent(encodedCategory);
+    const date = decodeURIComponent(encodedDate);
+    
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-content').innerText = content;
+    document.getElementById('modal-category').innerText = category;
+    document.getElementById('modal-date').innerText = date;
+    document.getElementById('modal-image').src = image;
+    
+    // Reset AI summary box
+    document.getElementById('ai-summary-box').classList.add('hidden');
+    document.getElementById('ai-summary-box').innerHTML = '';
+
+    document.getElementById('article-modal').classList.remove('hidden');
+}
+
+function closeArticleModal() {
+    document.getElementById('article-modal').classList.add('hidden');
+}
+
+function generateAISummary() {
+    const summaryBox = document.getElementById('ai-summary-box');
+    summaryBox.classList.remove('hidden');
+    summaryBox.innerHTML = "• Key Takeaway 1: Major architectural breakthroughs are reshaping industry standards.\n• Key Takeaway 2: Expected performance scaling introduces significant efficiency gains.\n• Key Takeaway 3: Broad deployment anticipated across enterprise ecosystems.";
+}
+</script>
+<!-- Article Detail Modal -->
+<div id="article-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative shadow-2xl">
+        <button onclick="closeArticleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold bg-gray-800 w-8 h-8 rounded-full flex items-center justify-center transition-colors">✕</button>
+        <img id="modal-image" src="" alt="" class="w-full h-64 object-cover rounded-xl mb-6">
+        <span id="modal-category" class="text-indigo-400 text-xs font-bold uppercase tracking-wider"></span>
+        <h1 id="modal-title" class="text-2xl font-bold text-white mt-2 mb-2"></h1>
+        <p id="modal-date" class="text-gray-500 text-xs mb-6"></p>
+        <div id="modal-content" class="text-gray-300 space-y-4 whitespace-pre-line leading-relaxed mb-8"></div>
+        
+        <!-- Gemini AI Insights Section -->
+        <div class="border-t border-gray-800 pt-6 mt-6">
+            <h3 class="text-white font-bold flex items-center gap-2 mb-3">✨ Gemini AI Insights</h3>
+            <button onclick="generateAISummary()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors mb-4">Generate Quick Summary</button>
+            <div id="ai-summary-box" class="bg-gray-800/50 p-4 rounded-xl text-sm text-gray-300 hidden mb-4 whitespace-pre-line"></div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
