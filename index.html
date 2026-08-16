@@ -12,6 +12,7 @@
         .nav-link { transition: color 0.2s, border-bottom 0.2s; border-bottom: 2px solid transparent; }
         .nav-link:hover, .nav-link.active { color: #fff; border-bottom: 2px solid #34d399; }
         .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -32,7 +33,7 @@
                     </div>
                 </div>
 
-                <div class="text-center w-full md:w-auto">
+                <div class="text-center w-full md:w-auto cursor-pointer" onclick="filterArticles('Front Page')">
                     <h1 class="text-4xl md:text-5xl font-bold tracking-tight">The Neural <span class="text-emerald-400">Circuit</span></h1>
                     <p class="text-gray-400 text-sm tracking-widest uppercase mt-1">Signal Over Noise.</p>
                 </div>
@@ -51,7 +52,7 @@
             <!-- Categories -->
             <nav class="flex overflow-x-auto hide-scrollbar py-3 gap-6 text-sm font-medium text-gray-400">
                 <button onclick="filterArticles('Front Page')" class="nav-link active whitespace-nowrap pb-1">Front Page</button>
-                <button onclick="filterArticles('LLMs & Foundation Models')" class="nav-link whitespace-nowrap pb-1">LLMs & Foundation Models</button>
+                <button onclick="filterArticles('LLMs & Foundation Models')" class="nav-link whitespace-nowrap pb-1">LLMs & Models</button>
                 <button onclick="filterArticles('Computer Vision')" class="nav-link whitespace-nowrap pb-1">Computer Vision</button>
                 <button onclick="filterArticles('Robotics')" class="nav-link whitespace-nowrap pb-1">Robotics</button>
                 <button onclick="filterArticles('Hardware & Silicon')" class="nav-link whitespace-nowrap pb-1">Hardware & Silicon</button>
@@ -133,6 +134,39 @@
         </div>
     </footer>
 
+    <!-- Subscribe Modal -->
+    <div id="subscribe-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeSubscribe()"></div>
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="relative bg-gray-900 border border-gray-700 rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-md w-full p-8">
+                <button onclick="closeSubscribe()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white serif mb-2">Stay Ahead of the Curve</h3>
+                    <p class="text-gray-400 text-sm">Join 2.5 million tech professionals. Get our daily briefing on the most important developments in AI.</p>
+                </div>
+                
+                <form id="subscribe-form" onsubmit="handleSubscribe(event)" class="space-y-4">
+                    <div>
+                        <input type="email" required placeholder="Enter your email address" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-gray-500">
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 rounded-lg transition-colors">
+                        Subscribe Now
+                    </button>
+                </form>
+                <div id="subscribe-success" class="hidden text-center text-emerald-400 mt-4 p-3 bg-emerald-400/10 rounded-lg">
+                    Welcome to the Circuit! Your email is verified.
+                </div>
+                <p class="text-xs text-gray-500 text-center mt-4">We respect your inbox. Unsubscribe at any time.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Article Detail Modal -->
     <div id="article-modal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeArticleModal()"></div>
         <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
@@ -142,6 +176,9 @@
                 <button onclick="closeArticleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white bg-gray-800 p-2 rounded-full transition-colors z-10">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
+
+                <!-- Optional AI Image Banner -->
+                <img id="modal-image" src="" alt="Article Banner" class="w-full h-64 sm:h-80 object-cover hidden border-b border-gray-800">
 
                 <!-- Modal Content Scrollable Area -->
                 <div class="overflow-y-auto px-6 py-8 sm:p-10 hide-scrollbar flex-grow">
@@ -178,7 +215,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-400 mb-2">Ask Gemini about this article:</label>
                             <div class="flex gap-2">
-                                <input type="text" id="ai-chat-input" placeholder="e.g. What are the main risks mentioned?" class="flex-grow bg-gray-900 border border-gray-700 rounded p-3 text-sm text-white focus:ring-1 focus:ring-indigo-500 focus:outline-none placeholder-gray-600">
+                                <input type="text" id="ai-chat-input" placeholder="e.g. What are the main risks mentioned?" class="flex-grow bg-gray-900 border border-gray-700 rounded p-3 text-white focus:ring-1 focus:ring-indigo-500 focus:outline-none placeholder-gray-600">
                                 <button id="btn-ai-ask" onclick="askGeminiQuestion()" class="bg-gray-700 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded transition-colors text-sm">
                                     Ask
                                 </button>
@@ -193,43 +230,15 @@
         </div>
     </div>
 
-    <div id="subscribe-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity" onclick="closeSubscribe()"></div>
-        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
-            <div class="relative bg-gray-900 border border-gray-700 rounded-xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-md w-full p-8">
-                <button onclick="closeSubscribe()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-                <div class="text-center mb-6">
-                    <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white serif mb-2">Stay Ahead of the Curve</h3>
-                    <p class="text-gray-400 text-sm">Join 2.5 million tech professionals. Get our daily briefing on the most important developments in AI.</p>
-                </div>
-                
-                <form id="subscribe-form" onsubmit="handleSubscribe(event)" class="space-y-4">
-                    <div>
-                        <input type="email" required placeholder="Enter your email address" class="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500 placeholder-gray-500">
-                    </div>
-                    <button type="submit" class="w-full bg-emerald-500 hover:bg-emerald-400 text-gray-900 font-bold py-3 rounded-lg transition-colors">
-                        Subscribe Now
-                    </button>
-                </form>
-                <div id="subscribe-success" class="hidden text-center text-emerald-400 mt-4 p-3 bg-emerald-400/10 rounded-lg">
-                    Welcome to the Circuit! Your email is verified.
-                </div>
-                <p class="text-xs text-gray-500 text-center mt-4">We respect your inbox. Unsubscribe at any time.</p>
-            </div>
-        </div>
-    </div>
-
     <script>
+        // Update header date
+        document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
+
         // -----------------------------------------
-        // DATABASE: 40 Detailed Premium Articles
+        // DATABASE: GitHub Action Target Array
         // -----------------------------------------
-        const database = [
-            // LLMs & Foundation Models (8 Articles)
+        // --- BEGIN AI ARTICLES ---
+        const fallbackArticles = [
             {
                 id: "llm-1",
                 category: "LLMs & Foundation Models",
@@ -252,43 +261,6 @@
                 desc: "Mark Zuckerberg has officially released the weights for Llama 4, a 500-billion parameter behemoth. It is the largest open-source model in history.\n\nMeta explicitly designed Llama 4 as a MoE (Mixture of Experts) model to keep inference costs low. Despite its massive size, it routes requests to highly specialized micro-models, allowing researchers to run it efficiently.\n\nThe release has sent shockwaves through the proprietary model market, as startups can now fine-tune a massive foundational model entirely for free."
             },
             {
-                id: "llm-4",
-                category: "LLMs & Foundation Models",
-                title: "Google Gemini 3.5 Pro Masters Long-Context Video",
-                date: "August 9, 2026",
-                desc: "Google DeepMind has expanded the context window of Gemini 3.5 Pro to an incredible 10 million tokens, natively processing hours of raw video alongside text.\n\nUsers can now upload feature-length films or security camera footage, and the model can pinpoint exactly when specific events occur, answer spatial reasoning queries, and track objects across cuts.\n\nThis native multimodal architecture removes the need for OCR or frame-by-frame transcription, processing visual data as raw tensors."
-            },
-            {
-                id: "llm-5",
-                category: "LLMs & Foundation Models",
-                title: "The Rise of 'Small Language Models' (SLMs)",
-                date: "August 7, 2026",
-                desc: "While giants battle over massive parameter counts, a new trend is emerging: highly capable Small Language Models (SLMs) under 3 billion parameters.\n\nCompanies like Mistral and Microsoft (with their Phi-4 release) are proving that extreme data curation—training models only on textbook-quality data—yields reasoning capabilities that punch far above their weight class.\n\nThese models are rapidly being integrated directly into smartphones, operating offline to preserve battery life and user privacy."
-            },
-            {
-                id: "llm-6",
-                category: "LLMs & Foundation Models",
-                title: "AI Hallucinations Solved? The RAG Revolution",
-                date: "August 6, 2026",
-                desc: "A new paradigm in Retrieval-Augmented Generation (RAG) named 'GraphRAG' has reportedly reduced factual hallucinations in LLMs to near absolute zero.\n\nInstead of just retrieving similar text chunks, GraphRAG builds a persistent knowledge graph of entities and relationships. Before generating a token, the LLM must map its reasoning against this deterministic graph.\n\nEnterprise adoption of GraphRAG is skyrocketing in the legal and medical sectors where factual accuracy is a life-or-death requirement."
-            },
-            {
-                id: "llm-7",
-                category: "LLMs & Foundation Models",
-                title: "xAI Releases Grok 3 with Real-Time API Access",
-                date: "August 5, 2026",
-                desc: "Elon Musk's xAI has launched Grok 3, featuring a unique architecture that inherently ingests real-time API streams as part of its foundational context.\n\nUnlike other models that require external tool use, Grok 3 natively understands JSON streams from X (Twitter), financial markets, and weather stations, updating its internal state on the fly.\n\nThe model excels at real-time sentiment analysis and rapid news summarization, though critics warn about the potential for ingesting unverified live data."
-            },
-            {
-                id: "llm-8",
-                category: "LLMs & Foundation Models",
-                title: "The Context Window Dilemma: Cost vs Memory",
-                date: "August 4, 2026",
-                desc: "As models boast multi-million token context windows, researchers are hitting a physical wall: the quadratic cost of the attention mechanism.\n\nRecent papers from Stanford highlight that while an LLM can theoretically process 2 million tokens, the computational cost and latency make it economically unviable for average consumers.\n\nNew architectures like Mamba (State Space Models) are being proposed as alternatives to Transformers, offering linear scaling to solve the context window bottleneck."
-            },
-
-            // Computer Vision (8 Articles)
-            {
                 id: "cv-1",
                 category: "Computer Vision",
                 title: "Sora 2.0 Generates Hyper-Realistic 4K Video in Realtime",
@@ -303,107 +275,12 @@
                 desc: "The legendary 'You Only Look Once' architecture has reached version 12, achieving near-perfect object detection accuracy on the edge.\n\nOptimized for mobile processors, YOLOv12 can identify, track, and predict the trajectory of over 500 distinct objects simultaneously in a busy street camera feed at 120Hz.\n\nThis breakthrough is a massive boon for autonomous driving systems, drastically reducing the latency required to identify pedestrians and unpredictable hazards."
             },
             {
-                id: "cv-3",
-                category: "Computer Vision",
-                title: "DeepFake Detection Algorithms Hit an Impasse",
-                date: "August 8, 2026",
-                desc: "Cybersecurity researchers have sounded the alarm: current generation generative video has surpassed the detection capabilities of traditional DeepFake scanners.\n\nBecause models now perfectly replicate micro-expressions, skin light scattering, and heart-rate fluctuations based on pixel shifts, standard analytical tools are returning false negatives.\n\nThe industry is now pivoting toward cryptographic watermarking at the hardware level (inside the camera sensor itself) to verify authentic media."
-            },
-            {
-                id: "cv-4",
-                category: "Computer Vision",
-                title: "Medical AI Detects Cancers 5 Years Earlier",
-                date: "August 6, 2026",
-                desc: "A joint study by MIT and the Mayo Clinic shows that a new vision transformer model can detect microscopic anomalies in MRI scans that precede tumor formation by up to 5 years.\n\nThe model was trained on millions of longitudinal scans, learning the invisible pixel-level patterns that human radiologists simply cannot perceive.\n\nFDA fast-track approval is underway, signaling a potential paradigm shift in preventative oncology."
-            },
-            {
-                id: "cv-5",
-                category: "Computer Vision",
-                title: "NeRFs Make 3D Rendering Obsolete",
-                date: "August 5, 2026",
-                desc: "Neural Radiance Fields (NeRFs) have evolved to the point where they are replacing traditional 3D polygon modeling in video game development.\n\nInstead of artists modeling assets, developers take a 10-second smartphone video of an object. The AI instantly creates a photorealistic, fully relightable 3D asset.\n\nMajor game engines like Unreal and Unity have fully integrated native NeRF support, cutting asset creation time from weeks to minutes."
-            },
-            {
-                id: "cv-6",
-                category: "Computer Vision",
-                title: "Apple Vision Pro 2 Relies Heavily on Edge CV",
-                date: "August 3, 2026",
-                desc: "Leaks regarding Apple's next headset reveal a massive reliance on on-device Computer Vision, powered by a dedicated 'R2' spatial compute chip.\n\nThe device uses advanced semantic segmentation to map the user's physical room, perfectly occluding virtual objects behind real-world furniture in real-time.\n\nThis deep integration of CV eliminates the 'floating UI' feeling, making augmented reality objects appear physically grounded in the real world."
-            },
-            {
-                id: "cv-7",
-                category: "Computer Vision",
-                title: "Satellite Imagery Analysis Predicts Crop Yields",
-                date: "August 1, 2026",
-                desc: "AgriTech startups are deploying massive vision models to analyze daily satellite imagery of global farmlands.\n\nBy measuring hyperspectral data—including soil moisture and infrared reflection of leaves—the AI can predict global crop yields with 96% accuracy months before harvest.\n\nThis data is being used to stabilize supply chains, though it has also caused massive fluctuations in agricultural commodity trading."
-            },
-            {
-                id: "cv-8",
-                category: "Computer Vision",
-                title: "AI Restores Heavily Damaged Historical Footage",
-                date: "July 28, 2026",
-                desc: "A community of open-source developers has released a tool that perfectly restores, colorizes, and upscales archival footage from the early 1900s.\n\nThe model hallucinates missing frames to create fluid 60fps motion, using semantic understanding to correctly guess the colors of historical clothing and environments.\n\nMuseums worldwide are adopting the technology to modernize their archives for a new generation of visitors."
-            },
-
-            // Robotics (8 Articles)
-            {
                 id: "robo-1",
                 category: "Robotics",
                 title: "Figure 03 Humanoid Now Working in BMW Plants",
                 date: "August 13, 2026",
                 desc: "Robotics startup Figure has officially deployed a fleet of their Version 03 humanoid robots onto the manufacturing floor at BMW's Spartanburg plant.\n\nThese robots are not hardcoded. They use a Vision-Language-Action (VLA) model to 'watch' human workers assemble parts and instantly mimic the behavior, adjusting their grip strength dynamically.\n\nBMW reports a 15% increase in efficiency in sections where the robots assist human technicians with heavy lifting and precision placement."
             },
-            {
-                id: "robo-2",
-                category: "Robotics",
-                title: "Tesla Optimus Navigates Complex Urban Environments",
-                date: "August 11, 2026",
-                desc: "A newly released video shows the Tesla Optimus robot navigating a crowded city street, stepping over uneven pavement, and avoiding pedestrians in real-time.\n\nTesla attributes this capability to their unified Full Self-Driving (FSD) architecture, utilizing the exact same neural nets used in their cars, adapted for bipedal locomotion.\n\nThe demonstration proves that end-to-end neural network training is vastly superior to traditional hardcoded robotic gait algorithms."
-            },
-            {
-                id: "robo-3",
-                category: "Robotics",
-                title: "Boston Dynamics' Atlas Masters Tool Use",
-                date: "August 9, 2026",
-                desc: "The fully electric version of Boston Dynamics' Atlas has demonstrated complex tool use, including operating power drills and welding equipment.\n\nThe robot's new hydraulic-free actuators provide unparalleled precision, allowing it to perform tasks that require sub-millimeter accuracy.\n\nConstruction companies are placing massive pre-orders, envisioning a future where robots handle hazardous structural tasks on active sites."
-            },
-            {
-                id: "robo-4",
-                category: "Robotics",
-                title: "Micro-Robots Deliver Targeted Cancer Drugs",
-                date: "August 7, 2026",
-                desc: "Researchers at ETH Zurich have successfully guided swarms of magnetic micro-robots through the human bloodstream to deliver chemotherapy directly to a tumor.\n\nThe robots are controlled externally by an AI system that monitors real-time ultrasound, navigating the complex vascular system while avoiding healthy tissue.\n\nThis breakthrough dramatically reduces the side effects of chemotherapy, as the drugs are only released exactly where they are needed."
-            },
-            {
-                id: "robo-5",
-                category: "Robotics",
-                title: "Drones Swarms Coordinate to Fight Wildfires",
-                date: "August 4, 2026",
-                desc: "In California, a fully autonomous swarm of 200 drones was deployed to map, track, and suppress a rapidly spreading wildfire.\n\nThe drones communicate with each other via a localized mesh network, dynamically reassigning tasks—some drop fire retardant, while others use thermal cameras to find hotspots.\n\nFire chiefs praise the AI swarm for operating in heavy smoke conditions where manned helicopters are grounded."
-            },
-            {
-                id: "robo-6",
-                category: "Robotics",
-                title: "Agricultural Robots Solve the Labor Shortage",
-                date: "August 2, 2026",
-                desc: "Autonomous harvesting machines powered by advanced vision models are sweeping through the American Midwest.\n\nThese machines identify ripe produce, use delicate robotic arms to pick fruit without bruising it, and sort it instantly. They operate 24/7, guided by GPS and LiDAR.\n\nFarmers report that the technology is the only viable solution to severe seasonal labor shortages, keeping food prices stable."
-            },
-            {
-                id: "robo-7",
-                category: "Robotics",
-                title: "Soft Robotics: Grippers that Feel",
-                date: "July 30, 2026",
-                desc: "A breakthrough in 'soft robotics' uses fluid-filled silicone fingers embedded with microscopic sensors that simulate a human sense of touch.\n\nThe AI analyzes pressure feedback in milliseconds, allowing the robot arm to pick up an egg without cracking it, and immediately transition to lifting a 50lb steel gear.\n\nThis tactile feedback is crucial for robots designed to interact safely with humans in domestic and healthcare environments."
-            },
-            {
-                id: "robo-8",
-                category: "Robotics",
-                title: "The Ethics of Autonomous Weapons Systems",
-                date: "July 28, 2026",
-                desc: "The UN has convened an emergency panel regarding the rapid deployment of AI-controlled autonomous weapon systems in recent global conflicts.\n\nThese drone systems can identify and engage targets without human intervention, raising profound moral questions about accountability in warfare.\n\nTech leaders are pushing for an absolute ban on lethal autonomous weapons, citing the risk of algorithmic bias and escalation without human oversight."
-            },
-
-            // Hardware & Silicon (8 Articles)
             {
                 id: "hard-1",
                 category: "Hardware & Silicon",
@@ -412,113 +289,14 @@
                 desc: "Nvidia CEO Jensen Huang unveiled the highly anticipated 'Rubin' GPU architecture, built on TSMC's cutting-edge 2-nanometer process node.\n\nRubin promises a 4x leap in AI training performance over Blackwell, utilizing advanced 3D packaging and next-generation HBM4 memory to eliminate data bottlenecks.\n\nThe announcement solidifies Nvidia's total dominance in the AI hardware space, with hyperscalers like Microsoft and AWS already reserving billions of dollars in silicon."
             },
             {
-                id: "hard-2",
-                category: "Hardware & Silicon",
-                title: "Groq's LPU shatters Inference Speed Records",
-                date: "August 11, 2026",
-                desc: "Silicon startup Groq has demonstrated their latest Language Processing Unit (LPU), generating an astonishing 2,000 tokens per second on Llama 3.\n\nUnlike traditional GPUs, Groq's deterministic architecture compiles the model directly into SRAM, bypassing the memory bandwidth issues that plague standard hardware.\n\nThis extreme inference speed makes real-time voice-to-voice AI communication imperceptibly fast, eliminating awkward pauses in AI voice assistants."
-            },
-            {
-                id: "hard-3",
-                category: "Hardware & Silicon",
-                title: "Apple M5 Focuses Exclusively on Neural Engine",
-                date: "August 8, 2026",
-                desc: "Details of Apple's upcoming M5 chip reveal that nearly 60% of the die space is dedicated to the Neural Engine, a massive departure from CPU-centric designs.\n\nApple is heavily prioritizing on-device AI generation, ensuring that future Macs can run billion-parameter models entirely locally without draining battery life.\n\nThis hardware shift ensures total user privacy, as sensitive personal queries never have to hit cloud servers for processing."
-            },
-            {
-                id: "hard-4",
-                category: "Hardware & Silicon",
-                title: "The Energy Crisis of AI Datacenters",
-                date: "August 5, 2026",
-                desc: "The explosive growth of AI datacenters is straining global power grids, with a single training cluster now drawing as much power as a small city.\n\nTech giants are desperately seeking alternative energy solutions, including significant investments in small modular nuclear reactors (SMRs) to power their facilities directly.\n\nGovernments are threatening to impose 'compute limits' on non-essential model training if the energy draw begins to affect civilian power infrastructure."
-            },
-            {
-                id: "hard-5",
-                category: "Hardware & Silicon",
-                title: "Neuromorphic Chips Mimic the Human Brain",
-                date: "August 3, 2026",
-                desc: "Intel's latest neuromorphic chip, 'Hala Point', simulates 1.15 billion artificial neurons, processing data thousands of times faster than a standard CPU.\n\nThe chip uses 'spiking neural networks' that only fire when necessary, operating on a fraction of a watt. It is vastly more energy-efficient than traditional GPUs.\n\nWhile difficult to program for traditional software, neuromorphic hardware is showing incredible promise for edge robotics and constant-on sensors."
-            },
-            {
-                id: "hard-6",
-                category: "Hardware & Silicon",
-                title: "Photonic Chips Compute at the Speed of Light",
-                date: "July 31, 2026",
-                desc: "A startup has successfully commercialized the first photonic AI chip, using lasers instead of electrons to perform matrix multiplication.\n\nBy manipulating the physical properties of light through microscopic waveguides, the chip performs calculations instantly with zero heat generation.\n\nWhile currently limited to specific types of AI inference, photonics represents a massive leap forward in overcoming the thermal limits of traditional silicon."
-            },
-            {
-                id: "hard-7",
-                category: "Hardware & Silicon",
-                title: "TSMC Struggles to Meet CoWoS Packaging Demand",
-                date: "July 28, 2026",
-                desc: "While silicon yields are high, TSMC is facing a severe bottleneck in its 'Chip-on-Wafer-on-Substrate' (CoWoS) advanced packaging facilities.\n\nModern AI chips require multiple chiplets and memory modules perfectly stitched together on a single substrate. The demand for this packaging has outpaced factory capacity.\n\nThis bottleneck is artificially limiting the global supply of AI accelerators, keeping prices exorbitantly high for smaller startups."
-            },
-            {
-                id: "hard-8",
-                category: "Hardware & Silicon",
-                title: "Open Source Silicon: RISC-V Gains Ground",
-                date: "July 25, 2026",
-                desc: "The open-source RISC-V instruction set architecture is rapidly gaining adoption in the AI accelerator market, threatening ARM's dominance.\n\nStartups appreciate the ability to build custom, highly optimized silicon without paying massive licensing fees to proprietary architecture owners.\n\nMajor players like Google and Qualcomm are forming alliances to ensure RISC-V software ecosystems mature fast enough to challenge the status quo."
-            },
-
-            // Policy & Ethics (8 Articles)
-            {
                 id: "pol-1",
                 category: "Policy & Ethics",
                 title: "EU AI Act Takes Full Effect: The Fallout",
                 date: "August 13, 2026",
                 desc: "The comprehensive EU AI Act is now strictly enforced, causing several major tech companies to geo-block their most advanced models in Europe.\n\nThe law requires exhaustive documentation of training data and strict bias testing for 'high-risk' applications. Open-source developers argue the liability clauses are too severe for non-commercial projects.\n\nCritics argue Europe is stifling innovation, while proponents praise the act for protecting citizens' data rights against unchecked corporate scraping."
-            },
-            {
-                id: "pol-2",
-                category: "Policy & Ethics",
-                title: "Copyright Lawsuit Over AI Training Data Ends in Settlement",
-                date: "August 11, 2026",
-                desc: "The landmark class-action lawsuit filed by authors against major AI labs has concluded with a massive, undisclosed settlement and a new licensing framework.\n\nAI companies will now be required to pay an 'opt-in royalty' to creators whose works are used to train foundational models going forward.\n\nThis establishes a precedent that training data is not strictly 'fair use', fundamentally altering the economics of building massive language models."
-            },
-            {
-                id: "pol-3",
-                category: "Policy & Ethics",
-                title: "Deepfakes and the Integrity of Elections",
-                date: "August 9, 2026",
-                desc: "As global elections loom, the proliferation of AI-generated audio and video deepfakes has caused a crisis of trust among voters.\n\nSeveral governments are rushing to pass laws making it a felony to distribute undisclosed political deepfakes within 90 days of an election.\n\nTech platforms are deploying counter-AI systems to label synthetic media, but the sheer volume of generated content makes perfect moderation impossible."
-            },
-            {
-                id: "pol-4",
-                category: "Policy & Ethics",
-                title: "The Problem of Algorithmic Bias in Healthcare",
-                date: "August 7, 2026",
-                desc: "An independent audit of widely used diagnostic AI systems revealed severe racial biases, with the models under-diagnosing specific conditions in minority populations.\n\nThe root cause was traced back to historical training data, which disproportionately represented affluent, caucasian demographics in clinical trials.\n\nRegulators are now demanding 'demographic parity' testing before any AI system can be approved for hospital deployment."
-            },
-            {
-                id: "pol-5",
-                category: "Policy & Ethics",
-                title: "Universal Basic Income Debated as AI Displaces Workers",
-                date: "August 5, 2026",
-                desc: "With AI automation now significantly impacting white-collar professions like copywriting, coding, and legal analysis, economic summits are seriously discussing UBI.\n\nEconomists propose funding a universal basic income through an 'Automation Tax' levied on corporations that replace human workers with AI agents.\n\nHowever, fierce political debate remains regarding the societal impact of detaching income from labor."
-            },
-            {
-                id: "pol-6",
-                category: "Policy & Ethics",
-                title: "The Open Source vs. Closed Model Debate",
-                date: "August 2, 2026",
-                desc: "A schism has formed in the tech community regarding the safety of open-sourcing highly capable foundation models.\n\nCompanies like Meta argue that open source democratizes access and improves security through community scrutiny. Opponents argue that open-sourcing models removes the ability to prevent malicious actors from generating bioterrorism instructions or mass propaganda.\n\nPolicymakers are struggling to define the line between safe code sharing and weapons proliferation."
-            },
-            {
-                id: "pol-7",
-                category: "Policy & Ethics",
-                title: "Watermarking Synthetic Text: A Failed Experiment?",
-                date: "July 31, 2026",
-                desc: "Attempts to cryptographically watermark AI-generated text have largely failed, as researchers demonstrate how easy it is to scrub the watermarks using basic paraphrasing tools.\n\nBecause text has low entropy compared to video or images, statistical watermarking inherently degrades the quality of the output.\n\nEducators and publishers are abandoning detection tools, pivoting instead to new methods of assessing human knowledge that don't rely on take-home essays."
-            },
-            {
-                id: "pol-8",
-                category: "Policy & Ethics",
-                title: "Who Owns the Rights to AI-Generated Art?",
-                date: "July 28, 2026",
-                desc: "The US Copyright Office has finalized its ruling: AI-generated images and text cannot be copyrighted, as they lack human authorship.\n\nThis decision has massive implications for media companies attempting to protect AI-generated assets in their video games and films.\n\nCreators are now actively documenting their 'prompt engineering' and manual Photoshop touch-ups to prove a sufficient threshold of human intervention."
             }
         ];
+        // --- END AI ARTICLES ---
 
         // -----------------------------------------
         // SHORTS (Sidebar Content)
@@ -551,27 +329,6 @@
                 title: "Waymo expands autonomous taxi service to NYC.", 
                 date: "12 hours ago",
                 desc: "Waymo has officially launched its Level 4 autonomous taxi service in the dense, highly unpredictable streets of Manhattan, New York City.\n\nThe fleet of custom-built Jaguar I-PACE vehicles has been training in simulation and shadow-mode for over two years to handle NYC-specific edge cases, such as erratic pedestrians and aggressive taxi drivers.\n\nEarly riders report smooth experiences, though the vehicles tend to drive far more conservatively than their human counterparts."
-            },
-            { 
-                id: "s5", 
-                category: "Business",
-                title: "OpenAI announces $10B funding round led by UAE.", 
-                date: "1 day ago",
-                desc: "OpenAI has closed a historic $10 billion Series F funding round, with the primary investment coming from a technology conglomerate backed by the United Arab Emirates government.\n\nThe capital injection is specifically earmarked for constructing a massive, dedicated supercomputer facility named 'Project Stargate', which aims to cluster millions of GPUs to train the hypothetical GPT-6.\n\nThe geopolitical implications of this investment have already sparked hearings in the US Senate regarding AI sovereignty."
-            },
-            { 
-                id: "s6", 
-                category: "Software Development",
-                title: "GitHub reports 75% of new code is AI-assisted.", 
-                date: "1 day ago",
-                desc: "In their annual 'State of the Octoverse' report, GitHub revealed that an astonishing 75% of all newly committed code on the platform was written or heavily modified by AI tools like Copilot.\n\nThe metric underscores a fundamental shift in software engineering, where developers are transitioning from writing syntax to acting as high-level reviewers and system architects.\n\nDespite the massive increase in code volume, GitHub notes that the overall quality and security metrics of the repositories have remained stable."
-            },
-            { 
-                id: "s7", 
-                category: "Finance & Trading",
-                title: "SEC investigates undisclosed AI trading algorithms.", 
-                date: "2 days ago",
-                desc: "The US Securities and Exchange Commission (SEC) has launched a sweeping investigation into several major hedge funds utilizing highly advanced, autonomous AI trading algorithms.\n\nThe concern stems from 'black box' models executing millions of micro-trades based on sentiment analysis of global news streams, potentially colluding or causing artificial flash crashes.\n\nRegulators are struggling to define the line between competitive algorithmic trading and market manipulation when no human is making the direct trading decisions."
             }
         ];
 
@@ -602,19 +359,30 @@
 
             articles.forEach((article, index) => {
                 const isFeatured = index === 0 && currentSearchQuery === "";
-                const safeContent = encodeURIComponent(article.desc);
-                const safeTitle = encodeURIComponent(article.title);
+                // Handle both older local format (desc) and new AI format (content)
+                const rawContent = article.content || article.desc || '';
+                const safeContent = encodeURIComponent(rawContent);
+                const safeTitle = encodeURIComponent(article.title || '');
+                const imgUrl = article.image || ''; 
                 
+                // Optional tags layout if they exist (added by AI)
+                const tagsHtml = article.tags ? `<div class="flex gap-2 flex-wrap mb-4 mt-2">${article.tags.map(tag => `<span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}</div>` : '';
+                
+                // Optional image layout if it exists (added by AI)
+                const imgHtml = imgUrl ? `<img src="${imgUrl}" alt="Cover" class="w-full h-48 sm:h-64 object-cover border-b border-gray-800">` : '';
+
                 const cardHtml = `
-                    <article onclick="openArticleDetail('${article.id}', '${safeTitle}', '${safeContent}', '${article.category}', '${article.date}')" 
+                    <article onclick="openArticleDetail('${article.id || ''}', '${safeTitle}', '${safeContent}', '${article.category}', '${article.date}', '${imgUrl}')" 
                              class="group cursor-pointer bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-emerald-500/50 transition-all hover:shadow-[0_0_30px_rgba(16,185,129,0.1)] flex flex-col ${isFeatured ? 'md:col-span-2' : ''}">
+                        ${imgHtml}
                         <div class="p-6 md:p-8 flex-grow flex flex-col">
                             <div class="flex items-center gap-3 mb-4">
                                 <span class="bg-gray-800 text-emerald-400 text-xs font-semibold px-2.5 py-1 rounded-full uppercase tracking-wider">${article.category}</span>
                                 <span class="text-sm text-gray-500">${article.date}</span>
                             </div>
-                            <h3 class="${isFeatured ? 'text-2xl md:text-4xl' : 'text-xl'} font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors serif leading-tight">${article.title}</h3>
-                            <p class="text-gray-400 leading-relaxed ${isFeatured ? 'text-lg line-clamp-4' : 'text-sm line-clamp-3'} mb-6 flex-grow">${article.desc.split('\n')[0]}</p>
+                            <h3 class="${isFeatured ? 'text-2xl md:text-4xl' : 'text-xl'} font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors serif leading-tight">${article.title}</h3>
+                            ${tagsHtml}
+                            <p class="text-gray-400 leading-relaxed ${isFeatured ? 'text-lg line-clamp-4' : 'text-sm line-clamp-3'} mb-6 flex-grow">${rawContent.split('\n')[0]}</p>
                             <div class="mt-auto flex items-center text-emerald-500 text-sm font-medium group-hover:translate-x-2 transition-transform">
                                 Read Full Story <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                             </div>
@@ -634,11 +402,13 @@
             );
 
             filteredShorts.forEach(short => {
-                const safeContent = encodeURIComponent(short.desc);
-                const safeTitle = encodeURIComponent(short.title);
-                
+                const rawContent = short.content || short.desc || '';
+                const safeContent = encodeURIComponent(rawContent);
+                const safeTitle = encodeURIComponent(short.title || '');
+                const imgUrl = short.image || '';
+
                 const shortHtml = `
-                    <div onclick="openArticleDetail('${short.id}', '${safeTitle}', '${safeContent}', '${short.category}', '${short.date}')" class="border-b border-gray-800 pb-4 last:border-0 cursor-pointer hover:bg-gray-800/50 p-3 -mx-3 rounded transition-colors group">
+                    <div onclick="openArticleDetail('${short.id}', '${safeTitle}', '${safeContent}', '${short.category}', '${short.date}', '${imgUrl}')" class="border-b border-gray-800 pb-4 last:border-0 cursor-pointer hover:bg-gray-800/50 p-3 -mx-3 rounded transition-colors group">
                         <span class="text-xs text-emerald-500 font-medium tracking-wide mb-1 block">${short.date}</span>
                         <h4 class="text-sm text-gray-300 font-medium group-hover:text-white transition-colors leading-snug">${short.title}</h4>
                     </div>
@@ -656,21 +426,25 @@
             // Update active state on nav buttons
             document.querySelectorAll('.nav-link').forEach(btn => {
                 btn.classList.remove('active');
-                if (btn.innerText.trim() === category) {
+                if (btn.innerText.trim() === category || (category === 'LLMs & Foundation Models' && btn.innerText.trim() === 'LLMs & Models')) {
                     btn.classList.add('active');
                 }
             });
 
             let filtered;
             if (category === "Front Page") {
-                // Get top 2 articles from each category for the front page
                 filtered = [];
                 const categories = ["LLMs & Foundation Models", "Computer Vision", "Robotics", "Hardware & Silicon", "Policy & Ethics"];
                 categories.forEach(cat => {
-                    filtered.push(...database.filter(a => a.category === cat).slice(0, 2));
+                    filtered.push(...fallbackArticles.filter(a => a.category === cat).slice(0, 2));
                 });
+                
+                // If the array is purely from the AI generator, just show everything on the front page
+                if (filtered.length === 0) {
+                    filtered = fallbackArticles;
+                }
             } else {
-                filtered = database.filter(a => a.category === category);
+                filtered = fallbackArticles.filter(a => a.category === category);
             }
             
             renderArticles(filtered);
@@ -682,19 +456,20 @@
             currentSearchQuery = e.target.value.toLowerCase().trim();
             
             let sourceData = currentCategory === "Front Page" 
-                ? database // Search everything if on front page
-                : database.filter(a => a.category === currentCategory); // Search only category
+                ? fallbackArticles 
+                : fallbackArticles.filter(a => a.category === currentCategory);
 
             if (currentSearchQuery === "") {
                 filterArticles(currentCategory); // Re-run standard filter
                 return;
             }
 
-            const searchResults = sourceData.filter(a => 
-                a.title.toLowerCase().includes(currentSearchQuery) || 
-                a.desc.toLowerCase().includes(currentSearchQuery) ||
-                a.category.toLowerCase().includes(currentSearchQuery)
-            );
+            const searchResults = sourceData.filter(a => {
+                const searchContent = (a.content || a.desc || '').toLowerCase();
+                return a.title.toLowerCase().includes(currentSearchQuery) || 
+                       searchContent.includes(currentSearchQuery) ||
+                       a.category.toLowerCase().includes(currentSearchQuery);
+            });
             
             renderArticles(searchResults);
             renderShorts(currentSearchQuery);
@@ -722,31 +497,38 @@
             btn.disabled = true;
             btn.innerText = "Verifying...";
 
-            // Simulate network request
             setTimeout(() => {
                 form.reset();
                 btn.disabled = false;
                 btn.innerText = "Subscribe Now";
                 successMsg.classList.remove('hidden');
                 
-                // Close after a moment
                 setTimeout(() => {
                     closeSubscribe();
                 }, 2000);
             }, 1000);
         }
 
-        function openArticleDetail(id, encodedTitle, encodedDesc, category, date) {
+        function openArticleDetail(id, encodedTitle, encodedDesc, category, date, image) {
             const title = decodeURIComponent(encodedTitle);
-            const desc = decodeURIComponent(encodedDesc);
+            const content = decodeURIComponent(encodedDesc);
             
             document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-content').innerText = desc;
+            document.getElementById('modal-content').innerText = content;
             document.getElementById('modal-category').innerText = category;
             document.getElementById('modal-date').innerText = date;
             
+            const imgEl = document.getElementById('modal-image');
+            if (image && image !== 'undefined') {
+                imgEl.src = image;
+                imgEl.classList.remove('hidden');
+            } else {
+                imgEl.src = '';
+                imgEl.classList.add('hidden');
+            }
+            
             // Save context for Gemini API calls
-            currentArticleContext = { title: title, desc: desc };
+            currentArticleContext = { title: title, desc: content };
 
             // Reset Gemini UI
             const btnSummary = document.getElementById('btn-ai-summary');
@@ -878,151 +660,6 @@
 
         // Initialize front page on load
         filterArticles("Front Page");
-  <script>
-// --- BEGIN AI ARTICLES ---
-const fallbackArticles = [
-  {
-    "title": "Photonic TPU v6: Google's Light-Based Co-Processor Shatters the Exaflop Barrier",
-    "category": "Hardware",
-    "tags": [
-      "Silicon",
-      "Photonics",
-      "TPU"
-    ],
-    "content": "In a move that could permanently alter the trajectory of high-performance computing, researchers and hardware engineers have officially unveiled the Photonic TPU v6. Utilizing breakthrough silicon photonics technology, the new co-processor routes data using light instead of electricity, solving the thermal and energetic bottlenecks that have plagued traditional silicon architectures for the last decade.\n\nHistorically, scaling up Tensor Processing Units (TPUs) meant grappling with extreme heat generation and massive power grids. By integrating microscopic on-chip lasers and silicon waveguides, the Photonic TPU v6 achieves an unprecedented 1.2 exaflops of neural network compute power per single rack, while drawing only 30% of the energy consumed by its purely electronic predecessor.\n\nIndustry insiders believe this marks the beginning of the post-silicon scaling era. Google's cloud infrastructure division has already begun deploying these optical accelerators to select research institutions, paving the way for the next generation of trillion-parameter models that previously would have taken months to train.",
-    "image": "https://picsum.photos/800/600?random=112",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "The Death of the Prompt: Standardizing Continuous Semantic Latent Spaces for Direct AI Interfacing",
-    "category": "LLMs",
-    "tags": [
-      "LLMs",
-      "Semantic Space",
-      "Neural Networks"
-    ],
-    "content": "For years, prompt engineering was hailed as the defining skill of the artificial intelligence boom. Today, that discipline took a massive step toward obsolescence with the release of the OpenLatent Standard. This new protocol bypasses natural language prompts entirely, allowing external software systems and neural interfaces to communicate directly with large language models via continuous semantic latent spaces.\n\nRather than translating an idea into English text, waiting for the LLM to parse it, and then generating a text output, the new standard allows direct vector-to-vector injection. This reduces token-processing latencies by over 90% and allows for an incredibly nuanced, bidirectional stream of thought that traditional text simply cannot capture.\n\nResearchers estimate that this direct semantic interfacing will enable real-time, zero-latency co-reasoning, transforming LLMs from chat-based assistants into seamless extensions of human cognition and software control systems alike.",
-    "image": "https://picsum.photos/800/600?random=345",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "Dexterity Leap: Reinforcement Learning in Simulation Achieves Zero-Shot Sub-Millimeter Physical Manipulation",
-    "category": "Robotics",
-    "tags": [
-      "Robotics",
-      "Sim-to-Real",
-      "Reinforcement Learning"
-    ],
-    "content": "The dream of highly adaptable, human-like robotic hands has historically been bottlenecked by the difficulty of translating simulated training into real-world performance. Today, a joint effort between leading robotics labs demonstrated a breakthrough in 'Sim-to-Real' transfer, enabling a 24-degree-of-freedom robotic hand to thread a needle, peel a grape, and solder a circuit board with zero-shot physical transfer.\n\nUsing an advanced physics engine that models microscopic surface friction and soft-tissue deformation in real-time, the robot was trained for the equivalent of 50,000 years in virtual environments. When the resulting policy was flashed onto physical hardware, the robot performed the tasks immediately without requiring a single adjustment or fine-tuning calibration loop.\n\nThis breakthrough is expected to fast-track the deployment of versatile robotic workers in electronics assembly, precision agriculture, and advanced micro-surgery, moving robotics past rigid automation and into highly dynamic environments.",
-    "image": "https://picsum.photos/800/600?random=678",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "The Geneva AI Accord: 42 Nations Sign Historic Treaty Governing Sovereign Autonomous Defenses",
-    "category": "Policy",
-    "tags": [
-      "Policy",
-      "Geopolitics",
-      "Autonomous Defense"
-    ],
-    "content": "In what diplomats are calling the most significant international agreement since the dawn of the nuclear age, 42 nations have officially signed the Geneva AI Accord. The treaty establishes strict, legally binding boundaries on the deployment of autonomous systems in military operations, fundamentally shaping how sovereign nations construct their defense grids.\n\nAt the core of the accord is a strict prohibition on fully autonomous target acquisition without human-in-the-loop verification. It also establishes an international inspection body to audit governmental and defense-contractor compute clusters, ensuring that sovereign defense systems remain sandbox-contained and incapable of self-replication outside of localized infrastructure.\n\nWhile critics express skepticism over the enforceability of these digital bounds, proponents argue that establishing a global ethical baseline is a critical first step to preventing a runaway algorithmic arms race that could destabilize global security.",
-    "image": "https://picsum.photos/800/600?random=901",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "NeRF-VGE: Real-Time Volumetric Geometry Estimation Transforms Edge Devices into Spatial Scanning Powerhouses",
-    "category": "Computer Vision",
-    "tags": [
-      "Computer Vision",
-      "NeRF",
-      "Spatial Computing"
-    ],
-    "content": "Generating high-fidelity 3D assets from standard video capture has long been a computationally heavy process, often requiring remote cloud servers to process neural radiance fields (NeRFs). That constraint has evaporated with the launch of NeRF-VGE (Volumetric Geometry Estimation), a novel model architecture optimized entirely for local edge hardware.\n\nBy utilizing a sparse ray-tracing algorithm that dynamically shifts resolution based on camera velocity and focal point, NeRF-VGE can construct photorealistic, fully interactive 3D spatial environments directly on consumer smartphones in real-time. The software produces not just a visual representation, but a physically interactive geometric mesh.\n\nThis technology is expected to revolutionize industrial inspections, real estate, and augmented reality gaming, allowing users to scan entire environments and instantly import them into physics-enabled game engines or architectural software without any latency or data privacy concerns.",
-    "image": "https://picsum.photos/800/600?random=223",
-    "date": "August 15, 2026"
-  }
-];
-// --- END AI ARTICLES ---
-
-document.addEventListener('DOMContentLoaded', () => {
-    const mainFeed = document.getElementById('main-feed');
-    
-    function renderArticles(articles) {
-        if (!mainFeed) return;
-        mainFeed.innerHTML = ''; 
-        articles.forEach(article => {
-            const encodedContent = encodeURIComponent(article.content || '');
-            const encodedTitle = encodeURIComponent(article.title || '');
-            const encodedCategory = encodeURIComponent(article.category || 'Tech');
-            const encodedDate = encodeURIComponent(article.date || 'August 15, 2026');
-            
-            const html = `
-                <div class="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden cursor-pointer hover:border-indigo-500 transition-colors" onclick="openArticleDetail('${encodedTitle}', '${encodedContent}', '${article.image}', '${encodedCategory}', '${encodedDate}')">
-                    <img src="${article.image}" alt="Article Image" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <span class="text-indigo-400 text-xs font-bold uppercase tracking-wider">${article.category}</span>
-                        <h2 class="text-white text-xl font-bold mt-2 mb-3">${article.title}</h2>
-                        <p class="text-gray-400 text-sm mb-4 line-clamp-3">${article.content}</p>
-                        <div class="flex gap-2 flex-wrap">
-                            ${(article.tags || []).map(tag => `<span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                </div>
-            `;
-            mainFeed.insertAdjacentHTML('beforeend', html);
-        });
-    }
-
-    renderArticles(fallbackArticles);
-});
-
-// Modal handling
-function openArticleDetail(encodedTitle, encodedContent, image, encodedCategory, encodedDate) {
-    const title = decodeURIComponent(encodedTitle);
-    const content = decodeURIComponent(encodedContent);
-    const category = decodeURIComponent(encodedCategory);
-    const date = decodeURIComponent(encodedDate);
-    
-    document.getElementById('modal-title').innerText = title;
-    document.getElementById('modal-content').innerText = content;
-    document.getElementById('modal-category').innerText = category;
-    document.getElementById('modal-date').innerText = date;
-    document.getElementById('modal-image').src = image;
-    
-    // Reset AI summary box
-    document.getElementById('ai-summary-box').classList.add('hidden');
-    document.getElementById('ai-summary-box').innerHTML = '';
-
-    document.getElementById('article-modal').classList.remove('hidden');
-}
-
-function closeArticleModal() {
-    document.getElementById('article-modal').classList.add('hidden');
-}
-
-function generateAISummary() {
-    const summaryBox = document.getElementById('ai-summary-box');
-    summaryBox.classList.remove('hidden');
-    summaryBox.innerHTML = "• Key Takeaway 1: Major architectural breakthroughs are reshaping industry standards.\n• Key Takeaway 2: Expected performance scaling introduces significant efficiency gains.\n• Key Takeaway 3: Broad deployment anticipated across enterprise ecosystems.";
-}
-</script>
-<!-- Article Detail Modal -->
-<div id="article-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-gray-900 border border-gray-800 rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 relative shadow-2xl">
-        <button onclick="closeArticleModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl font-bold bg-gray-800 w-8 h-8 rounded-full flex items-center justify-center transition-colors">✕</button>
-        <img id="modal-image" src="" alt="" class="w-full h-64 object-cover rounded-xl mb-6">
-        <span id="modal-category" class="text-indigo-400 text-xs font-bold uppercase tracking-wider"></span>
-        <h1 id="modal-title" class="text-2xl font-bold text-white mt-2 mb-2"></h1>
-        <p id="modal-date" class="text-gray-500 text-xs mb-6"></p>
-        <div id="modal-content" class="text-gray-300 space-y-4 whitespace-pre-line leading-relaxed mb-8"></div>
-        
-        <!-- Gemini AI Insights Section -->
-        <div class="border-t border-gray-800 pt-6 mt-6">
-            <h3 class="text-white font-bold flex items-center gap-2 mb-3">✨ Gemini AI Insights</h3>
-            <button onclick="generateAISummary()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors mb-4">Generate Quick Summary</button>
-            <div id="ai-summary-box" class="bg-gray-800/50 p-4 rounded-xl text-sm text-gray-300 hidden mb-4 whitespace-pre-line"></div>
-        </div>
-    </div>
-</div>
+    </script>
 </body>
 </html>
