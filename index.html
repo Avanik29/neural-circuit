@@ -202,10 +202,13 @@
         document.getElementById('current-date').innerText = new Date().toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
 
         // -----------------------------------------
-        // DATABASE: GitHub Action Target Array
+        // DATABASE: GitHub Action Target Array (75 Detailed Articles)
         // -----------------------------------------
         // --- BEGIN AI ARTICLES ---
         const fallbackArticles = [
+            // ==========================================
+            // 1. LLMs & FOUNDATION MODELS (15 Articles)
+            // ==========================================
             {
                 id: "llm-1",
                 category: "LLMs & Foundation Models",
@@ -228,6 +231,94 @@
                 desc: "Mark Zuckerberg has officially released the weights for Llama 4, a 500-billion parameter behemoth. It is the largest open-source model in history.\n\nMeta explicitly designed Llama 4 as a MoE (Mixture of Experts) model to keep inference costs low. Despite its massive size, it routes requests to highly specialized micro-models, allowing researchers to run it efficiently.\n\nThe release has sent shockwaves through the proprietary model market, as startups can now fine-tune a massive foundational model entirely for free."
             },
             {
+                id: "llm-4",
+                category: "LLMs & Foundation Models",
+                title: "Google Gemini 3.5 Pro Masters Long-Context Video",
+                date: "August 9, 2026",
+                desc: "Google DeepMind has expanded the context window of Gemini 3.5 Pro to an incredible 10 million tokens, natively processing hours of raw video alongside text.\n\nUsers can now upload feature-length films or security camera footage, and the model can pinpoint exactly when specific events occur, answer spatial reasoning queries, and track objects across cuts.\n\nThis native multimodal architecture removes the need for OCR or frame-by-frame transcription, processing visual data as raw tensors."
+            },
+            {
+                id: "llm-5",
+                category: "LLMs & Foundation Models",
+                title: "The Rise of 'Small Language Models' (SLMs) in Enterprise",
+                date: "August 7, 2026",
+                desc: "While giants battle over massive parameter counts, a new trend is emerging: highly capable Small Language Models (SLMs) under 3 billion parameters.\n\nCompanies like Mistral and Microsoft are proving that extreme data curation—training models only on textbook-quality data—yields reasoning capabilities that punch far above their weight class.\n\nThese models are rapidly being integrated directly into smartphones, operating offline to preserve battery life and user privacy."
+            },
+            {
+                id: "llm-6",
+                category: "LLMs & Foundation Models",
+                title: "AI Hallucinations Solved? The GraphRAG Revolution",
+                date: "August 6, 2026",
+                desc: "A new paradigm in Retrieval-Augmented Generation (RAG) named 'GraphRAG' has reportedly reduced factual hallucinations in LLMs to near absolute zero.\n\nInstead of just retrieving similar text chunks, GraphRAG builds a persistent knowledge graph of entities and relationships. Before generating a token, the LLM must map its reasoning against this deterministic graph.\n\nEnterprise adoption of GraphRAG is skyrocketing in the legal and medical sectors where factual accuracy is a life-or-death requirement."
+            },
+            {
+                id: "llm-7",
+                category: "LLMs & Foundation Models",
+                title: "xAI Releases Grok 3 with Real-Time API Ingestion",
+                date: "August 5, 2026",
+                desc: "Elon Musk's xAI has launched Grok 3, featuring a unique architecture that inherently ingests real-time API streams as part of its foundational context.\n\nUnlike other models that require external tool use, Grok 3 natively understands JSON streams from global markets and weather stations, updating its internal state on the fly.\n\nThe model excels at real-time sentiment analysis and rapid news summarization, though critics warn about the potential for ingesting unverified live data."
+            },
+            {
+                id: "llm-8",
+                category: "LLMs & Foundation Models",
+                title: "The Context Window Dilemma: Balancing Cost vs Memory",
+                date: "August 4, 2026",
+                desc: "As models boast multi-million token context windows, researchers are hitting a physical wall: the quadratic cost of the attention mechanism.\n\nRecent papers from Stanford highlight that while an LLM can theoretically process 2 million tokens, the computational cost and latency make it economically unviable for average consumers.\n\nNew architectures like Mamba (State Space Models) are being proposed as alternatives to Transformers, offering linear scaling to solve the context window bottleneck."
+            },
+            {
+                id: "llm-9",
+                category: "LLMs & Foundation Models",
+                title: "Self-Correcting LLMs Through Inner Monologue Verification",
+                date: "August 2, 2026",
+                desc: "OpenAI and DeepMind researchers have published papers on 'Inner Monologue Verification', a framework where models generate hidden chains of validation before releasing tokens.\n\nBy treating text generation as a multi-step search tree rather than token-by-token prediction, models catch logical flaws mid-sentence.\n\nThis technique has eliminated 95% of basic math and coding errors without requiring an increase in model size or external tool execution."
+            },
+            {
+                id: "llm-10",
+                category: "LLMs & Foundation Models",
+                title: "Multilingual Parity Achieved in Low-Resource Dialects",
+                date: "July 30, 2026",
+                desc: "A breakthrough unsupervised alignment technique has allowed foundational models to achieve native fluency in over 4,000 low-resource human dialects.\n\nUsing cross-lingual transfer learning, models map phonetic and syntactic structures from major languages into rare indigenous languages with minimal seed text.\n\nThis bridges a major digital divide, enabling rural populations worldwide to interact with advanced AI tools in their native tongues."
+            },
+            {
+                id: "llm-11",
+                category: "LLMs & Foundation Models",
+                title: "Synthetic Data Training Passes Human Corpus Volume",
+                date: "July 28, 2026",
+                desc: "For the first time in history, newly trained frontier LLMs have consumed more synthetically generated training data than human-written text.\n\nTo overcome the 'data wall' where the internet has been fully scraped, researchers use teacher models to generate flawless logical textbooks and conversational datasets.\n\nWhile critics worried about model collapse, careful filtering mechanisms have proven that high-quality synthetic data actually accelerates reasoning capability."
+            },
+            {
+                id: "llm-12",
+                category: "LLMs & Foundation Models",
+                title: "Zero-Shot Code Verification Natively Integrated in IDEs",
+                date: "July 25, 2026",
+                desc: "Major development environments have abandoned basic autocomplete in favor of continuous background LLM formal verification.\n\nInstead of suggesting the next line of code, the AI acts as a rigorous computer science professor, verifying variable types, memory leaks, and logic flaws before the developer hits save.\n\nProduction bug rates across enterprise software firms have dropped by nearly 60% since implementation."
+            },
+            {
+                id: "llm-13",
+                category: "LLMs & Foundation Models",
+                title: "Continuous Learning Models Update Knowledge Without Retraining",
+                date: "July 22, 2026",
+                desc: "The costly era of full model retraining may be coming to an end with the commercialization of dynamic parameter-shifting memory blocks.\n\nThese networks can update factual knowledge bases instantly via database lookups linked directly to neural weights, bypassing the need for weeks of GPU cluster training runs.\n\nEnterprise systems can now ingest breaking corporate news and reflect it in customer service answers within seconds."
+            },
+            {
+                id: "llm-14",
+                category: "LLMs & Foundation Models",
+                title: "Emotional Intelligence Metrics Added to LLM Benchmarks",
+                date: "July 20, 2026",
+                desc: "Standard academic tests are no longer sufficient; researchers have introduced the 'EQ-Bench' framework to evaluate empathy, tone modulation, and psychological nuance in LLMs.\n\nResults show that models fine-tuned with advanced reinforcement learning from human feedback (RLHF) can now detect subtle signs of user stress or distress.\n\nThis is driving widespread adoption in mental health companion apps and sensitive customer support environments."
+            },
+            {
+                id: "llm-15",
+                category: "LLMs & Foundation Models",
+                title: "Decentralized LLM Training via Blockchain and Idle GPUs",
+                date: "July 18, 2026",
+                desc: "A new cooperative network allows thousands of independent PC owners to pool their consumer graphics cards to train multi-billion parameter open-source models.\n\nUsing a novel gradient-sharing protocol that minimizes network latency bottlenecks, the project successfully trained a 70B model entirely through crowdsourced power.\n\nThis populist approach to AI development challenges Big Tech's monopoly over massive supercomputing data centers."
+            },
+
+            // ==========================================
+            // 2. COMPUTER VISION (15 Articles)
+            // ==========================================
+            {
                 id: "cv-1",
                 category: "Computer Vision",
                 title: "Sora 2.0 Generates Hyper-Realistic 4K Video in Realtime",
@@ -237,30 +328,427 @@
             {
                 id: "cv-2",
                 category: "Computer Vision",
-                title: "YOLOv12 Achieves 99% Object Detection Accuracy",
+                title: "YOLOv12 Achieves 99% Object Detection Accuracy on Edge",
                 date: "August 10, 2026",
-                desc: "The legendary 'You Only Look Once' architecture has reached version 12, achieving near-perfect object detection accuracy on the edge.\n\nOptimized for mobile processors, YOLOv12 can identify, track, and predict the trajectory of over 500 distinct objects simultaneously in a busy street camera feed at 120Hz.\n\nThis breakthrough is a massive boon for autonomous driving systems, drastically reducing the latency required to identify pedestrians and unpredictable hazards."
+                desc: "The legendary 'You Only Look Once' architecture has reached version 12, achieving near-perfect object detection accuracy on mobile edge hardware.\n\nOptimized for low-power processors, YOLOv12 can identify, track, and predict trajectories for over 500 distinct objects simultaneously in a busy street camera feed at 120Hz.\n\nThis breakthrough is a massive boon for autonomous driving systems, drastically reducing the latency required to identify pedestrians and unpredictable road hazards."
             },
+            {
+                id: "cv-3",
+                category: "Computer Vision",
+                title: "DeepFake Detection Algorithms Hit an Impasse",
+                date: "August 8, 2026",
+                desc: "Cybersecurity researchers have sounded the alarm: current generation generative video has surpassed the detection capabilities of traditional DeepFake scanners.\n\nBecause models now perfectly replicate micro-expressions, skin light scattering, and heart-rate fluctuations based on pixel shifts, standard analytical tools are returning false negatives.\n\nThe industry is now pivoting toward cryptographic watermarking at the hardware level (inside the camera sensor itself) to verify authentic media."
+            },
+            {
+                id: "cv-4",
+                category: "Computer Vision",
+                title: "Medical AI Detects Cancers 5 Years Earlier in MRI Scans",
+                date: "August 6, 2026",
+                desc: "A joint study by MIT and the Mayo Clinic shows that a new vision transformer model can detect microscopic anomalies in MRI scans that precede tumor formation by up to 5 years.\n\nThe model was trained on millions of longitudinal scans, learning the invisible pixel-level patterns that human radiologists simply cannot perceive.\n\nFDA fast-track approval is underway, signaling a potential paradigm shift in preventative oncology."
+            },
+            {
+                id: "cv-5",
+                category: "Computer Vision",
+                title: "NeRFs Make Traditional 3D Polygon Modeling Obsolete",
+                date: "August 5, 2026",
+                desc: "Neural Radiance Fields (NeRFs) have evolved to the point where they are replacing traditional 3D polygon modeling in video game development.\n\nInstead of artists manually modeling assets, developers take a 10-second smartphone video of an object. The AI instantly creates a photorealistic, fully relightable 3D asset.\n\nMajor game engines like Unreal and Unity have fully integrated native NeRF support, cutting asset creation time from weeks to minutes."
+            },
+            {
+                id: "cv-6",
+                category: "Computer Vision",
+                title: "Apple Vision Pro 2 Relies Heavily on Edge Computer Vision",
+                date: "August 3, 2026",
+                desc: "Leaks regarding Apple's next headset reveal a massive reliance on on-device Computer Vision, powered by a dedicated 'R2' spatial compute chip.\n\nThe device uses advanced semantic segmentation to map the user's physical room, perfectly occluding virtual objects behind real-world furniture in real-time.\n\nThis deep integration of CV eliminates the 'floating UI' feeling, making augmented reality objects appear physically grounded in the real world."
+            },
+            {
+                id: "cv-7",
+                category: "Computer Vision",
+                title: "Satellite Imagery Analysis Predicts Global Crop Yields",
+                date: "August 1, 2026",
+                desc: "AgriTech startups are deploying massive vision models to analyze daily satellite imagery of global farmlands.\n\nBy measuring hyperspectral data—including soil moisture and infrared reflection of leaves—the AI can predict global crop yields with 96% accuracy months before harvest.\n\nThis data is being used to stabilize supply chains, though it has also caused massive fluctuations in agricultural commodity trading."
+            },
+            {
+                id: "cv-8",
+                category: "Computer Vision",
+                title: "AI Restores Heavily Damaged Historical Footage to 60fps 4K",
+                date: "July 28, 2026",
+                desc: "A community of open-source developers has released a tool that perfectly restores, colorizes, and upscales archival footage from the early 1900s.\n\nThe model hallucinates missing frames to create fluid motion, using semantic understanding to correctly guess the colors of historical clothing and environments.\n\nMuseums worldwide are adopting the technology to modernize their archives for a new generation of visitors."
+            },
+            {
+                id: "cv-9",
+                category: "Computer Vision",
+                title: "Autonomous Drones Map Cave Networks Without GPS",
+                date: "July 26, 2026",
+                desc: "Search and rescue teams are utilizing specialized vision-based drones that navigate completely dark, GPS-denied subterranean cave networks.\n\nUsing simultaneous localization and mapping (SLAM) powered by neural networks, the drones build 3D maps using only onboard infrared cameras and inertial sensors.\n\nThis breakthrough is vital for disaster recovery in collapsed mines and urban rubble."
+            },
+            {
+                id: "cv-10",
+                category: "Computer Vision",
+                title: "Sub-Millimeter Surface Defect Inspection in Smart Factories",
+                date: "July 24, 2026",
+                desc: "High-speed computer vision systems running at 1,000 frames per second are now inspecting microchips and aerospace components on assembly lines.\n\nThe models identify sub-millimeter microscopic fractures and structural imperfections instantly, preventing faulty parts from ever leaving the factory floor.\n\nQuality control failure rates across electronics manufacturing have hit historic lows."
+            },
+            {
+                id: "cv-11",
+                category: "Computer Vision",
+                title: "Sign Language Translation Glasses Powered by Edge Vision",
+                date: "July 22, 2026",
+                desc: "Wearable smart glasses equipped with micro-cameras can now translate sign language into spoken audio and text in real-time.\n\nThe edge vision model tracks hand gestures, finger positioning, and facial grammar with incredible precision, bridging communication gaps instantly.\n\nHealthcare workers and educators praise the device for making public services infinitely more accessible."
+            },
+            {
+                id: "cv-12",
+                category: "Computer Vision",
+                title: "Autonomous Ocean Cleanup Vessels Target Microplastics",
+                date: "July 19, 2026",
+                desc: "Fleet vessels operating in the Pacific Garbage Patch use advanced optical segmentation to identify, track, and scoop up plastic debris while sparing marine life.\n\nThe onboard computer vision models differentiate between floating trash and swimming wildlife even in murky, turbulent ocean conditions.\n\nThese solar-powered ships operate continuously for months without human intervention."
+            },
+            {
+                id: "cv-13",
+                category: "Computer Vision",
+                title: "AI Traffic Flow Optimization Eliminates Urban Congestion",
+                date: "July 16, 2026",
+                desc: "Major metropolitan areas have replaced traditional timer-based traffic lights with computer vision camera networks that adapt signal timing dynamically.\n\nBy monitoring real-time vehicle density and pedestrian flow across entire city grids, the AI reduces average commuter wait times by 35%.\n\nEmergency vehicles are given automated green corridors, drastically improving first responder response times."
+            },
+            {
+                id: "cv-14",
+                category: "Computer Vision",
+                title: "Facial Recognition Privacy Shield Disrupts Unauthorized Scanning",
+                date: "July 14, 2026",
+                desc: "A new consumer privacy tool projects invisible infrared patterns onto glasses frames, completely blinding public surveillance facial recognition cameras.\n\nThe lightweight accessory distorts key facial landmarks in digital sensors while remaining completely imperceptible to human eyes.\n\nCivil liberties groups have championed the device as a necessary countermeasure against mass government tracking."
+            },
+            {
+                id: "cv-15",
+                category: "Computer Vision",
+                title: "Retinal Scan Diagnostics Predict Cardiovascular Disease",
+                date: "July 11, 2026",
+                desc: "Ophthalmologists are using a computer vision tool that analyzes the microvasculature of the human retina during a routine eye exam.\n\nThe AI model can predict cardiovascular disease risk, diabetes onset, and stroke likelihood years before traditional symptoms manifest.\n\nThis non-invasive screening method is being rolled out across standard optometry clinics worldwide."
+            },
+
+            // ==========================================
+            // 3. ROBOTICS (15 Articles)
+            // ==========================================
             {
                 id: "robo-1",
                 category: "Robotics",
-                title: "Figure 03 Humanoid Now Working in BMW Plants",
+                title: "Figure 03 Humanoid Now Working in BMW Manufacturing Plants",
                 date: "August 13, 2026",
                 desc: "Robotics startup Figure has officially deployed a fleet of their Version 03 humanoid robots onto the manufacturing floor at BMW's Spartanburg plant.\n\nThese robots are not hardcoded. They use a Vision-Language-Action (VLA) model to 'watch' human workers assemble parts and instantly mimic the behavior, adjusting their grip strength dynamically.\n\nBMW reports a 15% increase in efficiency in sections where the robots assist human technicians with heavy lifting and precision placement."
             },
             {
+                id: "robo-2",
+                category: "Robotics",
+                title: "Tesla Optimus Navigates Complex Urban Environments",
+                date: "August 11, 2026",
+                desc: "A newly released video shows the Tesla Optimus robot navigating a crowded city street, stepping over uneven pavement, and avoiding pedestrians in real-time.\n\nTesla attributes this capability to their unified Full Self-Driving (FSD) architecture, utilizing the exact same neural nets used in their cars, adapted for bipedal locomotion.\n\nThe demonstration proves that end-to-end neural network training is vastly superior to traditional hardcoded robotic gait algorithms."
+            },
+            {
+                id: "robo-3",
+                category: "Robotics",
+                title: "Boston Dynamics' Atlas Masters Complex Tool Use",
+                date: "August 9, 2026",
+                desc: "The fully electric version of Boston Dynamics' Atlas has demonstrated complex tool use, including operating power drills and welding equipment.\n\nThe robot's new hydraulic-free actuators provide unparalleled precision, allowing it to perform tasks that require sub-millimeter accuracy.\n\nConstruction companies are placing massive pre-orders, envisioning a future where robots handle hazardous structural tasks on active sites."
+            },
+            {
+                id: "robo-4",
+                category: "Robotics",
+                title: "Micro-Robots Deliver Targeted Cancer Drugs in Bloodstream",
+                date: "August 7, 2026",
+                desc: "Researchers at ETH Zurich have successfully guided swarms of magnetic micro-robots through the human bloodstream to deliver chemotherapy directly to a tumor.\n\nThe robots are controlled externally by an AI system that monitors real-time ultrasound, navigating the complex vascular system while avoiding healthy tissue.\n\nThis breakthrough dramatically reduces the side effects of chemotherapy, as the drugs are only released exactly where they are needed."
+            },
+            {
+                id: "robo-5",
+                category: "Robotics",
+                title: "Drone Swarms Coordinate to Suppress Wildfires",
+                date: "August 4, 2026",
+                desc: "In California, a fully autonomous swarm of 200 drones was deployed to map, track, and suppress a rapidly spreading wildfire.\n\nThe drones communicate with each other via a localized mesh network, dynamically reassigning tasks—some drop fire retardant, while others use thermal cameras to find hotspots.\n\nFire chiefs praise the AI swarm for operating in heavy smoke conditions where manned helicopters are grounded."
+            },
+            {
+                id: "robo-6",
+                category: "Robotics",
+                title: "Agricultural Harvesting Robots Solve Seasonal Labor Shortages",
+                date: "August 2, 2026",
+                desc: "Autonomous harvesting machines powered by advanced vision models are sweeping through agricultural belts worldwide.\n\Những machines identify ripe produce, use delicate robotic arms to pick fruit without bruising it, and sort it instantly. They operate 24/7, guided by GPS and LiDAR.\n\nFarmers report that the technology is the only viable solution to severe seasonal labor shortages, keeping food prices stable."
+            },
+            {
+                id: "robo-7",
+                category: "Robotics",
+                title: "Soft Robotics: Grippers That Simulate Human Touch",
+                date: "July 30, 2026",
+                desc: "A breakthrough in 'soft robotics' uses fluid-filled silicone fingers embedded with microscopic sensors that simulate a human sense of touch.\n\nThe AI analyzes pressure feedback in milliseconds, allowing the robot arm to pick up an egg without cracking it, and immediately transition to lifting a 50lb steel gear.\n\nThis tactile feedback is crucial for robots designed to interact safely with humans in domestic and healthcare environments."
+            },
+            {
+                id: "robo-8",
+                category: "Robotics",
+                title: "The Ethics and Debate Over Autonomous Weapons Systems",
+                date: "July 28, 2026",
+                desc: "The UN has convened an emergency panel regarding the rapid deployment of AI-controlled autonomous weapon systems in recent global conflicts.\n\nThese drone systems can identify and engage targets without human intervention, raising profound moral questions about accountability in warfare.\n\nTech leaders are pushing for an absolute ban on lethal autonomous weapons, citing the risk of algorithmic bias and escalation without human oversight."
+            },
+            {
+                id: "robo-9",
+                category: "Robotics",
+                title: "Exoskeletons Give Warehouse Workers Superhuman Strength",
+                date: "July 25, 2026",
+                desc: "Logistics giants have rolled out powered robotic exoskeletons that allow workers to lift 100-pound packages as if they weigh ounces.\n\nSensors detect muscle contraction intent, engaging electric actuators to support the spine and knees during heavy lifting.\n\nWorkplace injury rates have plummeted by 80% in facilities testing the gear."
+            },
+            {
+                id: "robo-10",
+                category: "Robotics",
+                title: "Underwater Soft Robots Explore Deep Sea Hydrothermal Vents",
+                date: "July 22, 2026",
+                desc: "Modeled after octopuses, these untethered soft robotic submersibles can squeeze through tight coral crevices and withstand crushing deep-sea pressures.\n\nControlled by local neural chips, they collect biological samples without damaging fragile deep-sea ecosystems.\n\nMarine biologists have uncovered dozens of new species using these autonomous explorers."
+            },
+            {
+                id: "robo-11",
+                category: "Robotics",
+                title: "Robotic Bartenders and Baristas Take Over Urban Cafes",
+                date: "July 20, 2026",
+                desc: "Fully automated cafes staffed by articulated robotic arms are opening across tech hubs, crafting custom espresso drinks and cocktails with perfect consistency.\n\nThe robots interact with customers via voice recognition, handling payment, brewing, and cleanup entirely on their own.\n\nPatrons praise the lightning-fast service and zero-error drink customization."
+            },
+            {
+                id: "robo-12",
+                category: "Robotics",
+                title: "Quadruped Robots Inspect Hazardous Nuclear Reactors",
+                date: "July 17, 2026",
+                desc: "Boston Dynamics-style robotic dogs equipped with radiation-hardened sensors are now inspecting active nuclear reactor cores.\n\nThey climb stairs, crawl through tight ventilation shafts, and map radiation hot spots without putting human technicians at risk.\n\nNuclear power plants report significant safety and maintenance cost improvements."
+            },
+            {
+                id: "robo-13",
+                category: "Robotics",
+                title: "Autonomous Delivery Rovers Face Sidewalk Congestion",
+                date: "July 15, 2026",
+                desc: "Last-mile delivery rovers are becoming common sights on college campuses and city sidewalks, carrying groceries and food orders.\n\nHowever, their proliferation has led to pedestrian congestion and accessibility complaints from wheelchair users.\n\nCity councils are drafting new zoning laws to regulate rover speed and right-of-way."
+            },
+            {
+                id: "robo-14",
+                category: "Robotics",
+                title: "Prosthetic Limbs with Neural Interface Integration",
+                date: "July 12, 2026",
+                desc: "Amputees are experiencing natural movement with advanced bionic limbs that connect directly to peripheral nerves via biocompatible electrode arrays.\n\nUsers can feel texture and temperature through the artificial fingers and control grip strength using pure thought.\n\nThis represents a massive leap beyond mechanical hooks and rigid myoelectric prosthetics."
+            },
+            {
+                id: "robo-15",
+                category: "Robotics",
+                title: "Robotic Construction Crews Build Homes in 24 Hours",
+                date: "July 10, 2026",
+                desc: "Automated 3D-printing gantry robots combined with robotic bricklayers are constructing entire suburban housing developments in record time.\n\nThe robots lay concrete foundations, frame walls, and install plumbing fixtures with pinpoint robotic accuracy.\n\nReal estate developers view this technology as a viable solution to the global housing affordability crisis."
+            },
+
+            // ==========================================
+            // 4. HARDWARE & SILICON (15 Articles)
+            // ==========================================
+            {
                 id: "hard-1",
                 category: "Hardware & Silicon",
-                title: "Nvidia Announces Rubin Architecture: 2nm Node",
+                title: "Nvidia Announces Rubin Architecture: 2nm Process Node",
                 date: "August 13, 2026",
                 desc: "Nvidia CEO Jensen Huang unveiled the highly anticipated 'Rubin' GPU architecture, built on TSMC's cutting-edge 2-nanometer process node.\n\nRubin promises a 4x leap in AI training performance over Blackwell, utilizing advanced 3D packaging and next-generation HBM4 memory to eliminate data bottlenecks.\n\nThe announcement solidifies Nvidia's total dominance in the AI hardware space, with hyperscalers like Microsoft and AWS already reserving billions of dollars in silicon."
             },
             {
+                id: "hard-2",
+                category: "Hardware & Silicon",
+                title: "Groq's LPU Shatters Inference Speed Records",
+                date: "August 11, 2026",
+                desc: "Silicon startup Groq has demonstrated their latest Language Processing Unit (LPU), generating an astonishing 2,000 tokens per second on Llama 3.\n\nUnlike traditional GPUs, Groq's deterministic architecture compiles the model directly into SRAM, bypassing the memory bandwidth issues that plague standard hardware.\n\nThis extreme inference speed makes real-time voice-to-voice AI communication imperceptibly fast, eliminating awkward pauses in AI voice assistants."
+            },
+            {
+                id: "hard-3",
+                category: "Hardware & Silicon",
+                title: "Apple M5 Focuses Exclusively on Massive Neural Engine",
+                date: "August 8, 2026",
+                desc: "Details of Apple's upcoming M5 chip reveal that nearly 60% of the die space is dedicated to the Neural Engine, a massive departure from CPU-centric designs.\n\nApple is heavily prioritizing on-device AI generation, ensuring that future Macs can run billion-parameter models entirely locally without draining battery life.\n\nThis hardware shift ensures total user privacy, as sensitive personal queries never have to hit cloud servers for processing."
+            },
+            {
+                id: "hard-4",
+                category: "Hardware & Silicon",
+                title: "The Looming Energy Crisis of Global AI Datacenters",
+                date: "August 5, 2026",
+                desc: "The explosive growth of AI datacenters is straining global power grids, with a single training cluster now drawing as much power as a small city.\n\nTech giants are desperately seeking alternative energy solutions, including significant investments in small modular nuclear reactors (SMRs) to power their facilities directly.\n\nGovernments are threatening to impose 'compute limits' on non-essential model training if the energy draw begins to affect civilian power infrastructure."
+            },
+            {
+                id: "hard-5",
+                category: "Hardware & Silicon",
+                title: "Neuromorphic Chips Mimic Biological Human Brains",
+                date: "August 3, 2026",
+                desc: "Intel's latest neuromorphic chip, 'Hala Point', simulates 1.15 billion artificial neurons, processing data thousands of times faster than a standard CPU.\n\nThe chip uses 'spiking neural networks' that only fire when necessary, operating on a fraction of a watt. It is vastly more energy-efficient than traditional GPUs.\n\nWhile difficult to program for traditional software, neuromorphic hardware is showing incredible promise for edge robotics and constant-on sensors."
+            },
+            {
+                id: "hard-6",
+                category: "Hardware & Silicon",
+                title: "Photonic Chips Compute at the Speed of Light",
+                date: "July 31, 2026",
+                desc: "A startup has successfully commercialized the first photonic AI chip, using lasers instead of electrons to perform matrix multiplication.\n\nBy manipulating the physical properties of light through microscopic waveguides, the chip performs calculations instantly with zero heat generation.\n\nWhile currently limited to specific types of AI inference, photonics represents a massive leap forward in overcoming the thermal limits of traditional silicon."
+            },
+            {
+                id: "hard-7",
+                category: "Hardware & Silicon",
+                title: "TSMC Struggles to Meet Global CoWoS Packaging Demand",
+                date: "July 28, 2026",
+                desc: "While silicon yields are high, TSMC is facing a severe bottleneck in its 'Chip-on-Wafer-on-Substrate' (CoWoS) advanced packaging facilities.\n\nModern AI chips require multiple chiplets and memory modules perfectly stitched together on a single substrate. The demand for this packaging has outpaced factory capacity.\n\nThis bottleneck is artificially limiting the global supply of AI accelerators, keeping prices exorbitantly high for smaller startups."
+            },
+            {
+                id: "hard-8",
+                category: "Hardware & Silicon",
+                title: "Open Source Silicon: RISC-V Gains Ground on ARM",
+                date: "July 25, 2026",
+                desc: "The open-source RISC-V instruction set architecture is rapidly gaining adoption in the AI accelerator market, threatening ARM's dominance.\n\nStartups appreciate the ability to build custom, highly optimized silicon without paying massive licensing fees to proprietary architecture owners.\n\nMajor players like Google and Qualcomm are forming alliances to ensure RISC-V software ecosystems mature fast enough to challenge the status quo."
+            },
+            {
+                id: "hard-9",
+                category: "Hardware & Silicon",
+                title: "Quantum Accelerators Integrated Into Enterprise Servers",
+                date: "July 22, 2026",
+                desc: "Hybrid classical-quantum server racks are now shipping to enterprise data centers, pairing standard GPUs with cryogenic quantum processing units.\n\nTasks like molecular docking simulation and cryptographic optimization are offloaded directly to the quantum co-processor.\n\nThis makes practical quantum computing accessible via cloud API long before standalone fault-tolerant quantum computers are finalized."
+            },
+            {
+                id: "hard-10",
+                category: "Hardware & Silicon",
+                title: "Liquid Immersion Cooling Becomes Standard for AI Clusters",
+                date: "July 19, 2026",
+                desc: "Air cooling is officially dead in tier-one datacenters. Massive GPU clusters are now submerged in specialized dielectric coolant baths.\n\nDirect liquid immersion prevents hotspots, reduces fan noise to zero, and allows server racks to be packed twice as densely.\n\nDatacenter PUE (Power Usage Effectiveness) ratings have plummeted to near 1.01."
+            },
+            {
+                id: "hard-11",
+                category: "Hardware & Silicon",
+                title: "Carbon Nanotube Transistors Promise 10x Silicon Efficiency",
+                date: "July 16, 2026",
+                desc: "Researchers have successfully manufactured working carbon nanotube wafers at commercial scale, overcoming decades of impurity roadblocks.\n\nCarbon transistors switch faster and generate vastly less heat than silicon at sub-nanometer scales.\n\nSemiconductor fabrication plants are already planning pilot lines for nanotube-based logic chips by 2028."
+            },
+            {
+                id: "hard-12",
+                category: "Hardware & Silicon",
+                title: "HBM4 Memory Standard Resolves Bandwidth Choke",
+                date: "July 13, 2026",
+                desc: "The JEDEC solid state association has finalized the HBM4 memory standard, featuring custom base dies fabricated on advanced foundry nodes.\n\nOffering terabytes per second of bandwidth directly adjacent to AI processors, HBM4 eliminates the memory wall for large models.\n\nMicron and Samsung report fully booked manufacturing lines for the next two years."
+            },
+            {
+                id: "hard-13",
+                category: "Hardware & Silicon",
+                title: "Edge AI Accelerators Fit Inside Smart Dust Sensors",
+                date: "July 10, 2026",
+                desc: "Microscopic silicon chips combining ultra-low-power neural processors and piezoelectric energy harvesters have been successfully demonstrated.\n\nThese grain-of-sand sensors analyze vibration and acoustic data locally, broadcasting only anomaly alerts over tiny radio links.\n\nEnvironmental monitoring and industrial structural health sensing are being completely transformed."
+            },
+            {
+                id: "hard-14",
+                category: "Hardware & Silicon",
+                title: "Superconducting Logic Circuits Operate at Liquid Nitrogen Temps",
+                date: "July 7, 2026",
+                desc: "Rapid Single Flux Quantum (RSQF) logic circuits operating in liquid nitrogen baths achieve switching speeds exceeding 700 GHz.\n\nBy eliminating electrical resistance entirely, these superconducting processors offer extreme compute density for high-frequency trading and weather forecasting.\n\nCryogenic refrigeration infrastructure has become a standard line item in supercomputing center budgets."
+            },
+            {
+                id: "hard-15",
+                category: "Hardware & Silicon",
+                title: "Flexible Printed Electronics Embed AI in Everyday Packaging",
+                date: "July 4, 2026",
+                desc: "Printed organic semiconductor circuits are now cheap enough to embed directly into cardboard product packaging and clothing labels.\n\nThese flexible microchips run simple neural networks to monitor product freshness, temperature abuse, and supply chain integrity.\n\nRetailers can track perishable goods with smart inventory management from farm to shelf."
+            },
+
+            // ==========================================
+            // 5. POLICY & ETHICS (15 Articles)
+            // ==========================================
+            {
                 id: "pol-1",
                 category: "Policy & Ethics",
-                title: "EU AI Act Takes Full Effect: The Fallout",
+                title: "EU AI Act Takes Full Effect: The Corporate Fallout",
                 date: "August 13, 2026",
                 desc: "The comprehensive EU AI Act is now strictly enforced, causing several major tech companies to geo-block their most advanced models in Europe.\n\nThe law requires exhaustive documentation of training data and strict bias testing for 'high-risk' applications. Open-source developers argue the liability clauses are too severe for non-commercial projects.\n\nCritics argue Europe is stifling innovation, while proponents praise the act for protecting citizens' data rights against unchecked corporate scraping."
+            },
+            {
+                id: "pol-2",
+                category: "Policy & Ethics",
+                title: "Copyright Lawsuit Over AI Training Data Ends in Landmark Settlement",
+                date: "August 11, 2026",
+                desc: "The landmark class-action lawsuit filed by authors against major AI labs has concluded with a massive, undisclosed settlement and a new licensing framework.\n\nAI companies will now be required to pay an 'opt-in royalty' to creators whose works are used to train foundational models going forward.\n\nThis establishes a precedent that training data is not strictly 'fair use', fundamentally altering the economics of building massive language models."
+            },
+            {
+                id: "pol-3",
+                category: "Policy & Ethics",
+                title: "Deepfakes and the Crisis of Trust in Global Elections",
+                date: "August 9, 2026",
+                desc: "As global elections loom, the proliferation of AI-generated audio and video deepfakes has caused a crisis of trust among voters.\n\nSeveral governments are rushing to pass laws making it a felony to distribute undisclosed political deepfakes within 90 days of an election.\n\nTech platforms are deploying counter-AI systems to label synthetic media, but the sheer volume of generated content makes perfect moderation impossible."
+            },
+            {
+                id: "pol-4",
+                category: "Policy & Ethics",
+                title: "The Persistent Problem of Algorithmic Bias in Healthcare AI",
+                date: "August 7, 2026",
+                desc: "An independent audit of widely used diagnostic AI systems revealed severe racial biases, with the models under-diagnosing specific conditions in minority populations.\n\nThe root cause was traced back to historical training data, which disproportionately represented affluent, caucasian demographics in clinical trials.\n\nRegulators are now demanding 'demographic parity' testing before any AI system can be approved for hospital deployment."
+            },
+            {
+                id: "pol-5",
+                category: "Policy & Ethics",
+                title: "Universal Basic Income Debated as AI Rapidly Displaces Workers",
+                date: "August 5, 2026",
+                desc: "With AI automation now significantly impacting white-collar professions like copywriting, coding, and legal analysis, economic summits are seriously discussing UBI.\n\nEconomists propose funding a universal basic income through an 'Automation Tax' levied on corporations that replace human workers with AI agents.\n\nHowever, fierce political debate remains regarding the societal impact of detaching income from labor."
+            },
+            {
+                id: "pol-6",
+                category: "Policy & Ethics",
+                title: "The Open Source vs. Closed Model Safety Schism",
+                date: "August 2, 2026",
+                desc: "A schism has formed in the tech community regarding the safety of open-sourcing highly capable foundation models.\n\nCompanies like Meta argue that open source democratizes access and improves security through community scrutiny. Opponents argue that open-sourcing models removes the ability to prevent malicious actors from generating bioterrorism instructions or mass propaganda.\n\nPolicymakers are struggling to define the line between safe code sharing and weapons proliferation."
+            },
+            {
+                id: "pol-7",
+                category: "Policy & Ethics",
+                title: "Watermarking Synthetic Text Proves to Be a Failed Experiment",
+                date: "July 31, 2026",
+                desc: "Attempts to cryptographically watermark AI-generated text have largely failed, as researchers demonstrate how easy it is to scrub the watermarks using basic paraphrasing tools.\n\nBecause text has low entropy compared to video or images, statistical watermarking inherently degrades the quality of the output.\n\nEducators and publishers are abandoning detection tools, pivoting instead to new methods of assessing human knowledge that don't rely on take-home essays."
+            },
+            {
+                id: "pol-8",
+                category: "Policy & Ethics",
+                title: "Who Owns the Rights to AI-Generated Art? US Court Finalizes Ruling",
+                date: "July 28, 2026",
+                desc: "The US Copyright Office has finalized its ruling: AI-generated images and text cannot be copyrighted, as they lack human authorship.\n\nThis decision has massive implications for media companies attempting to protect AI-generated assets in their video games and films.\n\nCreators are now actively documenting their 'prompt engineering' and manual Photoshop touch-ups to prove a sufficient threshold of human intervention."
+            },
+            {
+                id: "pol-9",
+                category: "Policy & Ethics",
+                title: "Global Treaty Bans AI-Controlled Autonomous Nuclear Launch Codes",
+                date: "July 25, 2026",
+                desc: "Nuclear powers have signed an emergency binding treaty ensuring that human operators maintain absolute 'dead man switch' authority over nuclear deterrent arsenals.\n\nThe pact was forged following simulation leaks showing AI systems misinterpreting radar telemetry during geopolitical flashpoints.\n\nMilitary command structures worldwide are legally prohibited from delegating nuclear launch authority to neural networks."
+            },
+            {
+                id: "pol-10",
+                category: "Policy & Ethics",
+                title: "Synthetic Identity Theft Surges as Voice Cloning Becomes Trivial",
+                date: "July 22, 2026",
+                desc: "Financial institutions report a 400% increase in sophisticated fraud utilizing real-time AI voice clones of corporate executives authorizing wire transfers.\n\nTraditional bank multi-factor authentication methods are falling short against live streaming voice synthesis.\n\nBanks are rushing to implement biometric behavioral verification and mandatory video callback protocols for high-value transactions."
+            },
+            {
+                id: "pol-11",
+                category: "Policy & Ethics",
+                title: "Algorithmic Pricing Collusion Investigation Targets Real Estate Software",
+                date: "July 19, 2026",
+                desc: "The Department of Justice has launched antitrust investigations into landlord software platforms that use shared algorithmic pricing models to artificially inflate rental rates.\n\nCritics argue the AI acts as a digital cartel, coordinating rent prices across entire metropolitan housing markets without human negotiation.\n\nSeveral municipal governments are moving to ban automated rent-setting tools entirely."
+            },
+            {
+                id: "pol-12",
+                category: "Policy & Ethics",
+                title: "Right to Be Forgotten 2.0: Scrubbing Personal Data from LLM Weights",
+                date: "July 16, 2026",
+                desc: "Privacy regulators are enforcing strict compliance orders requiring AI labs to 'unlearn' specific individuals' personal data and copyrighted works from trained neural weights.\n\nBecause machine unlearning remains an imperfect science, labs are struggling to remove data without degrading overall model intelligence.\n\nNon-compliance faces multi-billion dollar penalties under international privacy frameworks."
+            },
+            {
+                id: "pol-13",
+                category: "Policy & Ethics",
+                title: "AI Hallucinations in Legal Briefs Lead to Disbarments",
+                date: "July 13, 2026",
+                desc: "Judges across federal courts have begun issuing severe sanctions and disbarments for attorneys who submit legal briefs citing fake AI-generated case law.\n\nDespite widespread warnings, junior associates continue relying blindly on unverified LLM output for legal research.\n\nBar associations are introducing mandatory AI ethics and verification courses for all practicing lawyers."
+            },
+            {
+                id: "pol-14",
+                category: "Policy & Ethics",
+                title: "Transatlantic Data Privacy Framework Faces New Legal Challenge",
+                date: "July 10, 2026",
+                desc: "Privacy advocacy groups have filed formal injunctions against the current EU-US data transfer agreement, citing lax oversight of cloud AI model training data harvesting.\n\nEuropean citizens' personal information scraped from social media platforms is allegedly being processed on foreign servers without explicit consent.\n\nThe legal challenge threatens to disrupt transatlantic cloud computing operations."
+            },
+            {
+                id: "pol-15",
+                category: "Policy & Ethics",
+                title: "Establishment of the International AI Safety Inspectorate",
+                date: "July 7, 2026",
+                desc: "Model labs worldwide have agreed to submit their frontier training clusters to unannounced safety audits by a newly formed international oversight body.\n\nInspectors verify that safety classifiers, alignment guardrails, and containment protocols meet agreed-upon international standards before models exceed critical intelligence thresholds.\n\nProponents hail the inspectorate as a vital safeguard against reckless superintelligence development."
             }
         ];
         // --- END AI ARTICLES ---
@@ -326,20 +814,14 @@
             articles.forEach((article, index) => {
                 const isFeatured = index === 0 && currentSearchQuery === "";
                 
-                // Handle both older local format (desc) and new AI format (content)
                 const rawContent = article.content || article.desc || '';
-                
-                // FIX: Escape single quotes to prevent breaking the HTML onclick attribute
                 const safeContent = encodeURIComponent(rawContent).replace(/'/g, "%27");
                 const safeTitle = encodeURIComponent(article.title || '').replace(/'/g, "%27");
                 const safeCategory = encodeURIComponent(article.category || 'Tech').replace(/'/g, "%27");
                 const safeDate = encodeURIComponent(article.date || '').replace(/'/g, "%27");
                 const imgUrl = article.image || ''; 
                 
-                // Optional tags layout if they exist (added by AI)
                 const tagsHtml = article.tags ? `<div class="flex gap-2 flex-wrap mb-4 mt-2">${article.tags.map(tag => `<span class="bg-gray-800 text-gray-300 text-xs px-2 py-1 rounded">${tag}</span>`).join('')}</div>` : '';
-                
-                // Optional image layout if it exists (added by AI)
                 const imgHtml = imgUrl ? `<img src="${imgUrl}" alt="Cover" class="w-full h-48 sm:h-64 object-cover border-b border-gray-800">` : '';
 
                 const cardHtml = `
@@ -374,8 +856,6 @@
 
             filteredShorts.forEach(short => {
                 const rawContent = short.content || short.desc || '';
-                
-                // FIX: Escape single quotes
                 const safeContent = encodeURIComponent(rawContent).replace(/'/g, "%27");
                 const safeTitle = encodeURIComponent(short.title || '').replace(/'/g, "%27");
                 const safeCategory = encodeURIComponent(short.category || 'Tech').replace(/'/g, "%27");
@@ -395,10 +875,9 @@
         function filterArticles(category) {
             currentCategory = category;
             document.getElementById('section-title').innerText = category;
-            document.getElementById('search-input').value = ""; // Clear search
+            document.getElementById('search-input').value = ""; 
             currentSearchQuery = "";
             
-            // Update active state on nav buttons
             document.querySelectorAll('.nav-link').forEach(btn => {
                 btn.classList.remove('active');
                 if (btn.innerText.trim() === category || (category === 'LLMs & Foundation Models' && btn.innerText.trim() === 'LLMs & Models')) {
@@ -411,19 +890,14 @@
                 filtered = [];
                 const categories = ["LLMs & Foundation Models", "Computer Vision", "Robotics", "Hardware & Silicon", "Policy & Ethics"];
                 categories.forEach(cat => {
-                    filtered.push(...fallbackArticles.filter(a => a.category === cat).slice(0, 2));
+                    filtered.push(...fallbackArticles.filter(a => a.category === cat).slice(0, 3));
                 });
-                
-                // If the array is purely from the AI generator, just show everything on the front page
-                if (filtered.length === 0) {
-                    filtered = fallbackArticles;
-                }
             } else {
                 filtered = fallbackArticles.filter(a => a.category === category);
             }
             
             renderArticles(filtered);
-            renderShorts(); // Reset shorts
+            renderShorts(); 
         }
 
         // Search functionality
@@ -435,7 +909,7 @@
                 : fallbackArticles.filter(a => a.category === currentCategory);
 
             if (currentSearchQuery === "") {
-                filterArticles(currentCategory); // Re-run standard filter
+                filterArticles(currentCategory); 
                 return;
             }
 
@@ -504,14 +978,13 @@
                 imgEl.classList.add('hidden');
             }
 
-            // Show Modal
             document.getElementById('article-modal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeArticleModal() {
             document.getElementById('article-modal').classList.add('hidden');
-            document.body.style.overflow = 'auto'; // Restore background scrolling
+            document.body.style.overflow = 'auto'; 
         }
 
         // Initialize front page on load
