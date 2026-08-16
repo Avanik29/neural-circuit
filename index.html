@@ -77,7 +77,7 @@
                 </div>
                 <!-- Empty State -->
                 <div id="no-results" class="hidden py-12 text-center text-gray-500">
-                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2 2 0 00-.586-1.414l-4.5-4.5A2 2 0 0015.086 3H15m4 17h-4"></path></svg>
+                    <svg class="w-12 h-12 mx-auto mb-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 002-2V9.5a2 2 0 00-.586-1.414l-4.5-4.5A2 2 0 0015.086 3H15m4 17h-4"></path></svg>
                     <p class="text-lg">No articles found matching your search.</p>
                 </div>
             </div>
@@ -238,49 +238,65 @@
         // DATABASE: GitHub Action Target Array
         // -----------------------------------------
         // --- BEGIN AI ARTICLES ---
-const fallbackArticles = [
-  {
-    "title": "Phononic Silicon: The Next Frontier in Sub-1nm Chip Cooling",
-    "category": "Hardware",
-    "tags": ["Hardware", "Silicon", "Thermal Management"],
-    "content": "As the semiconductor industry pushes deep into the sub-1nanometer regime, thermal throttling has replaced quantum tunneling as the primary bottleneck for raw performance. Today, researchers at the Tokyo Institute of Technology and TSMC announced a joint breakthrough: Phononic Silicon. By embedding microscopic acoustic-wave guides directly into the silicon substrate, they have successfully redirected heat phonons away from critical logic gates, driving heat dissipation efficiency up by an unprecedented 45%.\n\nTraditionally, silicon chips rely on passive heat sinks or active liquid cooling systems attached to the exterior of the packaging. However, at the sub-1nm scale, local hot spots can degrade silicon before the heat can even reach the packaging surface. The new phononic crystal structures act like microscopic highways for heat, actively guiding vibrational energy toward dedicated thermal dissipation zones located on the periphery of the die.\n\nThis breakthrough means that upcoming 0.8nm processors could theoretically sustain clock speeds of up to 8.2 GHz under continuous load without requiring exotic cooling setups. Industry insiders suggest this technology will first find its way into high-performance datacenter accelerators by late 2027, paving the way for the next generation of dense AI training clusters.",
-    "image": "https://picsum.photos/800/600?random=112",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "Liquid Transformer Architecture Bypasses Attention Mechanism Bottlenecks",
-    "category": "LLMs",
-    "tags": ["LLMs", "Deep Learning", "Algorithms"],
-    "content": "The AI research community is buzzing today following the release of a landmark paper detailing the 'Liquid Transformer' (LT) architecture. Developed by an independent consortium of researchers from MIT and the Munich AI Institute, the new architecture promises to process infinite-context windows in O(1) time complexity, effectively solving the quadratic compute scaling issue that has plagued traditional Transformer models since 2017.\n\nUnlike standard Transformers that require calculating attention matrices across every token in a sequence, Liquid Transformers utilize dynamic continuous-time state-space representations. This allows the model to adjust its parameters on the fly based on incoming data streams, treating context as a fluid, continuous field rather than discrete, static blocks of tokens. In practice, this means an LLM can ingest entire libraries of technical documentation or millions of lines of codebase instantly, without the massive memory overhead typically required by multi-head attention systems.\n\nEarly benchmarks show that a 70-billion parameter Liquid Transformer model outperforms GPT-5 class models on complex, long-form reasoning tasks while utilizing less than 10% of the active inference memory. Open-source implementations have already begun appearing on GitHub, signaling a rapid shift in how enterprise-grade LLMs will be built and deployed over the coming year.",
-    "image": "https://picsum.photos/800/600?random=345",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "The Swarm-Grid Paradigm: How Decentralized Humanoids Are Transforming Logistics",
-    "category": "Robotics",
-    "tags": ["Robotics", "Swarm Intelligence", "Automation"],
-    "content": "The dream of fully autonomous logistics has taken a massive leap forward with the deployment of 'Swarm-Grid' firmware across major fulfillment networks. Developed by autonomous robotics pioneer Apptronik in collaboration with Amazon Robotics, the system shifts fleet management away from a centralized mainframe to a localized, peer-to-peer mesh network run directly on humanoid edge-hardware.\n\nIn standard automated warehouses, a central server coordinates every path, movement, and task, creating a single point of failure and high latency. Under the Swarm-Grid paradigm, individual humanoid robots communicate dynamically with adjacent units. If a robot encounters an unexpected obstacle or a fallen item, it instantly broadcasts a localized rerouting map to its neighbors, allowing the collective swarm to adapt organically without needing instructions from a central cloud.\n\nField tests conducted over the last six months demonstrate a 30% reduction in average item-retrieval times and a near-total elimination of systemic bottlenecks. Furthermore, because the robots share processing workloads locally, the warehouses can continue operating at 95% efficiency even during total external internet outages. This marks a significant step toward highly resilient, self-organizing industrial spaces.",
-    "image": "https://picsum.photos/800/600?random=567",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "Global Synod on Autonomous Warfare Establishes the Geneva AI Accord",
-    "category": "Policy",
-    "tags": ["Policy", "Ethics", "Global Regulation"],
-    "content": "In a historic diplomatic milestone, representatives from 85 nations gathered in Geneva today to sign the 'Accord on Autonomous Weapon Systems' (AAWS). The treaty, which has been in negotiation for over eighteen months, establishes strict, legally binding boundaries on the deployment of artificial intelligence in lethal military hardware, outlawing any system that can make life-or-death decisions without explicit human authorization.\n\nThe accord comes in response to the rapid proliferation of low-cost, AI-driven drones and autonomous loitering munitions in global conflicts. Under the terms of the treaty, any military AI must feature a hard-wired 'human-in-the-loop' veto capability that cannot be overridden by software. Additionally, the treaty establishes the International Artificial Intelligence Agency (IAIA), a regulatory body styled after the IAEA, tasked with conducting routine, unannounced inspections of state-backed AI laboratories to ensure compliance.\n\nWhile some defense analysts warn that non-signatory rogue states may ignore the guidelines, the consensus among global leaders is that the treaty represents a crucial, much-needed framework. By standardizing verification protocols and defining strict legal liabilities for AI system developers, the Geneva AI Accord sets a precedent for international cooperation in the age of advanced machine intelligence.",
-    "image": "https://picsum.photos/800/600?random=789",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "Neuromorphic Retinal Sensors Achieve Zero-Latency Spatial Mapping",
-    "category": "Computer Vision",
-    "tags": ["Computer Vision", "Neuromorphic", "Spatial Computing"],
-    "content": "For years, spatial computing and augmented reality systems have struggled with the 'photon-to-motion' latency gap—the tiny delay between a user moving their head and the virtual environment updating. Today, Prophesee and Sony Semiconductor Solutions unveiled a joint venture: a neuromorphic event-based retinal sensor designed specifically for next-generation spatial headsets, promising to reduce mapping latency to absolute zero.\n\nTraditional computer vision cameras capture environment data in sequential frames (e.g., 90 or 120 frames per second), processing massive amounts of redundant pixel data even when nothing in the scene has changed. In contrast, these new neuromorphic sensors mimic the human eye by only transmitting data when an individual pixel detects a change in light intensity. This 'event-driven' approach completely eliminates frames, allowing the sensor to track motion and depth changes continuously at the microsecond level.\n\nBy slashing the computational load of spatial mapping by over 90%, the new sensor allows compact, lightweight AR glasses to map complex rooms in real-time using tiny, energy-efficient onboard processors. This not only solves the issue of motion sickness caused by display lag but also extends the battery life of consumer spatial wearables from a couple of hours to a full day of continuous use.",
-    "image": "https://picsum.photos/800/600?random=901",
-    "date": "August 15, 2026"
-  }
-];
-// --- END AI ARTICLES ---
+        const fallbackArticles = [
+            {
+                id: "llm-1",
+                category: "LLMs & Foundation Models",
+                title: "GPT-6 Can Now Run Natively on Consumer Hardware",
+                date: "August 13, 2026",
+                desc: "In a stunning breakthrough for decentralized AI, OpenAI researchers have successfully compressed the GPT-6 architecture to run on 24GB VRAM consumer GPUs.\n\nHistorically, running models of this caliber required massive server clusters. By utilizing a new technique called 'Quantum Quantization' which reduces precision loss dynamically based on token importance, the model shrinks by nearly 85% in size.\n\nThis fundamentally alters the landscape of local AI, promising complete privacy for enterprise deployment while maintaining reasoning capabilities equivalent to the massive cloud-based GPT-5."
+            },
+            {
+                id: "llm-2",
+                category: "LLMs & Foundation Models",
+                title: "Claude 4 Opus Shatters SWE-bench Benchmarks",
+                date: "August 12, 2026",
+                desc: "Anthropic has quietly updated Claude 4 Opus, leading to an unprecedented 89% zero-shot success rate on the SWE-bench software engineering benchmark.\n\nThe improvement stems from Anthropic's new 'Constitutional Coding' training layer, which forces the model to heavily self-verify abstract logic trees before committing to syntax.\n\nDevelopers report that the model can now securely handle multi-file refactoring across complex React and Python codebases without hallucinating phantom variables."
+            },
+            {
+                id: "llm-3",
+                category: "LLMs & Foundation Models",
+                title: "Meta's Llama 4 Open-Sourced: 500B Parameters",
+                date: "August 10, 2026",
+                desc: "Mark Zuckerberg has officially released the weights for Llama 4, a 500-billion parameter behemoth. It is the largest open-source model in history.\n\nMeta explicitly designed Llama 4 as a MoE (Mixture of Experts) model to keep inference costs low. Despite its massive size, it routes requests to highly specialized micro-models, allowing researchers to run it efficiently.\n\nThe release has sent shockwaves through the proprietary model market, as startups can now fine-tune a massive foundational model entirely for free."
+            },
+            {
+                id: "cv-1",
+                category: "Computer Vision",
+                title: "Sora 2.0 Generates Hyper-Realistic 4K Video in Realtime",
+                date: "August 12, 2026",
+                desc: "OpenAI has stunned the film industry with the release of Sora 2.0, capable of generating 60 frames per second 4K video instantly with zero rendering time.\n\nThe leap in performance is attributed to a new diffusion transformer architecture that processes spatial and temporal patches simultaneously.\n\nHollywood studios are already heavily integrating the tool for pre-visualization, while independent creators use it to generate entire short films from a single text prompt."
+            },
+            {
+                id: "cv-2",
+                category: "Computer Vision",
+                title: "YOLOv12 Achieves 99% Object Detection Accuracy",
+                date: "August 10, 2026",
+                desc: "The legendary 'You Only Look Once' architecture has reached version 12, achieving near-perfect object detection accuracy on the edge.\n\nOptimized for mobile processors, YOLOv12 can identify, track, and predict the trajectory of over 500 distinct objects simultaneously in a busy street camera feed at 120Hz.\n\nThis breakthrough is a massive boon for autonomous driving systems, drastically reducing the latency required to identify pedestrians and unpredictable hazards."
+            },
+            {
+                id: "robo-1",
+                category: "Robotics",
+                title: "Figure 03 Humanoid Now Working in BMW Plants",
+                date: "August 13, 2026",
+                desc: "Robotics startup Figure has officially deployed a fleet of their Version 03 humanoid robots onto the manufacturing floor at BMW's Spartanburg plant.\n\nThese robots are not hardcoded. They use a Vision-Language-Action (VLA) model to 'watch' human workers assemble parts and instantly mimic the behavior, adjusting their grip strength dynamically.\n\nBMW reports a 15% increase in efficiency in sections where the robots assist human technicians with heavy lifting and precision placement."
+            },
+            {
+                id: "hard-1",
+                category: "Hardware & Silicon",
+                title: "Nvidia Announces Rubin Architecture: 2nm Node",
+                date: "August 13, 2026",
+                desc: "Nvidia CEO Jensen Huang unveiled the highly anticipated 'Rubin' GPU architecture, built on TSMC's cutting-edge 2-nanometer process node.\n\nRubin promises a 4x leap in AI training performance over Blackwell, utilizing advanced 3D packaging and next-generation HBM4 memory to eliminate data bottlenecks.\n\nThe announcement solidifies Nvidia's total dominance in the AI hardware space, with hyperscalers like Microsoft and AWS already reserving billions of dollars in silicon."
+            },
+            {
+                id: "pol-1",
+                category: "Policy & Ethics",
+                title: "EU AI Act Takes Full Effect: The Fallout",
+                date: "August 13, 2026",
+                desc: "The comprehensive EU AI Act is now strictly enforced, causing several major tech companies to geo-block their most advanced models in Europe.\n\nThe law requires exhaustive documentation of training data and strict bias testing for 'high-risk' applications. Open-source developers argue the liability clauses are too severe for non-commercial projects.\n\nCritics argue Europe is stifling innovation, while proponents praise the act for protecting citizens' data rights against unchecked corporate scraping."
+            }
+        ];
+        // --- END AI ARTICLES ---
 
         // -----------------------------------------
         // SHORTS (Sidebar Content)
@@ -343,10 +359,15 @@ const fallbackArticles = [
 
             articles.forEach((article, index) => {
                 const isFeatured = index === 0 && currentSearchQuery === "";
+                
                 // Handle both older local format (desc) and new AI format (content)
                 const rawContent = article.content || article.desc || '';
-                const safeContent = encodeURIComponent(rawContent);
-                const safeTitle = encodeURIComponent(article.title || '');
+                
+                // FIX: Escape single quotes to prevent breaking the HTML onclick attribute
+                const safeContent = encodeURIComponent(rawContent).replace(/'/g, "%27");
+                const safeTitle = encodeURIComponent(article.title || '').replace(/'/g, "%27");
+                const safeCategory = encodeURIComponent(article.category || 'Tech').replace(/'/g, "%27");
+                const safeDate = encodeURIComponent(article.date || '').replace(/'/g, "%27");
                 const imgUrl = article.image || ''; 
                 
                 // Optional tags layout if they exist (added by AI)
@@ -356,7 +377,7 @@ const fallbackArticles = [
                 const imgHtml = imgUrl ? `<img src="${imgUrl}" alt="Cover" class="w-full h-48 sm:h-64 object-cover border-b border-gray-800">` : '';
 
                 const cardHtml = `
-                    <article onclick="openArticleDetail('${article.id || ''}', '${safeTitle}', '${safeContent}', '${article.category}', '${article.date}', '${imgUrl}')" 
+                    <article onclick="openArticleDetail('${article.id || ''}', '${safeTitle}', '${safeContent}', '${safeCategory}', '${safeDate}', '${imgUrl}')" 
                              class="group cursor-pointer bg-gray-900 border border-gray-800 rounded-xl overflow-hidden hover:border-emerald-500/50 transition-all hover:shadow-[0_0_30px_rgba(16,185,129,0.1)] flex flex-col ${isFeatured ? 'md:col-span-2' : ''}">
                         ${imgHtml}
                         <div class="p-6 md:p-8 flex-grow flex flex-col">
@@ -387,12 +408,16 @@ const fallbackArticles = [
 
             filteredShorts.forEach(short => {
                 const rawContent = short.content || short.desc || '';
-                const safeContent = encodeURIComponent(rawContent);
-                const safeTitle = encodeURIComponent(short.title || '');
+                
+                // FIX: Escape single quotes
+                const safeContent = encodeURIComponent(rawContent).replace(/'/g, "%27");
+                const safeTitle = encodeURIComponent(short.title || '').replace(/'/g, "%27");
+                const safeCategory = encodeURIComponent(short.category || 'Tech').replace(/'/g, "%27");
+                const safeDate = encodeURIComponent(short.date || '').replace(/'/g, "%27");
                 const imgUrl = short.image || '';
 
                 const shortHtml = `
-                    <div onclick="openArticleDetail('${short.id}', '${safeTitle}', '${safeContent}', '${short.category}', '${short.date}', '${imgUrl}')" class="border-b border-gray-800 pb-4 last:border-0 cursor-pointer hover:bg-gray-800/50 p-3 -mx-3 rounded transition-colors group">
+                    <div onclick="openArticleDetail('${short.id}', '${safeTitle}', '${safeContent}', '${safeCategory}', '${safeDate}', '${imgUrl}')" class="border-b border-gray-800 pb-4 last:border-0 cursor-pointer hover:bg-gray-800/50 p-3 -mx-3 rounded transition-colors group">
                         <span class="text-xs text-emerald-500 font-medium tracking-wide mb-1 block">${short.date}</span>
                         <h4 class="text-sm text-gray-300 font-medium group-hover:text-white transition-colors leading-snug">${short.title}</h4>
                     </div>
@@ -493,9 +518,11 @@ const fallbackArticles = [
             }, 1000);
         }
 
-        function openArticleDetail(id, encodedTitle, encodedDesc, category, date, image) {
+        function openArticleDetail(id, encodedTitle, encodedDesc, encodedCategory, encodedDate, image) {
             const title = decodeURIComponent(encodedTitle);
             const content = decodeURIComponent(encodedDesc);
+            const category = decodeURIComponent(encodedCategory);
+            const date = decodeURIComponent(encodedDate);
             
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-content').innerText = content;
