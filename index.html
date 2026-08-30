@@ -207,43 +207,63 @@
         // --- BEGIN AI ARTICLES ---
 const fallbackArticles = [
   {
-    "title": "The Death of Context Limits: Infinite-Attention Transformers Take Center Stage",
-    "category": "LLMs",
-    "tags": ["Transformers", "Context Window", "Generative AI"],
-    "content": "For years, the generative AI revolution has been bottlenecked by a fundamental mathematical constraint: the quadratic complexity of self-attention. As context windows grew from 8k to 1 million tokens, the computational and financial costs of processing massive datasets exploded. Today, a coalition of researchers from top labs has unveiled 'Infini-Attention', a paradigm-shifting architecture that effectively removes context limits altogether, allowing models to process billions of tokens with flat VRAM requirements.\n\nUnlike traditional attention mechanisms that retain the entire key-value (KV) history in memory, Infini-Attention leverages a compressive memory system built directly into the transformer block. This allows the network to retrieve long-term history while maintaining a fixed-size local attention window for immediate context. Initial benchmarks show that models using this architecture can easily absorb entire corporate codebases, hundreds of hours of video transcripts, and multi-volume textbooks in a single prompt without any degradation in retrieval accuracy or response time.\n\nIndustry experts suggest this breakthrough could commoditize complex legal, scientific, and enterprise data analysis. Enterprise clients will no longer need to rely on shaky Retrieval-Augmented Generation (RAG) pipelines that often lose context between fragments. Instead, native, end-to-end reasoning over infinite horizons is now a tangible reality, signaling a new chapter in the LLM scaling wars.",
-    "image": "https://picsum.photos/800/600?random=124",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "Neuromorphic Photonic Silicon: Scaling Optical Computing Beyond 100 Terahertz",
+    "title": "LightSpeed-3: Photonics-Based Neuromorphic Chip Shakes Up Data Center Efficiency",
     "category": "Hardware",
-    "tags": ["Photonics", "Silicon", "Neuromorphic"],
-    "content": "As traditional silicon microchips approach the thermodynamic boundaries of physics, chip designers have been desperately searching for a post-silicon savior. They may have found it not in a new material, but in a new medium: light. Today, a leading semiconductor consortium announced the commercial tape-out of the 'Helios-1', a neuromorphic photonic co-processor capable of running AI matrix math at speeds exceeding 100 Terahertz, all while consuming a fraction of the energy of a conventional GPU.\n\nThe Helios-1 uses integrated silicon photonics to perform calculations. By splitting laser beams into multiple wavelengths and directing them through microscopic phase shifters, the chip performs mathematical operations at the speed of light. Because photons do not generate resistance or heat in the way electrons do, the chip avoids the thermal throttling that plagues modern data centers.\n\nThis shift to optical computing promises to drastically lower the carbon footprint of training next-generation foundational models. Hyperscale data centers, which currently strain local power grids, could see energy demands for AI inference plunge by up to 90%. Production-ready developer kits are slated to ship to cloud providers by late winter, marking the most significant shift in compute architecture since the transition to silicon transistors.",
-    "image": "https://picsum.photos/800/600?random=345",
+    "tags": [
+      "Silicon",
+      "Photonics",
+      "Energy Efficiency"
+    ],
+    "content": "Today, silicon startup PhotiX Labs unveiled its long-awaited LightSpeed-3 processor, a neuromorphic chip that uses photons instead of electrons to route information. As AI data centers globally struggle with unprecedented power demands, this optical architecture promises a staggering 150x reduction in energy consumption during LLM inference pipelines.\n\nUnlike traditional silicon architectures where electrical resistance creates heat and caps processing speeds, the LightSpeed-3 uses micro-ring resonators to split and modulate laser light into billions of simultaneous matrix multiplication operations. By embedding optical calculation engines directly onto a 3D-stacked silicon interposer, the engineering team bypassed the traditional memory bottleneck, delivering over 2,000 teraflops per watt.\n\nMajor hyperscalers have already queued up for early evaluation units. Industry analysts predict that if optical computing scales successfully into production-level clusters over the next year, the overall carbon footprint of global generative AI training could plummet by nearly 40 percent. PhotiX Labs plans to ship enterprise developer kits by early November.",
+    "image": "https://picsum.photos/800/600?random=142",
     "date": "August 15, 2026"
   },
   {
-    "title": "Dexterous Embodiment: The Rise of Tactile-Feedback Humanoid Fleets in Micro-Manufacturing",
+    "title": "Orion-Mini: The 3-Billion Parameter Model Outperforming GPT-4 on Edge Devices",
+    "category": "LLMs",
+    "tags": [
+      "Edge AI",
+      "On-Device",
+      "LLMs"
+    ],
+    "content": "In a remarkable demonstration of architectural optimization, research lab DeepFocus has launched Orion-Mini. This 3-billion parameter model is capable of running locally on consumer smartphones and wearables, yet matches or exceeds the logical reasoning capabilities of older server-grade models like GPT-4.\n\nThe breakthrough lies in a novel technique called 'Hierarchical Quantized Attention' combined with a dynamic weight-pruning algorithm. Rather than evaluating every layer for every token, Orion-Mini dynamically routes queries to specialized sub-networks, activating only 400 million parameters at any single millisecond. This allows high-fidelity reasoning, complex coding syntax, and agentic planning directly in offline environments.\n\nPrivacy advocates are hailing the release as a massive step forward for personal security. With Orion-Mini running locally, users can now index their entire personal lives, schedules, and financial history into an intelligent agent without ever uploading a single byte of data to a third-party cloud server.",
+    "image": "https://picsum.photos/800/600?random=829",
+    "date": "August 15, 2026"
+  },
+  {
+    "title": "Apex-Humanoid 2.0 Conquers Rugged Terrain with Real-Time Proprioceptive Learning",
     "category": "Robotics",
-    "tags": ["Humanoids", "Tactile Sensors", "Automation"],
-    "content": "While humanoid robots have dominated tech trade shows with fancy backflips and basic chore demonstrations, their industrial deployment has been slow due to a lack of fine-motor control. That changed today with the deployment of the 'Aether-v4' humanoid fleet in micro-manufacturing facilities across East Asia. Equipped with synthetic 'e-skin' that provides sub-millimeter tactile feedback, these machines are now successfully assembling delicate circuit boards and handling microscopic components alongside human workers.\n\nThe breakthrough lies in the combination of high-density piezoelectric arrays and real-time reinforcement learning models. The Aether-v4 does not just rely on computer vision to guide its hands; it actually 'feels' the surface tension, weight, and elasticity of the objects it touches. This closed-loop tactile feedback allows the robot to adjust its grip strength in microseconds, preventing delicate silicon wafers or glass tubes from shattering during assembly.\n\nThis marks a crucial pivot from repetitive, pre-programmed industrial arms to truly adaptable, general-purpose humanoid labor. As manufacturing margins shrink and labor shortages persist, the ability to deploy modular, self-learning robotic labor that fits seamlessly into pre-existing human workspaces could redefine global supply chains over the next decade.",
-    "image": "https://picsum.photos/800/600?random=678",
+    "tags": [
+      "Humanoid",
+      "Reinforcement Learning",
+      "Actuators"
+    ],
+    "content": "Apex Dynamics shocked the robotics world today by releasing a video of their Apex-Humanoid 2.0 navigating an unmapped, dynamic obstacle course filled with loose scree, wet mud, and collapsing platforms. Unlike its predecessors, which relied heavily on expensive pre-mapped lidar systems, the 2.0 relies on a bio-inspired tactile feedback network and zero-shot reinforcement learning.\n\nThe core of this breakthrough is the integration of synthetic muscle fibers with rapid proprioceptive neural loops. If a foot slips on a patch of loose gravel, the humanoid's local motor cortex adjusts joint torque in under 3 milliseconds—matching the biological reflexes of an alpine goat. This real-time sensory adaptation allows the robot to remain upright even when violently shoved or subjected to unexpected surface shifts.\n\nWith commercial logistics and disaster response agencies closely watching, Apex Dynamics announced that pilot programs deploying these bipedal units in decommissioned nuclear facilities and hazardous search-and-rescue zones will begin before the end of the fiscal year.",
+    "image": "https://picsum.photos/800/600?random=441",
     "date": "August 15, 2026"
   },
   {
-    "title": "The Geneva AI Accord: 42 Nations Sign Treaty Limiting Autonomous Kinetic Systems",
+    "title": "The Geneva Accord of 2026: 45 Nations Sign Historic Guardrails on Autonomous Weapons",
     "category": "Policy",
-    "tags": ["Regulation", "Autonomous Weapons", "Global Governance"],
-    "content": "In what is being hailed as the most significant international security agreement since the non-proliferation treaties of the 20th century, 42 nations have signed the 'Geneva AI Accord'. The landmark treaty establishes strict, binding boundaries on the deployment of artificial intelligence in lethal military hardware, explicitly banning fully autonomous kinetic systems that can make life-or-death decisions without human intervention.\n\nThe negotiations, which spanned over eighteen months of intense closed-door sessions, were catalyzed by the rapid escalation of algorithmic drone warfare. The treaty mandates that a 'human-in-the-loop' must remain legally and operationally responsible for any kinetic strike. Additionally, the accord introduces 'hardware-level kill-switches' for militarized robotics and establishes an international watchdog agency to inspect military compute clusters and verify compliance.\n\nWhile critics argue that enforcement will be challenging—especially concerning non-state actors and nations that refused to sign—the treaty represents a rare moment of global consensus. Policymakers hope that by setting these boundaries early, humanity can avoid an uncontrolled algorithmic arms race that could destabilize global peacekeeping efforts.",
-    "image": "https://picsum.photos/800/600?random=892",
+    "tags": [
+      "Global Governance",
+      "Autonomous Weapons",
+      "Regulation"
+    ],
+    "content": "After three weeks of intense closed-door negotiations, representatives from 45 nations have officially signed the Geneva Accord of 2026. This landmark treaty establishes the first binding international legal framework restricting the development, deployment, and exportation of fully autonomous lethal weapon systems (LAWS).\n\nThe treaty defines strict red lines, most notably mandating a 'meaningful human in the loop' for any kinetic targeting decision. Under the new rules, any nation-state utilizing AI algorithms that decide to apply lethal force without human verification will face sweeping economic sanctions. Additionally, the accord mandates the registration of national compute infrastructure dedicated to defense-sector AI training.\n\nWhile critics argue that enforcing verification in covert drone swarm programs will be incredibly difficult, proponents point out that the inclusion of major defense spenders in the signatory list represents a monumental triumph for global diplomacy and AI safety.",
+    "image": "https://picsum.photos/800/600?random=312",
     "date": "August 15, 2026"
   },
   {
-    "title": "Volumetric Neural Radiance Fields Achieve Real-Time Holographic Telepresence",
+    "title": "NeRF-Next: Real-Time 4D Holographic Teleportation from a Single Smartphone Lens",
     "category": "Computer Vision",
-    "tags": ["NeRF", "Telepresence", "3D Reconstruction"],
-    "content": "The dream of science-fiction style holographic communication has taken a massive leap forward. Utilizing a novel variation of Neural Radiance Fields (NeRFs) combined with 3D Gaussian Splatting, engineers have demonstrated real-time, photo-realistic volumetric telepresence streaming over standard consumer-grade 5G connections. Users wearing lightweight spatial computing glasses can now interact with life-sized, high-fidelity 3D projections of remote colleagues that look completely indistinguishable from reality.\n\nPrevious attempts at volumetric capture required massive, multi-camera studios and gigabits of bandwidth to transmit raw point-cloud data. This new approach uses a lightweight array of just three off-the-shelf depth cameras. A highly optimized localized neural network interpolates the spaces between the cameras in real-time, generating a continuous, high-definition 3D volume that accounts for complex lighting, shadows, and hair dynamics.\n\nThis development is set to revolutionize remote work, medical consultations, and global education. Instead of staring at flat grid walls on video conferencing software, remote team members can now sit 'directly' at the physical conference table, complete with natural eye contact and spatialized audio. The era of the digital avatar is coming to an end, replaced by the seamless, photo-real projection of the physical self.",
-    "image": "https://picsum.photos/800/600?random=401",
+    "tags": [
+      "NeRF",
+      "Spatial Computing",
+      "Computer Vision"
+    ],
+    "content": "The boundary between physical reality and digital simulation continues to blur as researchers from the Munich Institute of Technology unveil NeRF-Next. The newly developed computer vision pipeline can construct full 4D spatial scenes—including dynamic motion and reflections—using a standard single-lens smartphone camera feed in real time.\n\nHistorically, creating high-fidelity Neural Radiance Fields (NeRFs) or Gaussian splats required multi-angle arrays and hours of processing time. NeRF-Next circumvents these limitations by utilizing a foundational depth prediction model trained on billions of 3D spatial frames. The model instantly infers occluded geometry and simulates lighting changes dynamically as the camera sweeps across a room.\n\nThis technology has massive implications for spatial computing platforms and remote collaboration. Instead of wearing bulky tracksuits or using complex green-screen rooms, users can simply prop their phones up to project a fully volumetric, photorealistic 4D hologram of themselves and their physical environment to anywhere in the world.",
+    "image": "https://picsum.photos/800/600?random=955",
     "date": "August 15, 2026"
   }
 ];
