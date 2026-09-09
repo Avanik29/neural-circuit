@@ -207,43 +207,63 @@
         // --- BEGIN AI ARTICLES ---
 const fallbackArticles = [
   {
-    "title": "Photonic Core Breakout: Startup Unveils 100-GHz Optical AI Accelerator",
-    "category": "Hardware",
-    "tags": ["Photonics", "Silicon", "Hardware Acceleration"],
-    "content": "The limits of traditional silicon lithography have met their match not in smaller transistors, but in photons. Silicon Valley darling LuminWave announced today its first commercially available optical tensor processing unit, the 'Apex-1'. Capable of operating at an astonishing 100-GHz clock speed with practically zero thermal dissipation, the chip promises to shift the paradigm of heavy-duty model training.\n\nTraditional electronic chips suffer from RC delay and copper-based resistance, which manifests as heat when running high-performance LLM training workloads. LuminWave’s architecture replaces copper interconnects with sub-micron silicon waveguides, allowing matrix-vector multiplications to occur at the speed of light. Initial benchmarks show an 80% decrease in power consumption compared to modern Blackwell-class architectures.\n\nWhile optical computing has historically struggled with memory-to-core bottlenecks and signal decay, the Apex-1 uses an on-chip hybrid III-V laser source and integrated non-volatile phase-change memory. This ensures that weights are stored directly in the optical path, minimizing latency. Several hyperscalers have reportedly secured early access to the testing evaluation boards.",
-    "image": "https://picsum.photos/800/600?random=124",
-    "date": "August 15, 2026"
-  },
-  {
-    "title": "The End of Prompting: 'Self-Compiling' LLMs Outperform Prompt Engineers",
+    "title": "NeuraScribe 4.0 Debuts with Real-Time Context Merging and Zero-Latency Reasoning",
     "category": "LLMs",
-    "tags": ["Prompt Engineering", "LLM Architecture", "Meta-Reasoning"],
-    "content": "For years, prompt engineering was touted as the essential skill of the AI age. Today, a joint research paper from MIT and DeepMind has effectively rendered the discipline obsolete. The team introduced 'Autocode-7b', an open-weights model capable of dynamically restructuring its own internal attention layers and latent representations to match user intent without needing explicit instruction engineering.\n\nInstead of relying on users to craft complex system instructions or chain-of-thought prompts, Autocode-7b uses a secondary, lightweight 'intent-parsing' loop. This loop runs parallel to the main transformer, constantly updating the model's semantic weights on the fly during generation. Tests showed the model achieved higher accuracy in math, logic, and creative writing tasks when given vague, single-word inputs compared to standard models given meticulously structured 1,000-word prompts.\n\nIndustry analysts believe this shift will democratize AI access further, moving human interaction away from syntactical manipulation and closer to natural conversational dialogue. The implications for consumer-facing agents are massive, as digital assistants will no longer require background prompt pre-loading to function effectively.",
-    "image": "https://picsum.photos/800/600?random=456",
+    "tags": [
+      "LLMs",
+      "Artificial Intelligence",
+      "Context Windows"
+    ],
+    "content": "Today marks a major milestone in the evolution of large language models with the launch of NeuraScribe 4.0. Developed by the leading research consortium NeuraText, this new architecture introduces a proprietary technology dubbed 'Real-Time Context Merging' (RTCM). Unlike traditional models that must re-evaluate massive context windows from scratch during multi-turn interactions, NeuraScribe 4.0 utilizes dynamic state-caching to inject new information instantly into its latent space.\n\nThis breakthrough effectively eliminates the latency penalty associated with deep, long-context prompts. In practical terms, developers can now run queries against million-token databases with sub-millisecond initial response times. The model maintains a persistent memory state that updates incrementally, behaving more like a human brain holding a conversation than a static function processing an input vector.\n\nIndustry experts are already predicting that RTCM will revolutionize real-time customer service agents, automated legal analysis, and interactive gaming. By solving the memory throughput bottleneck, NeuraScribe 4.0 has set a new standard for performance and cost efficiency in the enterprise AI landscape.",
+    "image": "https://picsum.photos/800/600?random=112",
     "date": "August 15, 2026"
   },
   {
-    "title": "Kinematic Breakthrough: Humanoids Tackle Unstructured Construction Work",
+    "title": "Biomimetic Tendon Actuators: How Atlas-V is Redefining Humanoid Agility",
     "category": "Robotics",
-    "tags": ["Humanoid Robots", "Kinematics", "Industrial Automation"],
-    "content": "While humanoid robots have excelled in highly structured factory environments and warehouses, unstructured construction sites have remained the ultimate frontier. Today, Boston Dynamics and Trimble demonstrated a joint prototype of the 'Atlas-C', a ruggedized humanoid designed specifically to navigate loose gravel, scaffolding, and changing elevations while performing delicate manual labor.\n\nThe Atlas-C utilizes a real-time spatial mapping neural network coupled with high-torque hydraulic actuators to adapt its gait within milliseconds. During the live demonstration, the robot successfully carried drywall panels across an active, unpaved construction zone, mounted them to timber studs, and secured them with a standard nail gun.\n\nWhat sets this model apart is its tactile-feedback hand arrays. Using synthetic polymer skins embedded with piezoelectric sensors, the robot can detect the slip-threshold of building materials. This prevents the robot from crushing fragile materials like gypsum while maintaining a secure grip on heavy steel pipes under wet, slippery conditions.",
+    "tags": [
+      "Robotics",
+      "Humanoid",
+      "Actuators"
+    ],
+    "content": "The dream of truly human-like robotic agility has taken a massive leap forward. Boston-based robotics startup Kinetic Dynamics unveiled 'Atlas-V', their next-generation humanoid robot. The core innovation of Atlas-V lies not in its software, but in its physical actuation system, which swaps traditional electric motors and gearboxes for advanced biomimetic electro-active polymers (EAPs).\n\nThese artificial tendons expand and contract in response to minute electrical impulses, closely mimicking human muscle tissue. This transition allows Atlas-V to achieve a level of fluid, organic movement never before seen in bipedal systems. The robot can seamlessly adjust its gait over rocky, unstable surfaces and absorb sudden impacts without losing its balance.\n\nFurthermore, because EAPs are significantly lighter than metallic drivetrains, the overall weight of the humanoid has been reduced by 40%. This weight reduction translates directly into energy efficiency, tripling the robot's battery life to over eight hours of continuous heavy labor. Kinetic Dynamics plans to deploy the first batch of Atlas-V units in logistics and disaster recovery zones early next year.",
+    "image": "https://picsum.photos/800/600?random=445",
+    "date": "August 15, 2026"
+  },
+  {
+    "title": "Light-Speed Silicon: Photonic TPU-v6 Shatters the 10-Exaflop Barrier",
+    "category": "Hardware",
+    "tags": [
+      "Silicon",
+      "Photonics",
+      "TPU"
+    ],
+    "content": "In a historic achievement for computer engineering, silicon pioneer OptiCompute has officially revealed the Photonic TPU-v6. This new chip represents the first commercial integration of silicon photonics directly onto a high-performance processing die, bypassing the physical limitations of traditional copper wiring by using light to transmit data.\n\nThe TPU-v6 achieved an unprecedented 12.4 Exaflops of FP8 computing power during standard testing, leaving current industry leaders far behind. By utilizing micro-lasers to route signals between high-bandwidth memory (HBM) and logic gates, the chip eliminates the resistive heat generation that has long plagued high-end AI accelerators.\n\nData centers adopting the Photonic TPU-v6 stand to reduce their cooling bills by up to 60% while simultaneously increasing training speeds for massive AI models. OptiCompute has confirmed that production is scaling up, with cloud providers expecting the first shipments of these optical processors by late Q4.",
     "image": "https://picsum.photos/800/600?random=789",
     "date": "August 15, 2026"
   },
   {
-    "title": "The Geneva Accord of 2026: Sovereign States Agree to Compute Quotas",
-    "category": "Policy",
-    "tags": ["AI Policy", "Global Regulations", "Sovereign Compute"],
-    "content": "In an unprecedented diplomatic breakthrough, representatives from 45 nations have signed the Geneva Accord on Cognitive Assets. The landmark treaty represents the first global framework establishing sovereign compute quotas, designed to prevent a runaway algorithmic arms race while mitigating the environmental impact of massive data centers.\n\nUnder the terms of the accord, signatory nations agree to limit their peak compute expansion to certified sustainable power sources. It also establishes a 'Compute Credits' trading system, modeled after carbon credits, allowing developing nations to lease their unused compute quotas to international research consortiums. Crucially, the treaty bans the deployment of autonomous weapon systems powered by models larger than 10 trillion parameters without human-in-the-loop overrides.\n\nWhile some silicon valley lobbyists have expressed concern that the quotas could stifle scientific innovation, global policy leaders believe the guardrails are vital to ensuring market stability and preventing geopolitical friction over hardware supply chains.",
-    "image": "https://picsum.photos/800/600?random=912",
+    "title": "Retinal-Net: The Self-Supervised Vision Model That Sees in the Dark",
+    "category": "Computer Vision",
+    "tags": [
+      "Computer Vision",
+      "Self-Supervised Learning",
+      "Autonomous Vehicles"
+    ],
+    "content": "Computer vision researchers have long struggled to replicate the human visual cortex's ability to interpret chaotic, low-light environments. Today, a team at the Munich Institute of Technology released Retinal-Net, a self-supervised neural network trained entirely on raw, unlabelled video footage under variable lighting conditions.\n\nRetinal-Net utilizes an innovative 'predictive rendering' loss function. By forcing the network to predict future frames based on structural understanding rather than pixel matching, it learns to intuitively infer 3D depth, material reflectivity, and occlusion even in near-pitch darkness.\n\nThis breakthrough is particularly exciting for the autonomous vehicle sector. Current self-driving systems rely heavily on expensive LiDAR suites to navigate at night. With Retinal-Net, vehicles can map their surroundings using standard, low-cost optical cameras, potentially democratizing safe autonomous transport globally.",
+    "image": "https://picsum.photos/800/600?random=232",
     "date": "August 15, 2026"
   },
   {
-    "title": "Dynamic NeRFs Bring Instant 3D Reconstruction to Lightweight Smart Glasses",
-    "category": "Computer Vision",
-    "tags": ["Neural Radiance Fields", "Computer Vision", "Smart Glasses"],
-    "content": "Computer vision has taken a massive leap forward as researchers have successfully compressed Dynamic Neural Radiance Fields (NeRFs) to run locally on low-power mobile chipsets. The breakthrough, developed by the Swiss Federal Institute of Technology, allows consumer-grade smart glasses to capture and render hyper-realistic 3D scenes in real time.\n\nPreviously, generating a NeRF required high-end desktop GPUs and minutes of processing time to render a static scene. The new algorithm, dubbed 'Nano-NeRF', utilizes temporal sparsity and gaze-directed foveated rendering. By prioritizing the rendering of objects the wearer is actively looking at, the compute load is slashed by over 95%.\n\nThis technology has immediate real-world applications. Emergency responders can map disaster areas in 3D simply by walking through them, while remote technicians can guide field workers by interacting with high-fidelity, real-time spatial twins of complex machinery.",
-    "image": "https://picsum.photos/800/600?random=345",
+    "title": "The Geneva AI Accord: Global Leaders Agree on Universal Watermarking",
+    "category": "Policy",
+    "tags": [
+      "Policy",
+      "AI Regulation",
+      "Global Governance"
+    ],
+    "content": "Following months of intense closed-door negotiations, delegates from 42 nations have officially signed the Geneva AI Accord. This landmark treaty establishes the first binding, international framework aimed at mitigating the societal risks of generative artificial intelligence.\n\nAt the heart of the accord is a mandate for hardware-level cryptographic watermarking. Under the new rules, all semiconductor manufacturers must integrate immutable watermarking engines directly into silicon dies optimized for media generation. Any image, video, or audio file generated by these chips will automatically carry an invisible, unalterable metadata signature identifying it as machine-generated.\n\nWhile some open-source advocates have expressed concern that this move could stifle independent innovation, global policymakers argue it is a necessary step to combat deepfakes and secure democratic processes. Enforcement of the Geneva Accord is scheduled to begin phased implementation over the next 18 months.",
+    "image": "https://picsum.photos/800/600?random=901",
     "date": "August 15, 2026"
   }
 ];
